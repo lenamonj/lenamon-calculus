@@ -2412,6 +2412,1335 @@ function saveSession(s){try{if(s)localStorage.setItem(SESSION_KEY,JSON.stringify
 function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 function findUser(email){const e=(email||"").trim().toLowerCase();return loadUsers().find(u=>u.email===e)||null;}
 
+// Per-lesson quizzes (lesson id -> 3 questions). Injected/verified separately.
+const QUIZ = {
+ "1": [
+  {
+   "q": "The lesson describes a function as a 'machine for numbers.' What does this machine do?",
+   "choices": [
+    "It takes one number in, follows a fixed rule, and gives one number out",
+    "It takes one number in and gives back several different possible answers",
+    "It changes its rule each time you use it",
+    "It only works with whole numbers"
+   ],
+   "answer": 0,
+   "why": [
+    "Exactly right, you feed in one number, the rule runs, and one number comes out.",
+    "Not quite, a function gives back exactly one output for each input, never several.",
+    "Not this one, the whole point of a function is that the rule stays the same every time.",
+    "Not quite, the lesson never limits a function to whole numbers only."
+   ]
+  },
+  {
+   "q": "What does the domain of a function mean?",
+   "choices": [
+    "Every number that can come out of the function",
+    "The steepness of the function",
+    "Every number you are allowed to put into the function",
+    "The rule inside the machine"
+   ],
+   "answer": 2,
+   "why": [
+    "Close, but that describes the range, the outputs, not the domain.",
+    "Not this one, steepness is slope from Lesson 2, not the domain.",
+    "Yes, the domain is the set of all inputs you are allowed to feed in.",
+    "Not quite, the rule is how the machine works, not its domain."
+   ]
+  },
+  {
+   "q": "According to the lesson, what are the ONLY two things that can make a function 'jam' (be impossible to compute)?",
+   "choices": [
+    "Adding a negative number, or multiplying by zero",
+    "Using a fraction, or using a decimal",
+    "A very large input, or a very small input",
+    "Dividing by zero, or taking the square root of a negative number"
+   ],
+   "answer": 3,
+   "why": [
+    "Not this one, adding negatives and multiplying by zero are both perfectly fine.",
+    "Not quite, fractions and decimals are allowed; it is a zero denominator that jams things.",
+    "Not this one, the size of the input does not cause a jam by itself.",
+    "Exactly, those are the only two jams, dividing by zero and the square root of a negative."
+   ]
+  }
+ ],
+ "2": [
+  {
+   "q": "How is slope defined in the lesson?",
+   "choices": [
+    "$\\frac{\\text{rise}}{\\text{run}}$, how much $y$ changes divided by how much $x$ changes",
+    "$\\frac{\\text{run}}{\\text{rise}}$, how much $x$ changes divided by how much $y$ changes",
+    "The point where the line crosses the $y$-axis",
+    "The value of $y$ when $x=0$"
+   ],
+   "answer": 0,
+   "why": [
+    "Yes, slope is rise over run, the change in $y$ divided by the change in $x$.",
+    "So close, but you flipped it; slope is rise over run, not run over rise.",
+    "Not quite, that crossing point is the $y$-intercept $b$, not the slope.",
+    "Not this one, that describes $b$, the starting value, not the slope."
+   ]
+  },
+  {
+   "q": "In the equation $y=mx+b$, what does $b$ represent?",
+   "choices": [
+    "How steep the line is",
+    "The $y$-intercept, where the line crosses the $y$-axis (the value when $x=0$)",
+    "How far the line runs to the right",
+    "The slope of the line"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite, steepness is the slope $m$, not $b$.",
+    "Exactly, $b$ is the $y$-intercept, the starting value of $y$ when $x=0$.",
+    "Not this one, $b$ is a height on the $y$-axis, not a sideways distance.",
+    "Not quite, the slope is $m$; $b$ is the $y$-intercept."
+   ]
+  },
+  {
+   "q": "If a line has slope $m=2$, what does that tell you about the line?",
+   "choices": [
+    "The line is flat (horizontal)",
+    "The line goes down 2 for every 1 step to the right",
+    "The line crosses the $y$-axis at 2",
+    "The line goes up 2 for every 1 step to the right"
+   ],
+   "answer": 3,
+   "why": [
+    "Not quite, a flat line has slope $m=0$, not $m=2$.",
+    "Not this one, a downhill line would have a negative slope like $m=-2$.",
+    "Not quite, where it crosses the $y$-axis is $b$, not the slope.",
+    "Yes, a slope of 2 means the line rises 2 units for every 1 step right."
+   ]
+  }
+ ],
+ "3": [
+  {
+   "q": "What makes growth 'exponential' instead of 'linear'?",
+   "choices": [
+    "You multiply by the same amount each period, instead of adding the same amount",
+    "You add the same amount each period",
+    "You subtract a little each period",
+    "The amount never changes"
+   ],
+   "answer": 0,
+   "why": [
+    "Exactly, exponential growth multiplies by the same factor each period, so it snowballs.",
+    "Not quite, adding the same amount each period is linear growth from Lesson 2.",
+    "Not this one, steady subtracting is not how exponential growth works.",
+    "Not quite, with exponential growth the amount definitely changes each period."
+   ]
+  },
+  {
+   "q": "In the exponential function $f(x)=a\\cdot b^{x}$, what does $a$ represent?",
+   "choices": [
+    "The growth factor you multiply by each period",
+    "The time in years",
+    "The starting amount (the value when $x=0$)",
+    "The interest rate"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite, the growth factor is $b$, the thing you multiply by; $a$ is something else.",
+    "Not this one, time is the input $x$, not $a$.",
+    "Yes, $a$ is the starting amount, because $f(0)=a\\cdot b^{0}=a$ since $b^{0}=1$.",
+    "Not quite, the rate lives inside the growth factor, not in $a$ by itself."
+   ]
+  },
+  {
+   "q": "In the continuous compounding formula $A=P\\cdot e^{rt}$, what is $P$?",
+   "choices": [
+    "The principal, how much you start with",
+    "The amount you end with",
+    "The number of years",
+    "The interest rate as a decimal"
+   ],
+   "answer": 0,
+   "why": [
+    "Exactly, $P$ is the principal, the amount you start with.",
+    "Not quite, the amount you end with is $A$, not $P$.",
+    "Not this one, time in years is $t$.",
+    "Not quite, the rate as a decimal is $r$, not $P$."
+   ]
+  }
+ ],
+ "4": [
+  {
+   "q": "What is the natural log, $\\ln(x)$, according to the lesson?",
+   "choices": [
+    "Another name for multiplying by $e$",
+    "The reverse of $e^{x}$; they undo each other",
+    "The same thing as a square root",
+    "A way to make any number positive"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite, $\\ln$ does not multiply by $e$; it reverses raising $e$ to a power.",
+    "Exactly, $\\ln(x)$ is the inverse of $e^{x}$, so they cancel each other out.",
+    "Not this one, a square root is a different operation entirely.",
+    "Not quite, $\\ln$ finds an exponent; it does not just flip signs to positive."
+   ]
+  },
+  {
+   "q": "Why can you only take $\\ln$ of a positive number?",
+   "choices": [
+    "Because $\\ln$ only works on whole numbers",
+    "Because negative numbers are too big to handle",
+    "Because $e$ raised to any power is always positive, so no exponent can give 0 or a negative result",
+    "Because the calculator runs out of digits"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite, $\\ln$ handles fractions and decimals too, not just whole numbers.",
+    "Not this one, size is not the issue; the issue is that the result can never be negative.",
+    "Exactly, since $e^{?}$ is always positive, no exponent produces 0 or a negative, so $\\ln$ of those does not exist.",
+    "Not quite, this has nothing to do with the calculator's digits."
+   ]
+  },
+  {
+   "q": "What is the value of $\\ln(1)$?",
+   "choices": [
+    "$0$, because the exponent that gives 1 is 0 (since $e^{0}=1$)",
+    "$1$, because $\\ln$ of any number is itself",
+    "$e$, because $\\ln$ always gives back $e$",
+    "It is undefined"
+   ],
+   "answer": 0,
+   "why": [
+    "Exactly, $\\ln(1)=0$ because $e^{0}=1$, so the exponent that makes 1 is 0.",
+    "Not quite, $\\ln$ returns an exponent, not the number itself.",
+    "Not this one, $\\ln(e)=1$, but $\\ln$ does not always return $e$.",
+    "Not quite, $\\ln(1)$ is perfectly defined; it equals 0."
+   ]
+  }
+ ],
+ "5": [
+  {
+   "q": "A limit asks one main question. Which is it?",
+   "choices": [
+    "What number is $f(x)$ getting closer and closer to?",
+    "What is the exact value of $f$ at the point?",
+    "What is the largest value $f(x)$ ever reaches?",
+    "What is the slope of $f(x)$?"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - a limit is about the value the function is heading toward.",
+    "Not quite - a limit can exist even when the exact value is undefined, like $\\frac{0}{0}$.",
+    "No - a limit is about a destination near one point, not an overall maximum.",
+    "That is a derivative, which comes later; a limit is about the destination value."
+   ]
+  },
+  {
+   "q": "When you plug a number in and get $\\frac{0}{0}$, what does it tell you?",
+   "choices": [
+    "The limit is 0.",
+    "The limit does not exist.",
+    "Simplify the algebra first, then try again.",
+    "The function equals infinity there."
+   ],
+   "answer": 2,
+   "why": [
+    "No - $\\frac{0}{0}$ does not mean the answer is 0.",
+    "Not necessarily - $\\frac{0}{0}$ often hides a perfectly good limit.",
+    "Correct - $\\frac{0}{0}$ is a signal to factor, cancel, then plug in again.",
+    "No - $\\frac{0}{0}$ is undefined, not infinity; it is just a signal to simplify."
+   ]
+  },
+  {
+   "q": "The full two-sided limit at $x=c$ exists only when...",
+   "choices": [
+    "the left-side and right-side limits arrive at the same number.",
+    "$f(c)$ is defined.",
+    "the function never breaks anywhere on its graph.",
+    "the left side is larger than the right side."
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - both one-sided limits must agree for the full limit to exist.",
+    "Not required - a limit can exist even where $f(c)$ is undefined.",
+    "No - the function only needs to head to one value from both sides near $c$.",
+    "No - if the two sides disagree at all, the limit does not exist."
+   ]
+  }
+ ],
+ "6": [
+  {
+   "q": "For $\\lim_{x\\to\\infty}\\frac{3x^2+1}{5x^2-x}$, the top and bottom have the same degree. What is the limit?",
+   "choices": [
+    "$0$",
+    "$\\frac{3}{5}$",
+    "$\\infty$",
+    "$\\frac{5}{3}$"
+   ],
+   "answer": 1,
+   "why": [
+    "No - the limit is 0 only when the top degree is smaller than the bottom.",
+    "Correct - same degree means the limit is the ratio of leading coefficients, $\\frac{3}{5}$.",
+    "No - it blows up only when the top degree is larger than the bottom.",
+    "Careful - the ratio is top over bottom, so it is $\\frac{3}{5}$, not $\\frac{5}{3}$."
+   ]
+  },
+  {
+   "q": "What is $\\lim_{x\\to\\infty}\\frac{2x}{x^2+1}$?",
+   "choices": [
+    "$2$",
+    "$\\infty$",
+    "$0$",
+    "$\\frac{1}{2}$"
+   ],
+   "answer": 2,
+   "why": [
+    "No - that would be the ratio only if the top and bottom degrees matched.",
+    "No - the bottom grows faster, so the fraction does not blow up.",
+    "Correct - the bottom degree is larger, so it crushes the fraction to 0.",
+    "No - when the bottom degree is larger the limit is simply 0."
+   ]
+  },
+  {
+   "q": "As $x\\to 0^+$ the values of $\\frac{1}{x}$ are $10, 100, 1000, \\dots$ growing without bound, so we write $\\lim_{x\\to 0^+}\\frac{1}{x}=+\\infty$. What does this mean?",
+   "choices": [
+    "The limit equals the number infinity.",
+    "The function grows without bound, so the limit does not exist.",
+    "The function levels off at a horizontal line.",
+    "The function approaches 0."
+   ],
+   "answer": 1,
+   "why": [
+    "No - infinity is not a number, so the limit is not literally equal to it.",
+    "Correct - $+\\infty$ describes how the limit fails: the function grows without bound.",
+    "No - leveling off is a horizontal asymptote, which happens as $x$ gets large, not here.",
+    "No - $\\frac{1}{x}$ approaches 0 as $x$ gets huge, not as $x\\to 0$."
+   ]
+  }
+ ],
+ "7": [
+  {
+   "q": "The three-part continuity test at $x=c$ requires that $f(c)$ is defined and that $\\lim_{x\\to c}f(x)$ exists. What is the third condition?",
+   "choices": [
+    "$\\lim_{x\\to c}f(x)=f(c)$",
+    "$f(c)=0$",
+    "$f(x)$ must be a polynomial",
+    "the limit equals infinity"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - the limit must equal the actual value, with no fakeouts.",
+    "No - the value at $c$ does not need to be 0, it just needs to match the limit.",
+    "No - many non-polynomials are continuous; the rule is the limit matching the value.",
+    "No - an infinite limit means a discontinuity, not continuity."
+   ]
+  },
+  {
+   "q": "A function has a limit of 6 at $x=3$, but there is no actual point at $x=3$ (a missing dot). What type of discontinuity is this?",
+   "choices": [
+    "Jump",
+    "Vertical asymptote",
+    "Hole (removable discontinuity)",
+    "No discontinuity at all"
+   ],
+   "answer": 2,
+   "why": [
+    "No - a jump is when the left and right limits disagree.",
+    "No - a vertical asymptote is when the function shoots to $\\pm\\infty$.",
+    "Correct - a limit that exists with just a missing point is a removable discontinuity, a hole.",
+    "No - a missing point is a break, so the function is not continuous there."
+   ]
+  },
+  {
+   "q": "When you plug in and get a nonzero number over zero (like $\\frac{2}{0}$), what kind of break is it always?",
+   "choices": [
+    "Vertical asymptote (infinite discontinuity)",
+    "Hole (removable discontinuity)",
+    "Jump",
+    "The function is continuous there"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - a nonzero number over zero always gives a vertical asymptote.",
+    "No - a hole comes from $\\frac{0}{0}$, not from a nonzero numerator.",
+    "No - a jump comes from the left and right limits disagreeing, not from this.",
+    "No - dividing a nonzero number by zero is undefined, so it cannot be continuous."
+   ]
+  }
+ ],
+ "8": [
+  {
+   "q": "On a graph, the derivative of a function at a point tells you the curve's:",
+   "choices": [
+    "Height at that point",
+    "Slope (steepness) at that point",
+    "Area underneath it",
+    "Total distance traveled"
+   ],
+   "answer": 1,
+   "why": [
+    "Height is just the $y$-value $f(x)$; the derivative measures how fast that height is changing, not the height itself.",
+    "Correct! The derivative is the slope of the curve right at that single point.",
+    "Area under a curve is a different idea (integration); the derivative is about steepness.",
+    "Total distance is the original function like an odometer; the derivative is more like the speedometer."
+   ]
+  },
+  {
+   "q": "In the driving example, which dashboard reading acts like the derivative of your total distance?",
+   "choices": [
+    "The odometer (total miles)",
+    "The fuel gauge",
+    "The speedometer (how fast right now)",
+    "The clock"
+   ],
+   "answer": 2,
+   "why": [
+    "The odometer is the total distance itself, which is the original function, not its rate of change.",
+    "The fuel gauge does not measure how fast distance is changing.",
+    "Correct! The speedometer shows the instantaneous rate of change of distance, which is exactly the derivative.",
+    "The clock measures time, the input, not the rate the distance changes."
+   ]
+  },
+  {
+   "q": "The derivative answers which question about a function?",
+   "choices": [
+    "How fast is it changing right now, at this exact point?",
+    "What is its largest possible value ever?",
+    "Where does it cross the $x$-axis?",
+    "How many terms does it have?"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct! That instantaneous rate of change at a single point is exactly what the derivative captures.",
+    "Finding a maximum value uses the derivative later, but it is not what the derivative itself means.",
+    "Crossing the $x$-axis is about roots, a separate idea from rate of change.",
+    "The number of terms is just about how the formula is written, not its rate of change."
+   ]
+  }
+ ],
+ "9": [
+  {
+   "q": "Using the power rule, what is the derivative of $x^5$?",
+   "choices": [
+    "$x^4$",
+    "$5x^6$",
+    "$5x^4$",
+    "$4x^5$"
+   ],
+   "answer": 2,
+   "why": [
+    "You forgot to bring the exponent down as a multiplier; the 5 must move out front.",
+    "The exponent should go down by 1 to 4, not up to 6.",
+    "Correct! Bring the 5 down in front and subtract 1 from the exponent: $5x^4$.",
+    "You lowered the coefficient instead of the exponent; bring the 5 down and the exponent becomes 4."
+   ]
+  },
+  {
+   "q": "The power rule says to differentiate $x^n$ you should:",
+   "choices": [
+    "Add 1 to the exponent and divide by it",
+    "Bring the exponent down as a multiplier, then subtract 1 from the exponent",
+    "Multiply the exponent by itself",
+    "Leave the exponent alone and add 1 out front"
+   ],
+   "answer": 1,
+   "why": [
+    "Adding 1 and dividing is the rule for integration, the reverse process, not the derivative.",
+    "Correct! That is exactly the power rule: $\\frac{d}{dx}[x^n] = n x^{n-1}$.",
+    "Squaring the exponent is not part of any derivative rule.",
+    "You must bring the existing exponent down and reduce it by 1, not just add a 1."
+   ]
+  },
+  {
+   "q": "What is the derivative of the constant function $f(x) = 7$?",
+   "choices": [
+    "$7$",
+    "$7x$",
+    "$1$",
+    "$0$"
+   ],
+   "answer": 3,
+   "why": [
+    "A constant never changes, so its rate of change cannot be 7.",
+    "$7x$ would be an antiderivative idea; the derivative of a constant is not a line.",
+    "The slope of a flat constant is not 1; a flat line has zero slope.",
+    "Correct! A constant has zero rate of change, so its derivative is 0."
+   ]
+  }
+ ],
+ "10": [
+  {
+   "q": "If $C(x)$ is the total cost to make $x$ items, what does marginal cost $C'(x)$ tell you?",
+   "choices": [
+    "The approximate cost of producing one more item",
+    "The total cost of all the items so far",
+    "The average cost per item over all production",
+    "The selling price of each item"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct! Marginal cost $C'(x)$ estimates the cost of producing the next single item.",
+    "Total cost is $C(x)$ itself; the derivative is about the next unit, not the running total.",
+    "Average cost divides total cost by quantity, which is a different calculation.",
+    "Selling price relates to revenue, not the cost of producing one more item."
+   ]
+  },
+  {
+   "q": "Marginal revenue is best described as:",
+   "choices": [
+    "The total money earned from all sales",
+    "$R'(x)$, the approximate revenue from selling one more item",
+    "The cost of one more item",
+    "The number of items still unsold"
+   ],
+   "answer": 1,
+   "why": [
+    "Total money earned is $R(x)$ itself, not its derivative.",
+    "Correct! Marginal revenue is the derivative $R'(x)$, the revenue from selling the next item.",
+    "That describes marginal cost, which comes from the cost function instead.",
+    "Unsold inventory is not what the revenue derivative measures."
+   ]
+  },
+  {
+   "q": "Profit is maximized at the production level where:",
+   "choices": [
+    "Revenue first becomes positive",
+    "Cost is at its lowest",
+    "Marginal revenue equals marginal cost, $R'(x) = C'(x)$",
+    "You produce as many items as possible"
+   ],
+   "answer": 2,
+   "why": [
+    "Revenue turning positive does not by itself locate the largest profit.",
+    "Lowest cost usually means making almost nothing, which does not maximize profit.",
+    "Correct! Profit peaks where $R'(x) = C'(x)$, the golden rule where the next unit's revenue just matches its cost.",
+    "Producing the most possible can push cost above revenue and shrink profit."
+   ]
+  }
+ ],
+ "11": [
+  {
+   "q": "What is the derivative of $e^x$?",
+   "choices": [
+    "$x e^{x-1}$",
+    "$e^x$",
+    "$\\frac{1}{x}$",
+    "$x e^x$"
+   ],
+   "answer": 1,
+   "why": [
+    "The power rule does not apply to $e^x$ because the variable is in the exponent, not the base.",
+    "Correct! $e^x$ is its own derivative: $\\frac{d}{dx}[e^x] = e^x$.",
+    "$\\frac{1}{x}$ is the derivative of $\\ln(x)$, a different function.",
+    "There is no extra $x$ multiplier; the derivative of $e^x$ is just $e^x$."
+   ]
+  },
+  {
+   "q": "What is the derivative of $\\ln(x)$?",
+   "choices": [
+    "$\\frac{1}{x}$",
+    "$\\ln(x)$",
+    "$e^x$",
+    "$x$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct! $\\frac{d}{dx}[\\ln x] = \\frac{1}{x}$.",
+    "A function is rarely its own derivative; that special property belongs to $e^x$, not $\\ln(x)$.",
+    "$e^x$ is the derivative of $e^x$, not of $\\ln(x)$.",
+    "The slope of $\\ln(x)$ shrinks as $x$ grows, so it cannot be $x$."
+   ]
+  },
+  {
+   "q": "What is the derivative of $4e^x$?",
+   "choices": [
+    "$4x e^{x-1}$",
+    "$e^x$",
+    "$4e^x$",
+    "$4$"
+   ],
+   "answer": 2,
+   "why": [
+    "The power rule does not apply here; $e^x$ is its own derivative and the 4 just rides along.",
+    "You dropped the constant 4; the multiplier stays attached.",
+    "Correct! The constant 4 comes along and $e^x$ is its own derivative, giving $4e^x$.",
+    "The 4 stays multiplied by $e^x$; it does not become the whole answer."
+   ]
+  }
+ ],
+ "12": [
+  {
+   "q": "What is the product rule for $f(x) = u \\cdot v$?",
+   "choices": [
+    "$u' \\cdot v'$",
+    "$u'v + uv'$",
+    "$u'v - uv'$",
+    "$\\frac{u'v + uv'}{v^2}$"
+   ],
+   "answer": 1,
+   "why": [
+    "Just multiplying the two derivatives is the tempting trap that gives the wrong answer.",
+    "Correct: each function takes a turn being differentiated while the other stays put.",
+    "That uses a minus sign, but the product rule adds its two terms.",
+    "Dividing by $v^2$ belongs to the quotient rule, not products."
+   ]
+  },
+  {
+   "q": "Why is the derivative of a product NOT just the product of the derivatives?",
+   "choices": [
+    "Because derivatives can never be multiplied together",
+    "Because $u'v'$ is only the tiny throwaway corner, missing the two main side strips",
+    "Because you must always divide by $v^2$",
+    "Because products don't have derivatives"
+   ],
+   "answer": 1,
+   "why": [
+    "Derivatives can be multiplied; that's just not what gives a product's rate of change.",
+    "Correct: the rectangle picture shows $u'v$ and $uv'$ are the real growth, while $u'v'$ is negligible.",
+    "Dividing by $v^2$ is the quotient rule and has nothing to do with this.",
+    "Products absolutely have derivatives; we just need the right rule."
+   ]
+  },
+  {
+   "q": "Using the quotient rule, what is the derivative of $f(x) = \\frac{u}{v}$?",
+   "choices": [
+    "$\\frac{u'v + uv'}{v^2}$",
+    "$\\frac{u' }{v'}$",
+    "$\\frac{u'v - uv'}{v^2}$",
+    "$u'v - uv'$"
+   ],
+   "answer": 2,
+   "why": [
+    "The quotient rule subtracts, it does not add, in the numerator.",
+    "You can't just divide the derivatives, the same way you can't just multiply them.",
+    "Correct: 'Low D-High minus High D-Low, over Low squared.'",
+    "You forgot to divide by $v^2$, which is part of the pattern."
+   ]
+  }
+ ],
+ "13": [
+  {
+   "q": "The chain rule says the derivative of $f(g(x))$ equals:",
+   "choices": [
+    "$f'(g(x)) \\cdot g'(x)$",
+    "$f'(x) \\cdot g'(x)$",
+    "$f'(g'(x))$",
+    "$f(g'(x))$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: derivative of the outside (leaving the inside alone) times derivative of the inside.",
+    "The outside derivative must be evaluated at $g(x)$, not just at $x$.",
+    "You leave the inside alone in the outside step, you don't differentiate it there.",
+    "The outside function itself must be differentiated, not left as $f$."
+   ]
+  },
+  {
+   "q": "Why do you MULTIPLY the outside and inside derivatives in the chain rule?",
+   "choices": [
+    "Because multiplying is easier than adding",
+    "Because rates of change chain together: if outside is fast and inside is fast, the speeds multiply",
+    "Because the inside derivative is always 1",
+    "Because you actually should add them"
+   ],
+   "answer": 1,
+   "why": [
+    "It's not about ease; it's about how rates combine.",
+    "Correct: like a car twice as fast as a bike that's 3x walking, the rates multiply (2 x 3).",
+    "The inside derivative is usually not 1; that's why it matters.",
+    "Chained rates multiply, they don't add."
+   ]
+  },
+  {
+   "q": "What is the derivative of $f(x) = e^{5x}$?",
+   "choices": [
+    "$e^{5x}$",
+    "$5x \\cdot e^{5x}$",
+    "$5e^{5x}$",
+    "$e^{5}$"
+   ],
+   "answer": 2,
+   "why": [
+    "You forgot to multiply by the derivative of the inside, which is 5.",
+    "The derivative of the inside $5x$ is just 5, not $5x$.",
+    "Correct: $e^{5x}$ stays, then multiply by the inside's derivative, 5.",
+    "The exponent doesn't disappear; $e^{5x}$ stays and gets multiplied by 5."
+   ]
+  }
+ ],
+ "14": [
+  {
+   "q": "When elasticity $E > 1$ (elastic), what should a business do to increase revenue?",
+   "choices": [
+    "Lower the price",
+    "Raise the price",
+    "Keep the price exactly the same",
+    "Stop selling the product"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: customers are price-sensitive, so cutting price wins back more than enough sales.",
+    "Raising price when elastic loses too many customers and revenue falls.",
+    "Holding still leaves easy revenue on the table when demand is elastic.",
+    "Elasticity guides pricing, it doesn't mean you should quit selling."
+   ]
+  },
+  {
+   "q": "If elasticity $E < 1$ (inelastic), the best move to raise revenue is to:",
+   "choices": [
+    "Lower the price",
+    "Raise the price",
+    "Give the product away free",
+    "Do nothing because revenue can't change"
+   ],
+   "answer": 1,
+   "why": [
+    "Lowering price when customers barely react just throws away revenue.",
+    "Correct: a 1% price rise loses less than 1% of customers, so revenue climbs.",
+    "Free means no revenue at all, the opposite of the goal.",
+    "Revenue does change with price; inelastic demand means raising it helps."
+   ]
+  },
+  {
+   "q": "At $E = 1$ (unit elastic), what is special about this price?",
+   "choices": [
+    "Demand is exactly zero",
+    "Revenue is maximized; you're at the top of the revenue hill",
+    "The product is free",
+    "You should always raise the price"
+   ],
+   "answer": 1,
+   "why": [
+    "Demand isn't zero; customers are still buying.",
+    "Correct: a 1% price change is exactly cancelled by a 1% quantity change, so revenue peaks.",
+    "Unit elastic says nothing about the product being free.",
+    "At the peak, moving either way lowers revenue, so don't raise it."
+   ]
+  }
+ ],
+ "15": [
+  {
+   "q": "What is a critical number of a function $f$?",
+   "choices": [
+    "An $x$-value where $f'(x)=0$ or $f'(x)$ does not exist",
+    "Any $x$-value where $f(x)=0$",
+    "The largest value the function ever reaches",
+    "An $x$-value where the function crosses the $y$-axis"
+   ],
+   "answer": 0,
+   "why": [
+    "That's it: a critical number is where the slope is flat or has no clear value, the only places a peak or valley can hide.",
+    "That describes a root of $f$ (where the output is zero), not a critical number, which is about the slope $f'$.",
+    "That's an absolute maximum, a single output value, not the $x$-value where the slope behaves specially.",
+    "That's the $y$-intercept, which has nothing to do with where the slope is zero or undefined."
+   ]
+  },
+  {
+   "q": "As you move left to right across a critical number, the sign of $f'$ goes positive then negative. What is happening there?",
+   "choices": [
+    "A local minimum (a valley)",
+    "A local maximum (a peak)",
+    "An inflection point",
+    "Nothing special, just a flat pause"
+   ],
+   "answer": 1,
+   "why": [
+    "A valley is the opposite pattern: negative then positive (down then up).",
+    "Correct: rising then falling (up then over the top then down) is exactly a peak, a local maximum.",
+    "Inflection points are about concavity changing, not the first-derivative sign switching from positive to negative.",
+    "A flat pause happens when the sign does not change; here it clearly switches, so it is a real peak."
+   ]
+  },
+  {
+   "q": "What does $f'(x)>0$ tell you about the function on that stretch?",
+   "choices": [
+    "The function is decreasing",
+    "The function is concave up",
+    "The function is increasing",
+    "The function has a maximum there"
+   ],
+   "answer": 2,
+   "why": [
+    "Decreasing is $f'(x)<0$ (negative slope); a positive slope means the opposite.",
+    "Concave up is about the second derivative $f''$, not the sign of $f'$.",
+    "Right: a positive slope means the curve is climbing, so the function is increasing.",
+    "A maximum needs the slope to switch from positive to negative; just being positive means it is still rising."
+   ]
+  }
+ ],
+ "16": [
+  {
+   "q": "If $f''(x)>0$ on an interval, the curve is shaped like a:",
+   "choices": [
+    "Bowl (concave up)",
+    "Dome (concave down)",
+    "Straight line",
+    "Sharp corner"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: $f''>0$ means concave up, a bowl or smile that holds water.",
+    "A dome (concave down) is $f''(x)<0$, the mirror image.",
+    "A straight line has $f''=0$ everywhere, with no bend at all.",
+    "A corner is about $f'$ not existing, not about the sign of $f''$."
+   ]
+  },
+  {
+   "q": "Using the Second Derivative Test, if $c$ is a critical number and $f''(c)<0$, then $c$ is a:",
+   "choices": [
+    "Local minimum",
+    "Local maximum",
+    "Inflection point",
+    "Endpoint"
+   ],
+   "answer": 1,
+   "why": [
+    "A local minimum is the bottom of a bowl, where $f''(c)>0$, the opposite sign.",
+    "Right: $f''(c)<0$ means a dome there, and the top of a dome is a local maximum.",
+    "An inflection point is where concavity changes, not where you classify a peak or valley.",
+    "Endpoints come from the closed-interval method, not from the sign of the second derivative."
+   ]
+  },
+  {
+   "q": "What is an inflection point?",
+   "choices": [
+    "A point where the function equals zero",
+    "A point where the function reaches its peak",
+    "A point where the slope is steepest",
+    "A point where the concavity flips (bowl to dome or dome to bowl)"
+   ],
+   "answer": 3,
+   "why": [
+    "That's a root of the function, not a change in how the curve bends.",
+    "That's a maximum; an inflection point is about the bend switching, not the height peaking.",
+    "Steepness is about the slope size, not about concavity changing sign.",
+    "Correct: an inflection point is exactly where the curve switches from concave up to concave down or back."
+   ]
+  }
+ ],
+ "17": [
+  {
+   "q": "On a closed interval $[a,b]$, where can the absolute max and min of a smooth curve occur?",
+   "choices": [
+    "Only at the midpoint of the interval",
+    "Only where $f(x)=0$",
+    "At a critical number inside the interval or at an endpoint",
+    "Only at inflection points"
+   ],
+   "answer": 2,
+   "why": [
+    "There is nothing special about the midpoint; the extremes hide at critical numbers or endpoints.",
+    "Where $f(x)=0$ is about the output being zero, not about being highest or lowest.",
+    "Correct: the only suspects are interior critical numbers and the two endpoints.",
+    "Inflection points are about bending, not about where the highest or lowest values sit."
+   ]
+  },
+  {
+   "q": "In the Closed Interval Method, after listing the critical numbers and the two endpoints, what do you do next?",
+   "choices": [
+    "Evaluate $f$ at every value on the list and pick the biggest and smallest outputs",
+    "Take the second derivative at each one",
+    "Pick the value closest to zero",
+    "Average all the values together"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: plug each candidate into $f$; the largest output is the absolute max and the smallest is the absolute min.",
+    "The second derivative is not needed here; you just compare the actual function values.",
+    "Being close to zero is irrelevant; you compare the heights $f$ produces.",
+    "Averaging mixes the values together; you want the single biggest and smallest, not a mean."
+   ]
+  },
+  {
+   "q": "Why must you check the endpoints when finding absolute extrema on $[a,b]$?",
+   "choices": [
+    "Because the slope is always zero at endpoints",
+    "Because the highest or lowest value can sit at an endpoint even when the slope is not zero",
+    "Because endpoints are always the maximum",
+    "Because critical numbers do not matter on closed intervals"
+   ],
+   "answer": 1,
+   "why": [
+    "The slope is usually not zero at an endpoint; that is exactly why the test for critical numbers would miss it.",
+    "Right: at an endpoint you run out of room to step further, so it can be the extreme even with a nonzero slope.",
+    "Endpoints are only sometimes the extreme; you still have to compare them against the critical numbers.",
+    "Critical numbers absolutely matter; endpoints are checked in addition to them, not instead of them."
+   ]
+  }
+ ],
+ "18": [
+  {
+   "q": "What is the first step of the optimization recipe?",
+   "choices": [
+    "Take the second derivative",
+    "Guess the answer and check it",
+    "Write the quantity to optimize as a function of one variable",
+    "Plug in the endpoints"
+   ],
+   "answer": 2,
+   "why": [
+    "The second derivative comes later, only to confirm a max or min.",
+    "Optimization is solved with calculus, not guesswork.",
+    "Correct: step 1 is always to express what you want to maximize or minimize as a function of a single variable.",
+    "Endpoints belong to the closed-interval method; open-ended business curves are solved by setting the derivative to zero."
+   ]
+  },
+  {
+   "q": "After writing the quantity as a one-variable function, what do you do to find the candidate max or min?",
+   "choices": [
+    "Set the function itself equal to zero",
+    "Take the derivative and set it equal to zero",
+    "Take the derivative and set it equal to one",
+    "Add up all the variables"
+   ],
+   "answer": 1,
+   "why": [
+    "Setting the function to zero finds where the output is zero, not where the peak or valley is.",
+    "Correct: the max or min sits where the slope is zero, so you differentiate and solve $f'=0$.",
+    "The slope at a peak or valley is zero, not one.",
+    "Adding the variables does nothing useful; you need the derivative to locate the flat spot."
+   ]
+  },
+  {
+   "q": "After solving for the candidate, how can you confirm it is really a maximum?",
+   "choices": [
+    "Check that the second derivative is negative (concave down)",
+    "Check that the second derivative is positive (concave up)",
+    "Check that the function value is positive",
+    "Check that the candidate is a whole number"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: $f''<0$ means concave down, a dome, so the candidate is a maximum.",
+    "A positive second derivative is concave up, a bowl, which would confirm a minimum instead.",
+    "A positive output value does not tell you whether it is a peak or a valley.",
+    "Whether the candidate is a whole number says nothing about it being a max or min."
+   ]
+  }
+ ],
+ "19": [
+  {
+   "q": "Integration is best described as the reverse of which operation?",
+   "choices": [
+    "Differentiation",
+    "Multiplication",
+    "Taking a square root",
+    "Adding fractions"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - integration undoes differentiation, just like subtraction undoes addition.",
+    "Multiplication is undone by division, not by integration.",
+    "Square-rooting is undone by squaring, which is a separate idea.",
+    "Adding fractions has nothing to do with integration; the lesson pairs integration with differentiation."
+   ]
+  },
+  {
+   "q": "Why does an indefinite integral always include a $+C$?",
+   "choices": [
+    "Because every integral must end in a constant by tradition.",
+    "Because a constant differentiates to 0, so the original constant can't be recovered.",
+    "Because $C$ stands for the variable you integrate with respect to.",
+    "Because the integral sign requires a number after it."
+   ],
+   "answer": 1,
+   "why": [
+    "It is not just tradition; there is a real reason any constant could have been there.",
+    "Correct - since the derivative of any constant is 0, reversing the process can't tell which constant was present, so $+C$ covers them all.",
+    "The variable of integration is shown by the $dx$, not by $C$.",
+    "Nothing forces a number after the integral sign; the $C$ exists because constants vanish when differentiating."
+   ]
+  },
+  {
+   "q": "What is an antiderivative of $2x$?",
+   "choices": [
+    "$2$",
+    "$x^2$",
+    "$2x^2$",
+    "$\\frac{x^2}{2}$"
+   ],
+   "answer": 1,
+   "why": [
+    "The derivative of $2$ is $0$, not $2x$.",
+    "Correct - the derivative of $x^2$ is $2x$, so $x^2$ is an antiderivative of $2x$.",
+    "The derivative of $2x^2$ is $4x$, which is too big.",
+    "The derivative of $\\frac{x^2}{2}$ is $x$, not $2x$."
+   ]
+  }
+ ],
+ "20": [
+  {
+   "q": "Substitution is the reverse of which differentiation rule?",
+   "choices": [
+    "The power rule",
+    "The product rule",
+    "The chain rule",
+    "The constant rule"
+   ],
+   "answer": 2,
+   "why": [
+    "The power rule handles simple bare terms, not the nested functions substitution unwinds.",
+    "The product rule is a different pattern; substitution is not its reverse.",
+    "Correct - the chain rule builds nested functions, and substitution unwinds them when integrating.",
+    "The constant rule just sends constants to 0 and is unrelated here."
+   ]
+  },
+  {
+   "q": "In substitution, what should you choose as $u$?",
+   "choices": [
+    "The inner (messy) function",
+    "The whole integral",
+    "The $dx$ at the end",
+    "Any random part of the expression"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - you rename the inner function as $u$, which is step 1 of the method.",
+    "You substitute for the inner piece, not the entire integral at once.",
+    "The $dx$ becomes $du$ later; it is not what you call $u$.",
+    "The choice is not random; you pick the inner function so the integral collapses."
+   ]
+  },
+  {
+   "q": "Using substitution, what is $\\int e^{5x}\\,dx$?",
+   "choices": [
+    "$5e^{5x}+C$",
+    "$e^{5x}+C$",
+    "$\\frac{e^{5x}}{5}+C$",
+    "$e^{5}x+C$"
+   ],
+   "answer": 2,
+   "why": [
+    "Multiplying by 5 is the derivative direction; integrating divides by 5 instead.",
+    "Plain $e^{5x}$ is the integrand, not its integral; the inner $5x$ needs accounting for.",
+    "Correct - with $u=5x$ you get $\\frac{e^{5x}}{5}+C$, and differentiating it gives back $e^{5x}$.",
+    "That misreads $e^{5x}$; the exponent is $5x$, not a separate $5$ times $x$."
+   ]
+  }
+ ],
+ "21": [
+  {
+   "q": "A definite integral $\\int_a^b f(x)\\,dx$ gives back what?",
+   "choices": [
+    "A function plus $C$",
+    "A single number (the signed area)",
+    "A new variable",
+    "The slope at a point"
+   ],
+   "answer": 1,
+   "why": [
+    "That describes an indefinite integral; adding the two limits removes the $+C$.",
+    "Correct - with limits attached, the result is one number equal to the signed area from $a$ to $b$.",
+    "It does not produce a variable; it produces a definite numerical value.",
+    "Slope at a point is a derivative idea, not what a definite integral measures."
+   ]
+  },
+  {
+   "q": "What does \"signed\" area mean for a definite integral?",
+   "choices": [
+    "Area is always counted as positive.",
+    "Area above the x-axis is positive and area below is negative.",
+    "You must sign your name before computing it.",
+    "The area is doubled before adding."
+   ],
+   "answer": 1,
+   "why": [
+    "Area is not always positive; pieces below the axis count as negative.",
+    "Correct - regions above the x-axis add, regions below subtract, so the total can be negative.",
+    "That is just a play on the word; signed refers to positive versus negative area.",
+    "Nothing gets doubled; signed simply tracks above versus below the axis."
+   ]
+  },
+  {
+   "q": "What is the value of $\\int_a^a f(x)\\,dx$?",
+   "choices": [
+    "$0$",
+    "$f(a)$",
+    "$1$",
+    "It cannot be computed."
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - a zero-width interval encloses no area, so the integral is $0$.",
+    "$f(a)$ is a height of the curve, not the area over an empty interval.",
+    "There is no reason the answer would be $1$; an empty interval has no area.",
+    "It is perfectly computable: start and end match, so the area is $0$."
+   ]
+  }
+ ],
+ "22": [
+  {
+   "q": "The Fundamental Theorem of Calculus says $\\int_a^b f(x)\\,dx$ equals what?",
+   "choices": [
+    "$F(a)-F(b)$",
+    "$F(b)-F(a)$",
+    "$F(b)+F(a)$",
+    "$f(b)-f(a)$"
+   ],
+   "answer": 1,
+   "why": [
+    "That is the right pieces in the wrong order; top minus bottom is $F(b)-F(a)$.",
+    "Correct - find an antiderivative $F$, then subtract: plug in the top limit minus the bottom limit.",
+    "You subtract, not add, the two values of the antiderivative.",
+    "You use the antiderivative $F$, not the original $f$, at the limits."
+   ]
+  },
+  {
+   "q": "Why can you ignore the $+C$ when computing a definite integral?",
+   "choices": [
+    "Because $C$ is always equal to 0.",
+    "Because the $C$ cancels when you subtract $F(a)$ from $F(b)$.",
+    "Because definite integrals are not real integrals.",
+    "Because $C$ only matters for negative limits."
+   ],
+   "answer": 1,
+   "why": [
+    "$C$ is not always 0; it simply drops out of the subtraction.",
+    "Correct - $(F(b)+C)-(F(a)+C)$ cancels the $C$'s, leaving $F(b)-F(a)$.",
+    "Definite integrals are very real; the $C$ just cancels in the subtraction.",
+    "The limits being negative changes nothing; the $C$ always cancels."
+   ]
+  },
+  {
+   "q": "What is $\\int_0^2 4x\\,dx$?",
+   "choices": [
+    "$4$",
+    "$16$",
+    "$8$",
+    "$2$"
+   ],
+   "answer": 2,
+   "why": [
+    "That skips the evaluation; you must compute $F(2)-F(0)$ with $F(x)=2x^2$.",
+    "$16$ would be $4(2)^2$ without dividing correctly; the antiderivative is $2x^2$, giving $8$.",
+    "Correct - $F(x)=2x^2$, so $2(2)^2-2(0)^2=8-0=8$.",
+    "$2$ ignores the antiderivative step; evaluating $2x^2$ from 0 to 2 gives $8$."
+   ]
+  }
+ ],
+ "23": [
+  {
+   "q": "To find the area between two curves on $[a,b]$, what do you integrate?",
+   "choices": [
+    "$\\int_a^b[\\text{top}-\\text{bottom}]\\,dx$",
+    "$\\int_a^b[\\text{bottom}-\\text{top}]\\,dx$",
+    "$\\int_a^b[\\text{top}+\\text{bottom}]\\,dx$",
+    "$\\int_a^b[\\text{top}\\cdot\\text{bottom}]\\,dx$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: you integrate the top curve minus the bottom curve across the interval.",
+    "Subtracting in this order gives a negative number; just swap them since real area is positive.",
+    "Adding the curves does not measure the gap between them, so it is not the area between them.",
+    "Multiplying the curves has no meaning here; area between curves uses subtraction."
+   ]
+  },
+  {
+   "q": "Picture a thin vertical strip of the region at position $x$. What is its area?",
+   "choices": [
+    "height plus width",
+    "(top minus bottom) times $dx$",
+    "(top minus bottom) squared",
+    "just the width $dx$"
+   ],
+   "answer": 1,
+   "why": [
+    "Adding a height and a width does not give an area; you multiply them.",
+    "Correct: each strip is a tiny rectangle, height (top minus bottom) times width $dx$.",
+    "Squaring the height is not how rectangle area works; it is height times width.",
+    "The width alone is just a length; you must multiply it by the strip's height."
+   ]
+  },
+  {
+   "q": "If you are not told the interval, how do you find where the two curves cross?",
+   "choices": [
+    "Add the two curves and set the sum to zero",
+    "Take the derivative of each curve",
+    "Set the two curves equal and solve",
+    "Pick any two values of $x$"
+   ],
+   "answer": 2,
+   "why": [
+    "Adding the curves does not locate where they meet; their values must be equal there.",
+    "Derivatives give slopes, not the points where the curves cross each other.",
+    "Correct: the curves cross where they have the same value, so set them equal and solve.",
+    "Guessing values will not reliably find the exact crossing points."
+   ]
+  }
+ ],
+ "24": [
+  {
+   "q": "On a graph, consumer surplus is the area that is:",
+   "choices": [
+    "below the demand curve and above the price line",
+    "above the demand curve and below the price line",
+    "below the supply curve and above the price line",
+    "above the supply curve and below the price line"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: consumer surplus is the savings area below demand and above the price line.",
+    "This region is flipped; consumer surplus sits below demand, not above it.",
+    "This uses the supply curve, but consumer surplus is measured against the demand curve.",
+    "That description is producer surplus, not consumer surplus."
+   ]
+  },
+  {
+   "q": "Producer surplus is the area:",
+   "choices": [
+    "below the demand curve and above the price line",
+    "above the supply curve and below the price line",
+    "below the supply curve and above the price line",
+    "above the demand curve and below the price line"
+   ],
+   "answer": 1,
+   "why": [
+    "That description is consumer surplus, which uses the demand curve.",
+    "Correct: producer surplus is the extra earned, the area above supply and below the price line.",
+    "This region is flipped; producer surplus sits above the supply curve, not below it.",
+    "Producer surplus uses the supply curve, not the demand curve."
+   ]
+  },
+  {
+   "q": "How do you find the equilibrium quantity?",
+   "choices": [
+    "Set demand equal to zero",
+    "Add demand and supply together",
+    "Set demand equal to supply and solve",
+    "Take the area under the demand curve"
+   ],
+   "answer": 2,
+   "why": [
+    "Setting demand to zero finds where price hits zero, not where the market balances.",
+    "Adding the curves does not find where buyers and sellers agree.",
+    "Correct: equilibrium is where demand meets supply, so set $D(x)=S(x)$ and solve.",
+    "An area gives a surplus, not the equilibrium point where the curves meet."
+   ]
+  }
+ ],
+ "25": [
+  {
+   "q": "To find the present value of a dollar arriving later, you multiply it by:",
+   "choices": [
+    "$e^{rt}$",
+    "$e^{-rt}$",
+    "$rt$",
+    "$1+rt$"
+   ],
+   "answer": 1,
+   "why": [
+    "$e^{rt}$ grows money forward; present value runs that in reverse.",
+    "Correct: discounting multiplies future money by the discount factor $e^{-rt}$.",
+    "$rt$ is just the exponent, not the discount factor itself.",
+    "$1+rt$ is simple interest, not the continuous discount factor."
+   ]
+  },
+  {
+   "q": "Why is a dollar arriving five years from now worth less than a dollar today?",
+   "choices": [
+    "Because money loses its color over time",
+    "Because future dollars are taxed twice",
+    "Because today's dollar could be invested and grow",
+    "Because banks refuse to hold old dollars"
+   ],
+   "answer": 2,
+   "why": [
+    "This is not a real reason; dollars do not change in any such way.",
+    "Double taxation is not the reason; discounting comes from the chance to invest today.",
+    "Correct: a dollar today can be invested to grow, so future dollars are worth less now.",
+    "This is not true and is not why future money is discounted."
+   ]
+  },
+  {
+   "q": "For a continuous income stream $f(t)$ over $[0,T]$ at rate $r$, the present value is:",
+   "choices": [
+    "$\\int_0^T f(t)\\,e^{-rt}\\,dt$",
+    "$\\int_0^T f(t)\\,e^{rt}\\,dt$",
+    "$\\int_0^T f(t)\\,dt$",
+    "$\\int_0^T e^{-rt}\\,dt$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct: each tiny payment $f(t)\\,dt$ is discounted by $e^{-rt}$, then summed.",
+    "Using $e^{rt}$ grows the payments forward instead of discounting them back.",
+    "This adds up the payments without discounting, so it ignores present value.",
+    "This leaves out the income rate $f(t)$, so it does not total the actual money received."
+   ]
+  }
+ ]
+};
+
+// Render a string that may contain inline math wrapped in $...$ as KaTeX.
+function MX({s}){
+  const parts=String(s).split(/(\$[^$]*\$)/g);
+  return <>{parts.map((p,i)=>(p.length>1&&p[0]==="$"&&p[p.length-1]==="$")?<M key={i} d={p.slice(1,-1)}/>:<span key={i}>{p}</span>)}</>;
+}
+
+const QLETTERS=["A","B","C","D"];
+function Quiz({quiz,passed,onPass}){
+  const[step,setStep]=useState(passed?quiz.length:0);
+  const[chosen,setChosen]=useState(null);
+  const finished=step>=quiz.length;
+
+  if(finished){
+    return(
+      <div style={{background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.22)",borderRadius:20,padding:"24px 30px",marginBottom:24,textAlign:"center"}}>
+        <div style={{fontSize:15,fontWeight:800,color:"#6ee7b7",fontFamily:"Inter,system-ui"}}>✓ Quiz complete</div>
+        <div style={{fontSize:13.5,color:"#a5b0c2",marginTop:6,fontFamily:"Inter,system-ui"}}>You answered all {quiz.length} questions correctly. This lesson is unlocked - use the Next button up top to continue.</div>
+      </div>
+    );
+  }
+
+  const qz=quiz[step];
+  const isCorrect=chosen!==null&&chosen===qz.answer;
+  const isWrong=chosen!==null&&chosen!==qz.answer;
+  const pick=(i)=>{ if(isCorrect)return; setChosen(i); };
+  const cont=()=>{ if(step+1>=quiz.length){onPass();setStep(quiz.length);} else {setStep(step+1);setChosen(null);} };
+
+  return(
+    <div style={{background:"rgba(139,92,246,0.05)",border:"1px solid rgba(139,92,246,0.22)",borderRadius:20,padding:"28px 32px",marginBottom:24,fontFamily:"Inter,system-ui"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
+        <div style={{display:"inline-block",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",color:"#c4b5fd",background:"rgba(139,92,246,0.12)",border:"1px solid rgba(139,92,246,0.3)",padding:"5px 12px",borderRadius:999}}>Check your understanding</div>
+        <div style={{display:"flex",gap:5,alignItems:"center"}}>
+          {quiz.map((_,i)=><span key={i} style={{width:8,height:8,borderRadius:"50%",background:i<step?"#34d399":i===step?"#a78bfa":"rgba(148,163,184,0.3)"}}/>)}
+          <span style={{fontSize:12,color:"#94a3b8",marginLeft:6,fontWeight:600}}>Question {step+1} of {quiz.length}</span>
+        </div>
+      </div>
+
+      <div style={{fontSize:16.5,lineHeight:1.6,color:"#eef2f8",fontWeight:600,marginBottom:16}}><MX s={qz.q}/></div>
+
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {qz.choices.map((c,i)=>{
+          const picked=chosen===i;
+          const showRight=isCorrect&&i===qz.answer;
+          const showWrong=isWrong&&picked;
+          const bg=showRight?"rgba(16,185,129,0.14)":showWrong?"rgba(239,68,68,0.12)":"rgba(8,11,20,0.45)";
+          const bd=showRight?"#34d399":showWrong?"#f87171":"rgba(148,163,184,0.2)";
+          return(
+            <button key={i} onClick={()=>pick(i)} disabled={isCorrect}
+              style={{display:"flex",alignItems:"center",gap:12,width:"100%",textAlign:"left",background:bg,border:`1px solid ${bd}`,borderRadius:12,padding:"13px 16px",cursor:isCorrect?"default":"pointer",fontFamily:"Inter,system-ui",transition:"background 0.15s,border 0.15s"}}>
+              <span style={{width:26,height:26,flexShrink:0,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,background:showRight?"#10b981":showWrong?"#ef4444":"rgba(148,163,184,0.16)",color:showRight||showWrong?"#fff":"#cbd5e1"}}>{showRight?"✓":showWrong?"✕":QLETTERS[i]}</span>
+              <span style={{fontSize:15,color:"#dde4ee",lineHeight:1.5}}><MX s={c}/></span>
+            </button>
+          );
+        })}
+      </div>
+
+      {isWrong&&(
+        <div style={{marginTop:14,padding:"13px 16px",background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#fcd9a8"}}>
+          <strong style={{color:"#fbbf24"}}>Not quite. </strong><MX s={qz.why[chosen]}/> <span style={{color:"#fbbf24",fontWeight:600}}>Give it another try.</span>
+        </div>
+      )}
+      {isCorrect&&(
+        <div style={{marginTop:14}}>
+          <div style={{padding:"13px 16px",background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#bbf7d0"}}>
+            <strong style={{color:"#6ee7b7"}}>Correct! </strong><MX s={qz.why[qz.answer]}/>
+          </div>
+          <button onClick={cont} style={{marginTop:14,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.28)"}}>
+            {step+1>=quiz.length?"Finish quiz →":"Next question →"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LockIcon({size=13,color="#94a3b8"}){
   return(
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2564,12 +3893,22 @@ function Course({session,onSignOut,onBrand}){
   const allDone=done.size>=L.length;
   const certDate=(completedAt?new Date(completedAt):new Date()).toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
   const fullName=session?`${session.firstName||""} ${session.lastName||""}`.trim():"";
+  const lessonQuiz=QUIZ[lesson.id];
+  const hasQuiz=!!(lessonQuiz&&lessonQuiz.length);
+  const passed=done.has(idx);
   const toggle=(i)=>setAns(p=>({...p,[`${idx}-${i}`]:!p[`${idx}-${i}`]}));
+  // Passing the quiz is what completes a lesson (awards XP, confetti once).
+  const passQuiz=()=>{
+    if(!done.has(idx)){setDone(p=>new Set([...p,idx]));setXp(p=>p+50);setBurst(b=>b+1);}
+  };
+  const isLast=idx>=L.length-1;
+  const nextDisabled=hasQuiz?(!passed||(isLast&&!allDone)):false;
+  const nextLabel=(hasQuiz&&!passed)?"Pass the quiz to continue":(isLast?(allDone?"View certificate →":"Finish remaining lessons"):"Next →");
   const next=()=>{
-    const firstTime=!done.has(idx);
-    if(firstTime){setDone(p=>new Set([...p,idx]));setXp(p=>p+50);setBurst(b=>b+1);}
-    if(idx<L.length-1){setIdx(idx+1);setAns({});}
-    else if(done.size+(firstTime?1:0)>=L.length){setOnCert(true);}
+    if(nextDisabled)return;
+    if(!hasQuiz&&!passed){setDone(p=>new Set([...p,idx]));setXp(p=>p+50);setBurst(b=>b+1);}
+    if(!isLast){setIdx(idx+1);setAns({});}
+    else if(allDone){setOnCert(true);}
   };
   const prev=()=>{if(idx>0){setIdx(idx-1);setAns({});}};
 
@@ -2666,8 +4005,8 @@ function Course({session,onSignOut,onBrand}){
               <button disabled={idx===0} onClick={prev} aria-label="Previous lesson" style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:idx===0?"#334155":"#cbd5e1",padding:"9px 15px",borderRadius:10,cursor:idx===0?"default":"pointer",fontSize:13,fontWeight:600,fontFamily:"Inter,system-ui"}}>
                 ←
               </button>
-              <button onClick={next} style={{background:done.has(idx)?"rgba(16,185,129,0.12)":"linear-gradient(135deg,#6366f1,#8b5cf6)",border:done.has(idx)?"1px solid rgba(16,185,129,0.25)":"none",color:done.has(idx)?"#6ee7b7":"#fff",padding:"9px 18px",borderRadius:10,cursor:"pointer",fontSize:13,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:done.has(idx)?"none":"0 4px 14px rgba(99,102,241,0.3)",whiteSpace:"nowrap"}}>
-                {done.has(idx)?(idx<L.length-1?"Next →":"✓ Done"):(idx<L.length-1?"Complete →":"Finish ✓")}
+              <button onClick={next} disabled={nextDisabled} aria-label="Next lesson" style={{background:nextDisabled?"rgba(148,163,184,0.08)":(isLast&&allDone?"linear-gradient(135deg,#f6d365,#d9a520)":"linear-gradient(135deg,#6366f1,#8b5cf6)"),border:nextDisabled?"1px solid rgba(148,163,184,0.16)":"none",color:nextDisabled?"#64748b":(isLast&&allDone?"#3a2a06":"#fff"),padding:"9px 18px",borderRadius:10,cursor:nextDisabled?"default":"pointer",fontSize:13,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:nextDisabled?"none":"0 4px 14px rgba(99,102,241,0.3)",whiteSpace:"nowrap"}}>
+                {nextLabel}
               </button>
               </>)}
               <span className="acct-divider" style={{width:1,height:22,background:"rgba(148,163,184,0.18)",margin:"0 4px"}}/>
@@ -2687,6 +4026,7 @@ function Course({session,onSignOut,onBrand}){
               {lesson.content.map((item,i)=>(
                 <CC key={`${idx}-${i}`} id={`blk-${idx}-${i}`} item={item} showAnswer={!!ans[`${idx}-${i}`]} onToggle={()=>toggle(i)}/>
               ))}
+              {hasQuiz&&<Quiz key={`quiz-${idx}`} quiz={lessonQuiz} passed={passed} onPass={passQuiz}/>}
             </div>
             <aside className="lesson-rail" style={{position:"sticky",top:0,alignSelf:"start",fontFamily:"Inter,system-ui",display:"flex",flexDirection:"column",gap:14}}>
               <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:16,padding:"16px 18px"}}>
@@ -2968,12 +4308,39 @@ function AuthScreen({mode,onSignup,onSignin,onAdmin,onBack,goSignup,goSignin}){
   );
 }
 
-function AdminDashboard({users,onEnterCourse,onSignOut,onBrand}){
+function AdminDashboard({onEnterCourse,onSignOut,onBrand}){
+  const[users,setUsers]=useState(()=>loadUsers());
+  const[editing,setEditing]=useState(null);     // email currently being edited
+  const[form,setForm]=useState({firstName:"",lastName:"",email:""});
+  const[confirmDel,setConfirmDel]=useState(null); // email pending delete confirm
+  const[err,setErr]=useState("");
   const fmt=(iso)=>{try{return new Date(iso).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch(e){return iso;}};
+  const persist=(list)=>{saveUsers(list);setUsers(list);};
+
+  const startEdit=(u)=>{setEditing(u.email);setForm({firstName:u.firstName,lastName:u.lastName,email:u.email});setErr("");setConfirmDel(null);};
+  const cancelEdit=()=>{setEditing(null);setErr("");};
+  const saveEdit=(orig)=>{
+    const fn=form.firstName.trim(),ln=form.lastName.trim(),em=form.email.trim().toLowerCase();
+    if(!fn||!ln){setErr("First and last name are required.");return;}
+    if(!validEmail(em)){setErr("Enter a valid email address.");return;}
+    if(em!==orig&&users.some(u=>u.email===em)){setErr("Another account already uses that email.");return;}
+    if(em!==orig){try{const v=localStorage.getItem(SAVE_KEY+"::"+orig);if(v!=null){localStorage.setItem(SAVE_KEY+"::"+em,v);localStorage.removeItem(SAVE_KEY+"::"+orig);}}catch(e){}}
+    persist(users.map(u=>u.email===orig?{...u,firstName:fn,lastName:ln,email:em}:u));
+    setEditing(null);setErr("");
+  };
+  const doDelete=(email)=>{
+    try{localStorage.removeItem(SAVE_KEY+"::"+email);}catch(e){}
+    persist(users.filter(u=>u.email!==email));
+    setConfirmDel(null);
+  };
+
+  const inputStyle={width:"100%",boxSizing:"border-box",background:"rgba(8,11,20,0.6)",border:"1px solid rgba(148,163,184,0.25)",borderRadius:8,padding:"7px 10px",color:"#f1f5f9",fontSize:13.5,fontFamily:"Inter,system-ui",outline:"none"};
+  const sbtn=(bg,col,bd)=>({background:bg,color:col,border:bd||"none",padding:"6px 12px",borderRadius:8,cursor:"pointer",fontSize:12.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"});
+
   return(
     <div style={SCREEN_BG}>
       <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)"}}>
-        <div style={{maxWidth:1040,margin:"0 auto",padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
+        <div style={{maxWidth:1080,margin:"0 auto",padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
           <Brand onClick={onBrand}/>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <button onClick={onEnterCourse} style={{...BTN_GHOST,padding:"10px 16px"}}>Enter course</button>
@@ -2981,37 +4348,61 @@ function AdminDashboard({users,onEnterCourse,onSignOut,onBrand}){
           </div>
         </div>
       </div>
-      <div style={{maxWidth:1040,margin:"0 auto",padding:"40px 28px 60px"}}>
+      <div style={{maxWidth:1080,margin:"0 auto",padding:"40px 28px 60px"}}>
         <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:6}}>
           <h1 style={{fontSize:28,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:0}}>Registered users</h1>
           <span style={{fontSize:13,color:"#94a3b8",fontWeight:600}}>Admin dashboard (temporary)</span>
         </div>
-        <p style={{fontSize:14.5,color:"#94a3b8",margin:"0 0 22px"}}>{users.length} {users.length===1?"account":"accounts"} so far.</p>
+        <p style={{fontSize:14.5,color:"#94a3b8",margin:"0 0 22px"}}>{users.length} {users.length===1?"account":"accounts"} so far. You can edit a name or email, or delete an account.</p>
 
         {users.length===0?(
           <div style={{padding:"48px 24px",textAlign:"center",background:"rgba(255,255,255,0.022)",border:"1px dashed rgba(148,163,184,0.2)",borderRadius:18,color:"#94a3b8",fontSize:15}}>No accounts yet. New sign-ups will appear here.</div>
         ):(
           <div style={{overflowX:"auto",background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.12)",borderRadius:18}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:520}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:680}}>
               <thead>
                 <tr style={{color:"#94a3b8"}}>
-                  <th style={{...TH,textAlign:"left"}}>#</th><th style={{...TH,textAlign:"left"}}>First name</th><th style={{...TH,textAlign:"left"}}>Last name</th><th style={{...TH,textAlign:"left"}}>Email</th><th style={{...TH,textAlign:"left"}}>Signed up</th>
+                  <th style={{...TH,textAlign:"left"}}>#</th><th style={{...TH,textAlign:"left"}}>First name</th><th style={{...TH,textAlign:"left"}}>Last name</th><th style={{...TH,textAlign:"left"}}>Email</th><th style={{...TH,textAlign:"left"}}>Signed up</th><th style={{...TH,textAlign:"right"}}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((u,i)=>(
+                {users.map((u,i)=>{
+                  const isEdit=editing===u.email;
+                  return(
                   <tr key={u.email} style={{borderTop:"1px solid rgba(148,163,184,0.08)"}}>
                     <td style={{...TD,color:"#64748b"}}>{i+1}</td>
-                    <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.firstName}</td>
-                    <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.lastName}</td>
-                    <td style={{...TD,color:"#a5b0c2"}}>{u.email}</td>
-                    <td style={{...TD,color:"#94a3b8"}}>{fmt(u.createdAt)}</td>
-                  </tr>
-                ))}
+                    {isEdit?(<>
+                      <td style={TD}><input style={inputStyle} value={form.firstName} onChange={e=>{setForm({...form,firstName:e.target.value});setErr("");}}/></td>
+                      <td style={TD}><input style={inputStyle} value={form.lastName} onChange={e=>{setForm({...form,lastName:e.target.value});setErr("");}}/></td>
+                      <td style={TD}><input style={inputStyle} value={form.email} onChange={e=>{setForm({...form,email:e.target.value});setErr("");}}/></td>
+                      <td style={{...TD,color:"#94a3b8"}}>{fmt(u.createdAt)}</td>
+                      <td style={{...TD,textAlign:"right",whiteSpace:"nowrap"}}>
+                        <button onClick={()=>saveEdit(u.email)} style={sbtn("linear-gradient(135deg,#6366f1,#8b5cf6)","#fff")}>Save</button>
+                        <button onClick={cancelEdit} style={{...sbtn("rgba(148,163,184,0.08)","#cbd5e1","1px solid rgba(148,163,184,0.2)"),marginLeft:6}}>Cancel</button>
+                      </td>
+                    </>):(<>
+                      <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.firstName}</td>
+                      <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.lastName}</td>
+                      <td style={{...TD,color:"#a5b0c2"}}>{u.email}</td>
+                      <td style={{...TD,color:"#94a3b8"}}>{fmt(u.createdAt)}</td>
+                      <td style={{...TD,textAlign:"right",whiteSpace:"nowrap"}}>
+                        {confirmDel===u.email?(<>
+                          <span style={{fontSize:12.5,color:"#fca5a5",marginRight:8}}>Delete?</span>
+                          <button onClick={()=>doDelete(u.email)} style={sbtn("#ef4444","#fff")}>Confirm</button>
+                          <button onClick={()=>setConfirmDel(null)} style={{...sbtn("rgba(148,163,184,0.08)","#cbd5e1","1px solid rgba(148,163,184,0.2)"),marginLeft:6}}>Cancel</button>
+                        </>):(<>
+                          <button onClick={()=>startEdit(u)} style={sbtn("rgba(99,102,241,0.12)","#a5b4fc","1px solid rgba(99,102,241,0.3)")}>Edit</button>
+                          <button onClick={()=>{setConfirmDel(u.email);setEditing(null);}} style={{...sbtn("rgba(239,68,68,0.1)","#fca5a5","1px solid rgba(239,68,68,0.3)"),marginLeft:6}}>Delete</button>
+                        </>)}
+                      </td>
+                    </>)}
+                  </tr>);
+                })}
               </tbody>
             </table>
           </div>
         )}
+        {err&&<div style={{marginTop:14,fontSize:13.5,color:"#fca5a5",background:"rgba(239,68,68,0.08)",border:"1px solid rgba(239,68,68,0.22)",borderRadius:10,padding:"10px 14px"}}>{err}</div>}
       </div>
     </div>
   );
@@ -3055,7 +4446,7 @@ export default function App(){
     return <AuthScreen mode={view==="signup"?"signup":view==="signin"?"signin":"admin"} onSignup={handleSignup} onSignin={handleSignin} onAdmin={handleAdmin} onBack={goHome} goSignup={()=>setView("signup")} goSignin={()=>setView("signin")}/>;
   }
   if(view==="admin"&&session&&session.role==="admin"){
-    return <AdminDashboard users={loadUsers()} onEnterCourse={()=>setView("course")} onSignOut={signOut} onBrand={goHome}/>;
+    return <AdminDashboard onEnterCourse={()=>setView("course")} onSignOut={signOut} onBrand={goHome}/>;
   }
   if(view==="course"&&session){
     return <Course key={session.role==="admin"?"admin":session.email} session={session} onSignOut={signOut} onBrand={goHome}/>;
