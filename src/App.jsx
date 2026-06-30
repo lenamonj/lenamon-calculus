@@ -2448,19 +2448,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "According to the lesson, what are the ONLY two things that can make a function 'jam' (be impossible to compute)?",
+   "q": "What is the domain of $f(x)=\\dfrac{10}{x-3}$?",
    "choices": [
-    "Adding a negative number, or multiplying by zero",
-    "Using a fraction, or using a decimal",
-    "A very large input, or a very small input",
-    "Dividing by zero, or taking the square root of a negative number"
+    "All real numbers except $x=3$",
+    "All real numbers except $x=10$",
+    "All real numbers",
+    "All real numbers except $x=-3$"
    ],
-   "answer": 3,
+   "answer": 0,
    "why": [
-    "Not this one, adding negatives and multiplying by zero are both perfectly fine.",
-    "Not quite, fractions and decimals are allowed; it is a zero denominator that jams things.",
-    "Not this one, the size of the input does not cause a jam by itself.",
-    "Exactly, those are the only two jams, dividing by zero and the square root of a negative."
+    "Correct - the denominator $x-3$ equals zero at $x=3$, the one input that jams the machine.",
+    "Not quite - the 10 is on top; it is the bottom hitting zero that matters, at $x=3$.",
+    "Not quite - this is a fraction, so the input making the bottom zero ($x=3$) must be excluded.",
+    "Close - but $x-3=0$ gives $x=3$, not $x=-3$."
    ]
   }
  ],
@@ -2498,37 +2498,37 @@ const QUIZ = {
    ]
   },
   {
-   "q": "If a line has slope $m=2$, what does that tell you about the line?",
+   "q": "A line passes through $(0,25)$ and $(5,27.5)$. What is its slope?",
    "choices": [
-    "The line is flat (horizontal)",
-    "The line goes down 2 for every 1 step to the right",
-    "The line crosses the $y$-axis at 2",
-    "The line goes up 2 for every 1 step to the right"
+    "$2.5$",
+    "$0.5$",
+    "$5$",
+    "$-0.5$"
    ],
-   "answer": 3,
+   "answer": 1,
    "why": [
-    "Not quite, a flat line has slope $m=0$, not $m=2$.",
-    "Not this one, a downhill line would have a negative slope like $m=-2$.",
-    "Not quite, where it crosses the $y$-axis is $b$, not the slope.",
-    "Yes, a slope of 2 means the line rises 2 units for every 1 step right."
+    "Not quite - that is the rise alone; you still divide by the run of 5.",
+    "Correct - rise over run is $\\dfrac{27.5-25}{5-0}=\\dfrac{2.5}{5}=0.5$.",
+    "Not quite - 5 is the run (the change in $x$), not the slope.",
+    "Not quite - the line is rising, so the slope is positive."
    ]
   }
  ],
  "3": [
   {
-   "q": "What makes growth 'exponential' instead of 'linear'?",
+   "q": "An exponent is repeated multiplication. What is $2^5$?",
    "choices": [
-    "You multiply by the same amount each period, instead of adding the same amount",
-    "You add the same amount each period",
-    "You subtract a little each period",
-    "The amount never changes"
+    "$10$",
+    "$25$",
+    "$32$",
+    "$16$"
    ],
-   "answer": 0,
+   "answer": 2,
    "why": [
-    "Exactly, exponential growth multiplies by the same factor each period, so it snowballs.",
-    "Not quite, adding the same amount each period is linear growth from Lesson 2.",
-    "Not this one, steady subtracting is not how exponential growth works.",
-    "Not quite, with exponential growth the amount definitely changes each period."
+    "Not quite - that is $2\\times 5$; an exponent multiplies five 2's together.",
+    "Not quite - that is $5^2$; here the base is 2 and the exponent is 5.",
+    "Correct - $2^5 = 2\\times 2\\times 2\\times 2\\times 2 = 32$.",
+    "Not quite - $16$ is $2^4$; one more factor of 2 gives $32$."
    ]
   },
   {
@@ -2648,19 +2648,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "The full two-sided limit at $x=c$ exists only when...",
+   "q": "Find $\\displaystyle\\lim_{x\\to 2}\\frac{x^2-4}{x-2}$ by factoring and cancelling.",
    "choices": [
-    "the left-side and right-side limits arrive at the same number.",
-    "$f(c)$ is defined.",
-    "the function never breaks anywhere on its graph.",
-    "the left side is larger than the right side."
+    "$0$",
+    "$4$",
+    "$2$",
+    "It does not exist"
    ],
-   "answer": 0,
+   "answer": 1,
    "why": [
-    "Correct - both one-sided limits must agree for the full limit to exist.",
-    "Not required - a limit can exist even where $f(c)$ is undefined.",
-    "No - the function only needs to head to one value from both sides near $c$.",
-    "No - if the two sides disagree at all, the limit does not exist."
+    "Not quite - $\\frac{0}{0}$ is a signal to simplify, not an answer of 0.",
+    "Correct - $\\frac{(x-2)(x+2)}{x-2}=x+2$, and at $x=2$ that is $4$.",
+    "Not quite - 2 is the value $x$ approaches, not the limit of the function.",
+    "Not quite - after cancelling, the limit is a clean number, $4$."
    ]
   }
  ],
@@ -2732,19 +2732,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "A function has a limit of 6 at $x=3$, but there is no actual point at $x=3$ (a missing dot). What type of discontinuity is this?",
+   "q": "What is $\\displaystyle\\lim_{x\\to 3}\\frac{x^2-9}{x-3}$?",
    "choices": [
-    "Jump",
-    "Vertical asymptote",
-    "Hole (removable discontinuity)",
-    "No discontinuity at all"
+    "$6$",
+    "$0$",
+    "$3$",
+    "It does not exist"
    ],
-   "answer": 2,
+   "answer": 0,
    "why": [
-    "No - a jump is when the left and right limits disagree.",
-    "No - a vertical asymptote is when the function shoots to $\\pm\\infty$.",
-    "Correct - a limit that exists with just a missing point is a removable discontinuity, a hole.",
-    "No - a missing point is a break, so the function is not continuous there."
+    "Correct - factor to $\\frac{(x-3)(x+3)}{x-3}=x+3$, which is $6$ at $x=3$.",
+    "Not quite - $\\frac{0}{0}$ means simplify first, not that the answer is 0.",
+    "Not quite - 3 is the $x$-value; plug it into $x+3$ to get $6$.",
+    "Not quite - it cancels to $x+3$, giving a clear limit of $6$."
    ]
   },
   {
@@ -2798,19 +2798,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "The derivative answers which question about a function?",
+   "q": "For $f(x)=x^2$ the derivative is $f'(x)=2x$. What is the slope of the curve at $x=3$?",
    "choices": [
-    "How fast is it changing right now, at this exact point?",
-    "What is its largest possible value ever?",
-    "Where does it cross the $x$-axis?",
-    "How many terms does it have?"
+    "$3$",
+    "$9$",
+    "$6$",
+    "$0$"
    ],
-   "answer": 0,
+   "answer": 2,
    "why": [
-    "Correct! That instantaneous rate of change at a single point is exactly what the derivative captures.",
-    "Finding a maximum value uses the derivative later, but it is not what the derivative itself means.",
-    "Crossing the $x$-axis is about roots, a separate idea from rate of change.",
-    "The number of terms is just about how the formula is written, not its rate of change."
+    "Not quite - 3 is the $x$-value; plug it into $f'(x)=2x$.",
+    "Not quite - $9$ is the height $f(3)=3^2$, not the slope.",
+    "Correct - $f'(3)=2\\times 3=6$.",
+    "Not quite - the slope is 0 only at the bottom of the parabola, $x=0$."
    ]
   }
  ],
@@ -2882,19 +2882,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "Marginal revenue is best described as:",
+   "q": "A cost function has marginal cost $C'(x)=25-0.10x$. What is the marginal cost at $x=50$?",
    "choices": [
-    "The total money earned from all sales",
-    "$R'(x)$, the approximate revenue from selling one more item",
-    "The cost of one more item",
-    "The number of items still unsold"
+    "$25",
+    "$20",
+    "$5",
+    "$30"
    ],
    "answer": 1,
    "why": [
-    "Total money earned is $R(x)$ itself, not its derivative.",
-    "Correct! Marginal revenue is the derivative $R'(x)$, the revenue from selling the next item.",
-    "That describes marginal cost, which comes from the cost function instead.",
-    "Unsold inventory is not what the revenue derivative measures."
+    "Not quite - you still subtract 0.10 times 50 from 25.",
+    "Correct - C'(50) = 25 - 0.10(50) = 25 - 5 = 20 dollars.",
+    "Not quite - 5 is only the amount subtracted, not the final marginal cost.",
+    "Not quite - marginal cost here decreases as x grows, so it is below 25."
    ]
   },
   {
@@ -2966,19 +2966,19 @@ const QUIZ = {
  ],
  "12": [
   {
-   "q": "What is the product rule for $f(x) = u \\cdot v$?",
+   "q": "Using the product rule, what is the derivative of $f(x)=x^2 e^x$?",
    "choices": [
-    "$u' \\cdot v'$",
-    "$u'v + uv'$",
-    "$u'v - uv'$",
-    "$\\frac{u'v + uv'}{v^2}$"
+    "$2x\\,e^x$",
+    "$2x\\,e^x + x^2 e^x$",
+    "$2x\\,e^x \\cdot x^2 e^x$",
+    "$x^2 e^x$"
    ],
    "answer": 1,
    "why": [
-    "Just multiplying the two derivatives is the tempting trap that gives the wrong answer.",
-    "Correct: each function takes a turn being differentiated while the other stays put.",
-    "That uses a minus sign, but the product rule adds its two terms.",
-    "Dividing by $v^2$ belongs to the quotient rule, not products."
+    "Not quite - that is only the first term; the product rule adds a second.",
+    "Correct - $u'v+uv' = 2x\\,e^x + x^2 e^x$.",
+    "Not quite - the product rule adds the two terms, it does not multiply them.",
+    "Not quite - that is only the $u\\,v'$ term; you also need $u'\\,v$."
    ]
   },
   {
@@ -3098,19 +3098,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "At $E = 1$ (unit elastic), what is special about this price?",
+   "q": "For demand $q=1000-20p$ (so $f'(p)=-20$) at $p=30$ where $f(30)=400$, use $E=-\\dfrac{p\\,f'(p)}{f(p)}$. What is $E(30)$?",
    "choices": [
-    "Demand is exactly zero",
-    "Revenue is maximized; you're at the top of the revenue hill",
-    "The product is free",
-    "You should always raise the price"
+    "$1.5$",
+    "$0.5$",
+    "$2$",
+    "$-1.5$"
    ],
-   "answer": 1,
+   "answer": 0,
    "why": [
-    "Demand isn't zero; customers are still buying.",
-    "Correct: a 1% price change is exactly cancelled by a 1% quantity change, so revenue peaks.",
-    "Unit elastic says nothing about the product being free.",
-    "At the peak, moving either way lowers revenue, so don't raise it."
+    "Correct - $E=-\\dfrac{30\\times(-20)}{400}=\\dfrac{600}{400}=1.5$.",
+    "Not quite - recompute $\\dfrac{600}{400}$; it is $1.5$.",
+    "Not quite - $\\dfrac{600}{400}=1.5$, not 2.",
+    "Not quite - the minus sign out front makes $E$ positive, so $+1.5$."
    ]
   }
  ],
@@ -3148,19 +3148,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "What does $f'(x)>0$ tell you about the function on that stretch?",
+   "q": "Find the critical number of $f(x)=x^2-6x+5$ by solving $f'(x)=0$.",
    "choices": [
-    "The function is decreasing",
-    "The function is concave up",
-    "The function is increasing",
-    "The function has a maximum there"
+    "$x=6$",
+    "$x=3$",
+    "$x=5$",
+    "$x=-3$"
    ],
-   "answer": 2,
+   "answer": 1,
    "why": [
-    "Decreasing is $f'(x)<0$ (negative slope); a positive slope means the opposite.",
-    "Concave up is about the second derivative $f''$, not the sign of $f'$.",
-    "Right: a positive slope means the curve is climbing, so the function is increasing.",
-    "A maximum needs the slope to switch from positive to negative; just being positive means it is still rising."
+    "Not quite - solve $2x-6=0$ for $x$, which gives 3.",
+    "Correct - $f'(x)=2x-6=0$ gives $x=3$.",
+    "Not quite - 5 is the constant in $f$, not where the slope is zero.",
+    "Not quite - $2x-6=0$ gives $x=+3$, not $-3$."
    ]
   }
  ],
@@ -3198,19 +3198,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "What is an inflection point?",
+   "q": "If $f(x)=2x^3-9x^2+12x$, what is $f''(x)$?",
    "choices": [
-    "A point where the function equals zero",
-    "A point where the function reaches its peak",
-    "A point where the slope is steepest",
-    "A point where the concavity flips (bowl to dome or dome to bowl)"
+    "$6x^2-18x+12$",
+    "$12x-18$",
+    "$6x-9$",
+    "$12x-9$"
    ],
-   "answer": 3,
+   "answer": 1,
    "why": [
-    "That's a root of the function, not a change in how the curve bends.",
-    "That's a maximum; an inflection point is about the bend switching, not the height peaking.",
-    "Steepness is about the slope size, not about concavity changing sign.",
-    "Correct: an inflection point is exactly where the curve switches from concave up to concave down or back."
+    "Not quite - that is the first derivative $f'(x)$; differentiate once more.",
+    "Correct - differentiating $f'(x)=6x^2-18x+12$ gives $f''(x)=12x-18$.",
+    "Not quite - bring down each exponent carefully; the answer is $12x-18$.",
+    "Not quite - the constant 12 differentiates to 0, leaving $12x-18$."
    ]
   }
  ],
@@ -3232,19 +3232,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "In the Closed Interval Method, after listing the critical numbers and the two endpoints, what do you do next?",
+   "q": "What is the absolute maximum of $f(x)=x^2$ on $[1,4]$?",
    "choices": [
-    "Evaluate $f$ at every value on the list and pick the biggest and smallest outputs",
-    "Take the second derivative at each one",
-    "Pick the value closest to zero",
-    "Average all the values together"
+    "$1$",
+    "$16$",
+    "$8$",
+    "$0$"
    ],
-   "answer": 0,
+   "answer": 1,
    "why": [
-    "Correct: plug each candidate into $f$; the largest output is the absolute max and the smallest is the absolute min.",
-    "The second derivative is not needed here; you just compare the actual function values.",
-    "Being close to zero is irrelevant; you compare the heights $f$ produces.",
-    "Averaging mixes the values together; you want the single biggest and smallest, not a mean."
+    "Not quite - $f(1)=1$ is the minimum on this interval, not the max.",
+    "Correct - $f(4)=4^2=16$ is the largest value, at the right endpoint.",
+    "Not quite - check the endpoints; $f(4)=16$ is larger.",
+    "Not quite - $x=0$ is not even inside $[1,4]$, so it does not count."
    ]
   },
   {
@@ -3266,19 +3266,19 @@ const QUIZ = {
  ],
  "18": [
   {
-   "q": "What is the first step of the optimization recipe?",
+   "q": "Revenue is $R(p)=600p-20p^2$. Which price maximizes it (solve $R'(p)=0$)?",
    "choices": [
-    "Take the second derivative",
-    "Guess the answer and check it",
-    "Write the quantity to optimize as a function of one variable",
-    "Plug in the endpoints"
+    "$p=15$",
+    "$p=30$",
+    "$p=600$",
+    "$p=20$"
    ],
-   "answer": 2,
+   "answer": 0,
    "why": [
-    "The second derivative comes later, only to confirm a max or min.",
-    "Optimization is solved with calculus, not guesswork.",
-    "Correct: step 1 is always to express what you want to maximize or minimize as a function of a single variable.",
-    "Endpoints belong to the closed-interval method; open-ended business curves are solved by setting the derivative to zero."
+    "Correct - $R'(p)=600-40p=0$ gives $p=15$.",
+    "Not quite - $600-40p=0$ gives $p=15$, not 30.",
+    "Not quite - 600 is a coefficient, not the solution of $600-40p=0$.",
+    "Not quite - solve $600-40p=0$ carefully: $p=15$."
    ]
   },
   {
@@ -3448,19 +3448,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "What is the value of $\\int_a^a f(x)\\,dx$?",
+   "q": "If $\\int_1^4 f\\,dx=7$ and $\\int_1^4 g\\,dx=3$, what is $\\int_1^4 (2f-g)\\,dx$?",
    "choices": [
-    "$0$",
-    "$f(a)$",
-    "$1$",
-    "It cannot be computed."
+    "$11$",
+    "$17$",
+    "$4$",
+    "$8$"
    ],
    "answer": 0,
    "why": [
-    "Correct - a zero-width interval encloses no area, so the integral is $0$.",
-    "$f(a)$ is a height of the curve, not the area over an empty interval.",
-    "There is no reason the answer would be $1$; an empty interval has no area.",
-    "It is perfectly computable: start and end match, so the area is $0$."
+    "Correct - $2(7)-3=14-3=11$.",
+    "Not quite - only $f$ is doubled: $2(7)-3=11$.",
+    "Not quite - that is $7-3$; remember to double the first integral.",
+    "Not quite - $2\\times 7=14$, then subtract 3 to get $11$."
    ]
   }
  ],
@@ -3548,19 +3548,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "If you are not told the interval, how do you find where the two curves cross?",
+   "q": "What is the area between $y=x$ and $y=x^2$ from $x=0$ to $x=1$?",
    "choices": [
-    "Add the two curves and set the sum to zero",
-    "Take the derivative of each curve",
-    "Set the two curves equal and solve",
-    "Pick any two values of $x$"
+    "$\\dfrac{1}{6}$",
+    "$\\dfrac{1}{2}$",
+    "$1$",
+    "$\\dfrac{1}{3}$"
    ],
-   "answer": 2,
+   "answer": 0,
    "why": [
-    "Adding the curves does not locate where they meet; their values must be equal there.",
-    "Derivatives give slopes, not the points where the curves cross each other.",
-    "Correct: the curves cross where they have the same value, so set them equal and solve.",
-    "Guessing values will not reliably find the exact crossing points."
+    "Correct - $\\int_0^1 (x-x^2)\\,dx=\\dfrac{1}{2}-\\dfrac{1}{3}=\\dfrac{1}{6}$.",
+    "Not quite - $\\dfrac{1}{2}$ is just $\\int_0^1 x\\,dx$; subtract the bottom curve too.",
+    "Not quite - the gap between the curves is small here, only $\\dfrac{1}{6}$.",
+    "Not quite - $\\dfrac{1}{3}$ is $\\int_0^1 x^2\\,dx$; subtract it from $\\dfrac{1}{2}$."
    ]
   }
  ],
@@ -3598,19 +3598,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "How do you find the equilibrium quantity?",
+   "q": "For demand $D(x)=50-0.1x$ and supply $S(x)=10+0.1x$, what is the equilibrium quantity?",
    "choices": [
-    "Set demand equal to zero",
-    "Add demand and supply together",
-    "Set demand equal to supply and solve",
-    "Take the area under the demand curve"
+    "$x=100$",
+    "$x=200$",
+    "$x=400$",
+    "$x=40$"
    ],
-   "answer": 2,
+   "answer": 1,
    "why": [
-    "Setting demand to zero finds where price hits zero, not where the market balances.",
-    "Adding the curves does not find where buyers and sellers agree.",
-    "Correct: equilibrium is where demand meets supply, so set $D(x)=S(x)$ and solve.",
-    "An area gives a surplus, not the equilibrium point where the curves meet."
+    "Not quite - set $50-0.1x=10+0.1x$; combining gives $0.2x=40$.",
+    "Correct - $50-0.1x=10+0.1x$ gives $40=0.2x$, so $x=200$.",
+    "Not quite - solve $0.2x=40$, which gives $x=200$.",
+    "Not quite - 40 is the gap $50-10$; divide by $0.2$ to get $x=200$."
    ]
   }
  ],
@@ -3648,19 +3648,19 @@ const QUIZ = {
    ]
   },
   {
-   "q": "For a continuous income stream $f(t)$ over $[0,T]$ at rate $r$, the present value is:",
+   "q": "An income of 10,000 dollars per year flows in continuously for 5 years at a 6% rate. Using $PV=\\dfrac{R\\,(1-e^{-rT})}{r}$ with $e^{-0.3}\\approx 0.7408$, the present value is about:",
    "choices": [
-    "$\\int_0^T f(t)\\,e^{-rt}\\,dt$",
-    "$\\int_0^T f(t)\\,e^{rt}\\,dt$",
-    "$\\int_0^T f(t)\\,dt$",
-    "$\\int_0^T e^{-rt}\\,dt$"
+    "$43,200",
+    "$50,000",
+    "$30,000",
+    "$7,408"
    ],
    "answer": 0,
    "why": [
-    "Correct: each tiny payment $f(t)\\,dt$ is discounted by $e^{-rt}$, then summed.",
-    "Using $e^{rt}$ grows the payments forward instead of discounting them back.",
-    "This adds up the payments without discounting, so it ignores present value.",
-    "This leaves out the income rate $f(t)$, so it does not total the actual money received."
+    "Correct - 10000(1 - 0.7408)/0.06 = 2592/0.06, about $43,200.",
+    "Not quite - $50,000 is the undiscounted total; discounting makes it less.",
+    "Not quite - recompute 2592/0.06; it is about $43,200.",
+    "Not quite - 0.7408 is only the discount factor, not the present value."
    ]
   }
  ]
