@@ -2383,9 +2383,21 @@ function CC({item,showAnswer,onToggle,id}){
 }
 
 const SAVE_KEY="lenamon_calc_v1";
-function loadSave(){
-  try{const s=JSON.parse(localStorage.getItem(SAVE_KEY));if(s)return s;}catch(e){}
+function progressKey(session){
+  if(session&&session.role==="admin") return SAVE_KEY+"::admin";
+  if(session&&session.email) return SAVE_KEY+"::"+session.email;
+  return SAVE_KEY;
+}
+function loadSave(key){
+  try{const s=JSON.parse(localStorage.getItem(key||SAVE_KEY));if(s)return s;}catch(e){}
   return {done:[],idx:0,xp:0};
+}
+// Resume point: the first lesson the learner has not completed yet
+// (Lesson 1 for a brand-new account; the last lesson if everything is done).
+function firstIncompleteIdx(doneArr){
+  const d=new Set(doneArr||[]);
+  for(let i=0;i<L.length;i++){if(!d.has(i))return i;}
+  return Math.max(0,L.length-1);
 }
 
 // ---------- Temporary client-side accounts (replaced by a real backend in the next stage) ----------
@@ -2401,8 +2413,9 @@ function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 function findUser(email){const e=(email||"").trim().toLowerCase();return loadUsers().find(u=>u.email===e)||null;}
 
 function Course({session,onSignOut,onBrand}){
-  const saved=loadSave();
-  const[idx,setIdx]=useState(saved.idx||0);
+  const storeKey=progressKey(session);
+  const saved=loadSave(storeKey);
+  const[idx,setIdx]=useState(()=>firstIncompleteIdx(saved.done));
   const[done,setDone]=useState(new Set(saved.done||[]));
   const[xp,setXp]=useState(saved.xp||0);
   const[ans,setAns]=useState({});
@@ -2437,8 +2450,8 @@ function Course({session,onSignOut,onBrand}){
   },[sidebarOpen]);
 
   useEffect(()=>{
-    try{localStorage.setItem(SAVE_KEY,JSON.stringify({done:[...done],idx,xp}));}catch(e){}
-  },[done,idx,xp]);
+    try{localStorage.setItem(storeKey,JSON.stringify({done:[...done],idx,xp}));}catch(e){}
+  },[done,idx,xp,storeKey]);
 
   const level=Math.floor(xp/300)+1;
   const lesson=L[idx];
@@ -2912,7 +2925,7 @@ export default function App(){
     return <AdminDashboard users={loadUsers()} onEnterCourse={()=>setView("course")} onSignOut={signOut} onBrand={goHome}/>;
   }
   if(view==="course"&&session){
-    return <Course session={session} onSignOut={signOut} onBrand={goHome}/>;
+    return <Course key={session.role==="admin"?"admin":session.email} session={session} onSignOut={signOut} onBrand={goHome}/>;
   }
   return <LandingPage loggedIn={!!session} userName={session&&session.firstName} onCreate={()=>setView("signup")} onSignIn={()=>setView("signin")} onContinue={continueLearning} onAdmin={()=>setView("adminlogin")} onSignOut={signOut}/>;
 }
