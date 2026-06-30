@@ -18,7 +18,7 @@ ahead of a real backend ("next stage"): accounts and session live in
 - Accounts are first name + last name + email (no password). First/last name are
   captured now for a future course-completion certificate.
 - Returning users sign in with email only (matched against registered accounts).
-- The app always opens on the landing page. Clicking the "Lenamon Calculus"
+- The app always opens on the landing page. Clicking the "Business Calculus"
   brand (top right of the course/admin header) returns to the landing page.
 
 ## Architecture
