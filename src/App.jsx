@@ -2388,7 +2388,19 @@ function loadSave(){
   return {done:[],idx:0,xp:0};
 }
 
-export default function App(){
+// ---------- Temporary client-side accounts (replaced by a real backend in the next stage) ----------
+const USERS_KEY="lenamon_users_v1";
+const SESSION_KEY="lenamon_session_v1";
+const ADMIN_USER="user";      // temporary admin credentials - not secure, dev only
+const ADMIN_PASS="password";  // temporary admin credentials - not secure, dev only
+function loadUsers(){try{const u=JSON.parse(localStorage.getItem(USERS_KEY));if(Array.isArray(u))return u;}catch(e){}return[];}
+function saveUsers(u){try{localStorage.setItem(USERS_KEY,JSON.stringify(u));}catch(e){}}
+function loadSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY));if(s)return s;}catch(e){}return null;}
+function saveSession(s){try{if(s)localStorage.setItem(SESSION_KEY,JSON.stringify(s));else localStorage.removeItem(SESSION_KEY);}catch(e){}}
+function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+function findUser(email){const e=(email||"").trim().toLowerCase();return loadUsers().find(u=>u.email===e)||null;}
+
+function Course({session,onSignOut,onBrand}){
   const saved=loadSave();
   const[idx,setIdx]=useState(saved.idx||0);
   const[done,setDone]=useState(new Set(saved.done||[]));
@@ -2517,6 +2529,13 @@ export default function App(){
               <button onClick={next} style={{background:done.has(idx)?"rgba(16,185,129,0.12)":"linear-gradient(135deg,#6366f1,#8b5cf6)",border:done.has(idx)?"1px solid rgba(16,185,129,0.25)":"none",color:done.has(idx)?"#6ee7b7":"#fff",padding:"9px 18px",borderRadius:10,cursor:"pointer",fontSize:13,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:done.has(idx)?"none":"0 4px 14px rgba(99,102,241,0.3)",whiteSpace:"nowrap"}}>
                 {done.has(idx)?(idx<L.length-1?"Next →":"✓ Done"):(idx<L.length-1?"Complete →":"Finish ✓")}
               </button>
+              <span className="acct-divider" style={{width:1,height:22,background:"rgba(148,163,184,0.18)",margin:"0 4px"}}/>
+              <button onClick={onBrand} title="Back to home" style={{display:"flex",alignItems:"center",gap:7,background:"transparent",border:"none",cursor:"pointer",padding:"4px 2px",fontFamily:"'Bricolage Grotesque',Inter,sans-serif"}}>
+                <span style={{width:24,height:24,borderRadius:7,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#fff",flexShrink:0}}>∫</span>
+                <span className="acct-brand" style={{fontSize:14,fontWeight:800,color:"#f1f5f9",letterSpacing:"-0.01em",whiteSpace:"nowrap"}}>Lenamon Calculus</span>
+              </button>
+              {session&&session.firstName&&<span className="acct-name" style={{fontSize:12.5,color:"#94a3b8",fontWeight:600,whiteSpace:"nowrap"}}>Hi, {session.firstName}</span>}
+              <button onClick={onSignOut} style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:"#cbd5e1",padding:"8px 13px",borderRadius:10,cursor:"pointer",fontSize:12.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"}}>Sign out</button>
             </div>
           </div>
         </div>
@@ -2589,6 +2608,9 @@ export default function App(){
         .lesson-fade { animation: fadeUp 0.42s cubic-bezier(0.22,1,0.36,1); }
         @media (prefers-reduced-motion: reduce) { .lesson-fade { animation: none; } }
         @media (max-width: 560px) { .xp-chip { display: none !important; } }
+        @media (max-width: 1120px) { .acct-brand { display: none !important; } }
+        @media (max-width: 900px) { .acct-name { display: none !important; } }
+        @media (max-width: 720px) { .acct-divider { display: none !important; } }
         input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
         input[type=range]::-moz-range-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
@@ -2597,4 +2619,300 @@ export default function App(){
       `}</style>
     </div>
   );
+}
+
+// ---------- Shared styles for the landing / auth / admin screens ----------
+const DISPLAY="'Bricolage Grotesque',Inter,sans-serif";
+const SCREEN_BG={height:"100vh",overflowY:"auto",color:"#e2e8f0",fontFamily:"Inter,system-ui,-apple-system,sans-serif"};
+const BTN_PRIMARY={background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",padding:"13px 24px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 8px 24px rgba(99,102,241,0.32)",whiteSpace:"nowrap"};
+const BTN_GHOST={background:"rgba(148,163,184,0.06)",color:"#cbd5e1",border:"1px solid rgba(148,163,184,0.2)",padding:"13px 22px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"};
+const LINKBTN={background:"transparent",border:"none",color:"#a5b4fc",cursor:"pointer",fontWeight:700,fontSize:13.5,fontFamily:"Inter,system-ui",padding:0};
+const TH={padding:"14px 18px",fontSize:11.5,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.05em"};
+const TD={padding:"13px 18px"};
+const MODULE_BLURB={
+  "Foundations":"Functions, lines, exponentials, and logs - the language everything else is written in.",
+  "Limits & Continuity":"What it means for a function to head toward a value, and when it actually arrives.",
+  "Derivatives":"The rate of change: slopes of curves, the rules, and what \"marginal\" means in business.",
+  "Applications of Derivatives":"Find peaks, valleys, and the single best choice using optimization.",
+  "Integration":"Add up infinitely many tiny pieces, and the theorem that ties calculus together.",
+  "Business Applications":"Area between curves, consumer and producer surplus, and present value.",
+};
+
+function Brand({onClick,size=22}){
+  return(
+    <button onClick={onClick} title={onClick?"Back to home":undefined} style={{display:"flex",alignItems:"center",gap:10,background:"transparent",border:"none",cursor:onClick?"pointer":"default",padding:0,fontFamily:DISPLAY}}>
+      <span style={{width:size+12,height:size+12,borderRadius:9,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:size,color:"#fff",flexShrink:0}}>∫</span>
+      <span style={{fontSize:size-3,fontWeight:800,color:"#f1f5f9",letterSpacing:"-0.01em"}}>Lenamon Calculus</span>
+    </button>
+  );
+}
+
+function Field({label,type,value,onChange,placeholder,autoFocus}){
+  return(
+    <label style={{display:"block",marginBottom:14}}>
+      <span style={{display:"block",fontSize:12.5,fontWeight:700,color:"#cbd5e1",marginBottom:6}}>{label}</span>
+      <input type={type||"text"} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} autoFocus={autoFocus}
+        style={{width:"100%",boxSizing:"border-box",background:"rgba(8,11,20,0.6)",border:"1px solid rgba(148,163,184,0.2)",borderRadius:11,padding:"12px 14px",color:"#f1f5f9",fontSize:15,fontFamily:"Inter,system-ui",outline:"none"}}/>
+    </label>
+  );
+}
+
+function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onSignOut}){
+  const modules=MODULES.map(m=>({name:m,count:L.filter(l=>l.module===m).length}));
+  const feature=(title,body)=>(
+    <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:18,padding:"24px 24px"}}>
+      <div style={{fontSize:17,fontWeight:800,color:"#f1f5f9",marginBottom:8,fontFamily:DISPLAY}}>{title}</div>
+      <div style={{fontSize:14.5,lineHeight:1.7,color:"#a5b0c2"}}>{body}</div>
+    </div>
+  );
+  const stat=(big,small)=>(
+    <div style={{textAlign:"center"}}>
+      <div style={{fontSize:30,fontWeight:800,color:"#c7d2fe",fontFamily:DISPLAY,lineHeight:1}}>{big}</div>
+      <div style={{fontSize:12.5,color:"#94a3b8",marginTop:6,fontWeight:600,letterSpacing:"0.02em"}}>{small}</div>
+    </div>
+  );
+  return(
+    <div style={SCREEN_BG}>
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)"}}>
+        <div style={{maxWidth:1140,margin:"0 auto",padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
+          <Brand/>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            {loggedIn?(<>
+              <span style={{fontSize:13,color:"#94a3b8",fontWeight:600}}>Hi, {userName||"learner"}</span>
+              <button onClick={onContinue} style={{...BTN_PRIMARY,padding:"11px 20px"}}>Continue learning →</button>
+              <button onClick={onSignOut} style={{...BTN_GHOST,padding:"11px 16px"}}>Sign out</button>
+            </>):(<>
+              <button onClick={onSignIn} style={{...BTN_GHOST,padding:"11px 18px"}}>Sign in</button>
+              <button onClick={onCreate} style={{...BTN_PRIMARY,padding:"11px 20px"}}>Create account</button>
+            </>)}
+          </div>
+        </div>
+      </div>
+
+      <div style={{maxWidth:900,margin:"0 auto",padding:"86px 28px 60px",textAlign:"center"}}>
+        <div style={{display:"inline-block",fontSize:12,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:"#a5b4fc",background:"rgba(99,102,241,0.10)",border:"1px solid rgba(99,102,241,0.22)",padding:"6px 14px",borderRadius:999,marginBottom:24}}>Business calculus, from absolute zero</div>
+        <h1 style={{fontSize:"clamp(34px,6vw,60px)",lineHeight:1.05,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,letterSpacing:"-0.02em",margin:0}}>Calculus is not hard.<br/>It was just explained badly.</h1>
+        <p style={{fontSize:"clamp(16px,2.4vw,19px)",lineHeight:1.7,color:"#aeb8c8",maxWidth:640,margin:"22px auto 0"}}>An interactive course that builds every idea from the ground up and assumes nothing. If you can do basic arithmetic, you can start today. Free, and made to be understood by anyone of any age.</p>
+        <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:34}}>
+          {loggedIn?(
+            <button onClick={onContinue} style={BTN_PRIMARY}>Continue learning →</button>
+          ):(<>
+            <button onClick={onCreate} style={BTN_PRIMARY}>Create your free account</button>
+            <button onClick={onSignIn} style={BTN_GHOST}>I already have an account</button>
+          </>)}
+        </div>
+      </div>
+
+      <div style={{maxWidth:760,margin:"0 auto",padding:"0 28px"}}>
+        <div style={{display:"flex",justifyContent:"space-around",flexWrap:"wrap",gap:24,padding:"26px 24px",background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:18}}>
+          {stat(L.length,"Lessons")}
+          {stat(MODULES.length,"Modules")}
+          {stat("Live","Interactive labs")}
+          {stat("Free","Always")}
+        </div>
+      </div>
+
+      <div style={{maxWidth:840,margin:"0 auto",padding:"74px 28px 0",textAlign:"center"}}>
+        <h2 style={{fontSize:"clamp(26px,4vw,38px)",fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY,letterSpacing:"-0.01em",margin:0}}>The one rule this course follows</h2>
+        <p style={{fontSize:17,lineHeight:1.8,color:"#aeb8c8",maxWidth:680,margin:"18px auto 0"}}>Never state a fact without explaining <em>why</em> it is true, in terms you already understand. No skipped steps, no silent assumptions, no "you should already know this." You will learn why you cannot divide by zero, why the chain rule multiplies, and why an integral measures area, not just the rules.</p>
+      </div>
+
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"44px 28px 0",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:18}}>
+        {feature("Interactive labs","Drag a point along a curve and watch the tangent line and live slope change. Reshape a function with a slider and see the equation update in real time.")}
+        {feature("Worked, step by step","Every example shows the full algebra, including the sign traps and the lines most textbooks skip. Then you try one yourself with a complete solution.")}
+        {feature("Progress that sticks","Earn XP, level up, and celebrate each finished lesson. Your place is saved automatically, so you can pick up exactly where you left off.")}
+      </div>
+
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"74px 28px 0"}}>
+        <h2 style={{fontSize:"clamp(26px,4vw,38px)",fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY,letterSpacing:"-0.01em",textAlign:"center",margin:"0 0 8px"}}>What you will learn</h2>
+        <p style={{fontSize:15,color:"#94a3b8",textAlign:"center",margin:"0 0 28px"}}>{L.length} lessons across {MODULES.length} modules, building from the basics to real business applications.</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:16}}>
+          {modules.map((m,i)=>(
+            <div key={m.name} style={{display:"flex",gap:16,background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:16,padding:"20px 22px"}}>
+              <div style={{width:38,height:38,flexShrink:0,borderRadius:11,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800,color:"#fff",fontFamily:DISPLAY}}>{i+1}</div>
+              <div>
+                <div style={{fontSize:16,fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY}}>{m.name}</div>
+                <div style={{fontSize:11.5,color:"#818cf8",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",margin:"3px 0 7px"}}>{m.count} lessons</div>
+                <div style={{fontSize:14,lineHeight:1.6,color:"#a5b0c2"}}>{MODULE_BLURB[m.name]}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"74px 28px 20px"}}>
+        <div style={{textAlign:"center",padding:"48px 28px",borderRadius:22,background:"linear-gradient(160deg,rgba(99,102,241,0.16),rgba(139,92,246,0.06))",border:"1px solid rgba(99,102,241,0.22)"}}>
+          <h2 style={{fontSize:"clamp(24px,4vw,34px)",fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:0}}>Ready to start?</h2>
+          <p style={{fontSize:16,color:"#aeb8c8",margin:"14px auto 26px",maxWidth:520}}>Create a free account with your name and email. That is all it takes.</p>
+          {loggedIn?(
+            <button onClick={onContinue} style={BTN_PRIMARY}>Continue learning →</button>
+          ):(
+            <button onClick={onCreate} style={BTN_PRIMARY}>Create your free account</button>
+          )}
+        </div>
+      </div>
+
+      <div style={{maxWidth:1040,margin:"40px auto 0",padding:"30px 28px 50px",borderTop:"1px solid rgba(148,163,184,0.08)",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+        <span style={{fontSize:13,color:"#64748b"}}>Lenamon Calculus - learn calculus the honest way.</span>
+        <button onClick={onAdmin} style={{background:"transparent",border:"none",color:"#475569",fontSize:12.5,cursor:"pointer",fontFamily:"Inter,system-ui",fontWeight:600}}>Admin</button>
+      </div>
+    </div>
+  );
+}
+
+function AuthScreen({mode,onSignup,onSignin,onAdmin,onBack,goSignup,goSignin}){
+  const[firstName,setFirstName]=useState("");
+  const[lastName,setLastName]=useState("");
+  const[email,setEmail]=useState("");
+  const[username,setUsername]=useState("");
+  const[password,setPassword]=useState("");
+  const[error,setError]=useState("");
+  const titles={signup:"Create your account",signin:"Welcome back",admin:"Admin sign in"};
+  const subs={signup:"Just your name and email - no password needed.",signin:"Enter the email you signed up with.",admin:"Restricted access for course administrators."};
+  const submit=(e)=>{
+    e.preventDefault();
+    let err=null;
+    if(mode==="signup") err=onSignup({firstName,lastName,email});
+    else if(mode==="signin") err=onSignin(email);
+    else err=onAdmin(username,password);
+    if(err) setError(err);
+  };
+  return(
+    <div style={{...SCREEN_BG,display:"flex",flexDirection:"column"}}>
+      <div style={{padding:"22px 28px"}}><Brand onClick={onBack} size={20}/></div>
+      <div style={{flex:1,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"10px 20px 60px"}}>
+        <form onSubmit={submit} style={{width:"100%",maxWidth:420,background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.12)",borderRadius:20,padding:"32px 30px",marginTop:"4vh"}}>
+          <h1 style={{fontSize:25,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:"0 0 6px"}}>{titles[mode]}</h1>
+          <p style={{fontSize:14,color:"#94a3b8",margin:"0 0 22px"}}>{subs[mode]}</p>
+
+          {mode==="signup"&&(<>
+            <div style={{display:"flex",gap:12}}>
+              <div style={{flex:1}}><Field label="First name" value={firstName} onChange={v=>{setFirstName(v);setError("");}} placeholder="Ada" autoFocus/></div>
+              <div style={{flex:1}}><Field label="Last name" value={lastName} onChange={v=>{setLastName(v);setError("");}} placeholder="Lovelace"/></div>
+            </div>
+            <Field label="Email" type="email" value={email} onChange={v=>{setEmail(v);setError("");}} placeholder="you@example.com"/>
+          </>)}
+
+          {mode==="signin"&&(
+            <Field label="Email" type="email" value={email} onChange={v=>{setEmail(v);setError("");}} placeholder="you@example.com" autoFocus/>
+          )}
+
+          {mode==="admin"&&(<>
+            <Field label="Username" value={username} onChange={v=>{setUsername(v);setError("");}} placeholder="user" autoFocus/>
+            <Field label="Password" type="password" value={password} onChange={v=>{setPassword(v);setError("");}} placeholder="password"/>
+          </>)}
+
+          {error&&<div style={{fontSize:13.5,color:"#fca5a5",background:"rgba(239,68,68,0.08)",border:"1px solid rgba(239,68,68,0.22)",borderRadius:10,padding:"10px 12px",marginBottom:14}}>{error}</div>}
+
+          <button type="submit" style={{...BTN_PRIMARY,width:"100%",padding:"13px",marginTop:4}}>
+            {mode==="signup"?"Create account":mode==="signin"?"Sign in":"Enter dashboard"}
+          </button>
+
+          {mode!=="admin"&&(
+            <div style={{textAlign:"center",marginTop:18,fontSize:13.5,color:"#94a3b8"}}>
+              {mode==="signup"?(<>Already have an account? <button type="button" onClick={goSignin} style={LINKBTN}>Sign in</button></>):(<>New here? <button type="button" onClick={goSignup} style={LINKBTN}>Create an account</button></>)}
+            </div>
+          )}
+          <div style={{textAlign:"center",marginTop:12}}>
+            <button type="button" onClick={onBack} style={{...LINKBTN,color:"#64748b"}}>← Back to home</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function AdminDashboard({users,onEnterCourse,onSignOut,onBrand}){
+  const fmt=(iso)=>{try{return new Date(iso).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch(e){return iso;}};
+  return(
+    <div style={SCREEN_BG}>
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)"}}>
+        <div style={{maxWidth:1040,margin:"0 auto",padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
+          <Brand onClick={onBrand}/>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <button onClick={onEnterCourse} style={{...BTN_GHOST,padding:"10px 16px"}}>Enter course</button>
+            <button onClick={onSignOut} style={{...BTN_PRIMARY,padding:"10px 18px"}}>Sign out</button>
+          </div>
+        </div>
+      </div>
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"40px 28px 60px"}}>
+        <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:6}}>
+          <h1 style={{fontSize:28,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:0}}>Registered users</h1>
+          <span style={{fontSize:13,color:"#94a3b8",fontWeight:600}}>Admin dashboard (temporary)</span>
+        </div>
+        <p style={{fontSize:14.5,color:"#94a3b8",margin:"0 0 22px"}}>{users.length} {users.length===1?"account":"accounts"} so far.</p>
+
+        {users.length===0?(
+          <div style={{padding:"48px 24px",textAlign:"center",background:"rgba(255,255,255,0.022)",border:"1px dashed rgba(148,163,184,0.2)",borderRadius:18,color:"#94a3b8",fontSize:15}}>No accounts yet. New sign-ups will appear here.</div>
+        ):(
+          <div style={{overflowX:"auto",background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.12)",borderRadius:18}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:520}}>
+              <thead>
+                <tr style={{color:"#94a3b8"}}>
+                  <th style={{...TH,textAlign:"left"}}>#</th><th style={{...TH,textAlign:"left"}}>First name</th><th style={{...TH,textAlign:"left"}}>Last name</th><th style={{...TH,textAlign:"left"}}>Email</th><th style={{...TH,textAlign:"left"}}>Signed up</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u,i)=>(
+                  <tr key={u.email} style={{borderTop:"1px solid rgba(148,163,184,0.08)"}}>
+                    <td style={{...TD,color:"#64748b"}}>{i+1}</td>
+                    <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.firstName}</td>
+                    <td style={{...TD,color:"#f1f5f9",fontWeight:600}}>{u.lastName}</td>
+                    <td style={{...TD,color:"#a5b0c2"}}>{u.email}</td>
+                    <td style={{...TD,color:"#94a3b8"}}>{fmt(u.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function App(){
+  const[session,setSession]=useState(loadSession());
+  const[view,setView]=useState("landing");
+  useEffect(()=>{saveSession(session);},[session]);
+
+  const handleSignup=({firstName,lastName,email})=>{
+    const fn=(firstName||"").trim(),ln=(lastName||"").trim(),em=(email||"").trim().toLowerCase();
+    if(!fn||!ln) return "Please enter both your first and last name.";
+    if(!validEmail(em)) return "Please enter a valid email address.";
+    if(findUser(em)) return "That email already has an account. Try signing in instead.";
+    const users=loadUsers();
+    users.push({firstName:fn,lastName:ln,email:em,createdAt:new Date().toISOString()});
+    saveUsers(users);
+    setSession({role:"user",email:em,firstName:fn,lastName:ln});
+    setView("course");
+    return null;
+  };
+  const handleSignin=(email)=>{
+    const em=(email||"").trim().toLowerCase();
+    if(!validEmail(em)) return "Please enter a valid email address.";
+    const u=findUser(em);
+    if(!u) return "No account found for that email. Create one to get started.";
+    setSession({role:"user",email:u.email,firstName:u.firstName,lastName:u.lastName});
+    setView("course");
+    return null;
+  };
+  const handleAdmin=(username,password)=>{
+    if(username===ADMIN_USER&&password===ADMIN_PASS){setSession({role:"admin"});setView("admin");return null;}
+    return "Incorrect admin username or password.";
+  };
+  const signOut=()=>{setSession(null);setView("landing");};
+  const goHome=()=>setView("landing");
+  const continueLearning=()=>setView(session&&session.role==="admin"?"admin":"course");
+
+  if(view==="signup"||view==="signin"||view==="adminlogin"){
+    return <AuthScreen mode={view==="signup"?"signup":view==="signin"?"signin":"admin"} onSignup={handleSignup} onSignin={handleSignin} onAdmin={handleAdmin} onBack={goHome} goSignup={()=>setView("signup")} goSignin={()=>setView("signin")}/>;
+  }
+  if(view==="admin"&&session&&session.role==="admin"){
+    return <AdminDashboard users={loadUsers()} onEnterCourse={()=>setView("course")} onSignOut={signOut} onBrand={goHome}/>;
+  }
+  if(view==="course"&&session){
+    return <Course session={session} onSignOut={signOut} onBrand={goHome}/>;
+  }
+  return <LandingPage loggedIn={!!session} userName={session&&session.firstName} onCreate={()=>setView("signup")} onSignIn={()=>setView("signin")} onContinue={continueLearning} onAdmin={()=>setView("adminlogin")} onSignOut={signOut}/>;
 }
