@@ -2412,12 +2412,113 @@ function saveSession(s){try{if(s)localStorage.setItem(SESSION_KEY,JSON.stringify
 function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 function findUser(email){const e=(email||"").trim().toLowerCase();return loadUsers().find(u=>u.email===e)||null;}
 
+function LockIcon({size=13,color="#94a3b8"}){
+  return(
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="5" y="11" width="14" height="9" rx="2" fill={color}/>
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke={color} strokeWidth="2.2" fill="none"/>
+    </svg>
+  );
+}
+
+// Golden foil completion seal (SVG so it prints crisply and uses no emoji).
+function CertSeal(){
+  const cx=75,cy=78,pts=22,rO=47,rI=39;
+  let star="";
+  for(let i=0;i<pts*2;i++){
+    const r=i%2===0?rO:rI;
+    const a=(Math.PI/pts)*i-Math.PI/2;
+    star+=(i===0?"M":"L")+(cx+r*Math.cos(a)).toFixed(1)+","+(cy+r*Math.sin(a)).toFixed(1)+" ";
+  }
+  star+="Z";
+  return(
+    <svg width="150" height="192" viewBox="0 0 150 192" aria-hidden="true" style={{display:"block"}}>
+      <defs>
+        <radialGradient id="cs_gold" cx="40%" cy="32%" r="72%">
+          <stop offset="0%" stopColor="#fff7d6"/>
+          <stop offset="45%" stopColor="#f3cd5f"/>
+          <stop offset="78%" stopColor="#dca320"/>
+          <stop offset="100%" stopColor="#a9760c"/>
+        </radialGradient>
+        <linearGradient id="cs_ribbon" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#e0a92a"/>
+          <stop offset="100%" stopColor="#8c6207"/>
+        </linearGradient>
+        <path id="cs_textpath" d={`M ${cx} ${cy} m -26,0 a 26,26 0 1,1 52,0 a 26,26 0 1,1 -52,0`} fill="none"/>
+      </defs>
+      <path d="M61,108 L51,184 L66,173 L69,112 Z" fill="url(#cs_ribbon)"/>
+      <path d="M89,108 L99,184 L84,173 L81,112 Z" fill="url(#cs_ribbon)"/>
+      <path d={star} fill="url(#cs_gold)" stroke="#8a5e08" strokeWidth="0.6"/>
+      <circle cx={cx} cy={cy} r="38" fill="url(#cs_gold)" stroke="#fff7d6" strokeWidth="1"/>
+      <circle cx={cx} cy={cy} r="33" fill="none" stroke="#7d5505" strokeWidth="1" opacity="0.55"/>
+      <text fill="#6b4a06" fontSize="8" fontWeight="700" letterSpacing="2" fontFamily="'Playfair Display',serif">
+        <textPath href="#cs_textpath" startOffset="6%">LENAMON CALCULUS · EST MMXXVI ·</textPath>
+      </text>
+      <text x={cx} y={cy+12} textAnchor="middle" fontSize="36" fontFamily="'Playfair Display',Georgia,serif" fontWeight="700" fill="#6b4a06">∫</text>
+    </svg>
+  );
+}
+
+function Certificate({fullName,dateStr,onPrint}){
+  const name=(fullName||"").trim()||"Valued Student";
+  const ink="#1c2b4a",gold="#caa64a",goldDk="#9a7b2e",serif="'Playfair Display',Georgia,serif",ui="'Inter',system-ui,sans-serif";
+  const corner=(pos)=>{
+    const b="2px solid "+gold,base={position:"absolute",width:26,height:26,pointerEvents:"none"};
+    if(pos==="tl")return{...base,top:16,left:16,borderTop:b,borderLeft:b};
+    if(pos==="tr")return{...base,top:16,right:16,borderTop:b,borderRight:b};
+    if(pos==="bl")return{...base,bottom:16,left:16,borderBottom:b,borderLeft:b};
+    return{...base,bottom:16,right:16,borderBottom:b,borderRight:b};
+  };
+  return(
+    <div style={{padding:"30px 18px 72px",display:"flex",flexDirection:"column",alignItems:"center"}}>
+      <div className="cert-print" style={{position:"relative",width:"100%",maxWidth:820,background:"linear-gradient(135deg,#fffdf6,#fbf3e0)",border:`2px solid ${gold}`,borderRadius:6,boxShadow:"0 24px 60px rgba(0,0,0,0.45)",padding:"48px 54px 56px",textAlign:"center",color:ink,fontFamily:serif,WebkitPrintColorAdjust:"exact",printColorAdjust:"exact",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:10,border:`1px solid ${gold}`,borderRadius:3,opacity:0.6,pointerEvents:"none"}}/>
+        <div style={corner("tl")}/><div style={corner("tr")}/><div style={corner("bl")}/><div style={corner("br")}/>
+
+        <div style={{fontSize:28,color:"#b8860b",marginBottom:2,fontFamily:serif,lineHeight:1}}>∫</div>
+        <div style={{fontSize:"clamp(28px,5vw,44px)",fontWeight:800,letterSpacing:"0.12em",textTransform:"uppercase",color:ink,lineHeight:1.05}}>Lenamon Calculus</div>
+        <div style={{height:1,width:210,background:`linear-gradient(90deg,transparent,${gold},transparent)`,margin:"12px auto 8px"}}/>
+        <div style={{fontSize:11.5,letterSpacing:"0.34em",textTransform:"uppercase",color:goldDk,fontFamily:ui,fontWeight:600}}>Department of Business Calculus</div>
+
+        <div style={{fontSize:"clamp(18px,3vw,25px)",fontStyle:"italic",color:"#5b4a2a",margin:"30px 0 4px"}}>Certificate of Completion</div>
+        <div style={{fontSize:13,color:"#5a6275",fontFamily:ui,letterSpacing:"0.04em"}}>This is to certify that</div>
+
+        <div style={{fontSize:"clamp(30px,6vw,48px)",fontWeight:700,color:ink,margin:"14px 0 6px",lineHeight:1.1}}>{name}</div>
+        <div style={{height:1,width:"min(440px,82%)",background:`linear-gradient(90deg,transparent,${gold},transparent)`,margin:"0 auto 22px"}}/>
+
+        <div style={{fontSize:"clamp(14px,2.4vw,16.5px)",lineHeight:1.85,color:"#3a4254",fontFamily:ui,maxWidth:560,margin:"0 auto"}}>
+          has successfully completed the <strong style={{color:ink}}>Lenamon Calculus</strong> course, comprising all 25 lessons across 6 modules of business calculus, demonstrating mastery from foundations and limits through derivatives, integration, and their real-world business applications.
+        </div>
+
+        <div style={{margin:"22px auto 4px",display:"flex",justifyContent:"center"}}><CertSeal/></div>
+
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",gap:30,margin:"14px auto 0",maxWidth:600}}>
+          <div style={{textAlign:"center",flex:1}}>
+            <div style={{fontFamily:"'Pinyon Script',cursive",fontSize:36,color:ink,lineHeight:1,marginBottom:2}}>Jeff Lenamon</div>
+            <div style={{height:1,background:goldDk,opacity:0.55,margin:"0 auto 6px",width:"88%"}}/>
+            <div style={{fontSize:11,letterSpacing:"0.06em",textTransform:"uppercase",color:"#6b5a32",fontFamily:ui,fontWeight:600}}>Jeff Lenamon, Course Director</div>
+          </div>
+          <div style={{textAlign:"center",flex:1}}>
+            <div style={{fontFamily:serif,fontSize:21,color:ink,lineHeight:1,marginBottom:8}}>{dateStr}</div>
+            <div style={{height:1,background:goldDk,opacity:0.55,margin:"0 auto 6px",width:"88%"}}/>
+            <div style={{fontSize:11,letterSpacing:"0.06em",textTransform:"uppercase",color:"#6b5a32",fontFamily:ui,fontWeight:600}}>Date of Completion</div>
+          </div>
+        </div>
+      </div>
+
+      <button onClick={onPrint} style={{marginTop:26,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",padding:"12px 24px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 8px 24px rgba(99,102,241,0.32)"}}>Print / Save as PDF</button>
+    </div>
+  );
+}
+
 function Course({session,onSignOut,onBrand}){
   const storeKey=progressKey(session);
   const saved=loadSave(storeKey);
   const[idx,setIdx]=useState(()=>firstIncompleteIdx(saved.done));
   const[done,setDone]=useState(new Set(saved.done||[]));
   const[xp,setXp]=useState(saved.xp||0);
+  const[onCert,setOnCert]=useState(false);
+  const[completedAt,setCompletedAt]=useState(saved.completedAt||null);
   const[ans,setAns]=useState({});
   const[sidebarOpen,setSidebarOpen]=useState(false);
   const[ready,setReady]=useState(false);
@@ -2440,7 +2541,7 @@ function Course({session,onSignOut,onBrand}){
 
   useEffect(()=>{
     if(contentRef.current) contentRef.current.scrollTo({top:0,behavior:scrollBehavior});
-  },[idx]);
+  },[idx,onCert]);
 
   useEffect(()=>{
     if(!sidebarOpen) return;
@@ -2450,16 +2551,25 @@ function Course({session,onSignOut,onBrand}){
   },[sidebarOpen]);
 
   useEffect(()=>{
-    try{localStorage.setItem(storeKey,JSON.stringify({done:[...done],idx,xp}));}catch(e){}
-  },[done,idx,xp,storeKey]);
+    try{localStorage.setItem(storeKey,JSON.stringify({done:[...done],idx,xp,completedAt}));}catch(e){}
+  },[done,idx,xp,completedAt,storeKey]);
+
+  // Stamp the completion date the first time every lesson is done.
+  useEffect(()=>{
+    if(done.size>=L.length&&!completedAt) setCompletedAt(new Date().toISOString());
+  },[done,completedAt]);
 
   const level=Math.floor(xp/300)+1;
   const lesson=L[idx];
+  const allDone=done.size>=L.length;
+  const certDate=(completedAt?new Date(completedAt):new Date()).toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  const fullName=session?`${session.firstName||""} ${session.lastName||""}`.trim():"";
   const toggle=(i)=>setAns(p=>({...p,[`${idx}-${i}`]:!p[`${idx}-${i}`]}));
   const next=()=>{
     const firstTime=!done.has(idx);
     if(firstTime){setDone(p=>new Set([...p,idx]));setXp(p=>p+50);setBurst(b=>b+1);}
     if(idx<L.length-1){setIdx(idx+1);setAns({});}
+    else if(done.size+(firstTime?1:0)>=L.length){setOnCert(true);}
   };
   const prev=()=>{if(idx>0){setIdx(idx-1);setAns({});}};
 
@@ -2494,6 +2604,20 @@ function Course({session,onSignOut,onBrand}){
           })}
         </div>
       ))}
+      <div style={{marginTop:6,paddingTop:12,borderTop:"1px solid rgba(99,102,241,0.12)"}}>
+        <div role={allDone?"button":undefined} tabIndex={allDone?0:undefined} aria-disabled={!allDone}
+          onClick={allDone?()=>{setOnCert(true);setSidebarOpen(false);}:undefined}
+          onKeyDown={allDone?e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setOnCert(true);setSidebarOpen(false);}}:undefined}
+          style={{display:"flex",alignItems:"center",gap:8,padding:"8px 8px",borderRadius:6,cursor:allDone?"pointer":"default",opacity:allDone?1:0.65,background:onCert?"rgba(245,158,11,0.14)":"transparent",border:onCert?"1px solid rgba(245,158,11,0.32)":"1px solid transparent"}}>
+          <div style={{width:22,height:22,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,background:allDone?"linear-gradient(135deg,#f6d365,#d9a520)":"rgba(51,65,85,0.55)"}}>
+            {allDone?<span style={{fontSize:12,color:"#5a3c06",fontWeight:800}}>★</span>:<LockIcon size={12} color="#94a3b8"/>}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:12,fontWeight:700,color:allDone?(onCert?"#fde68a":"#e2e8f0"):"#94a3b8",lineHeight:1.3}}>Certificate of Completion</div>
+            {!allDone&&<div style={{fontSize:10.5,color:"#64748b",marginTop:1}}>Finish all {L.length} lessons to unlock</div>}
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -2525,9 +2649,9 @@ function Course({session,onSignOut,onBrand}){
               <button onClick={()=>setSidebarOpen(true)} className="sidebar-toggle" aria-label="Open lesson menu" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.25)",color:"#a5b4fc",padding:"7px 11px",borderRadius:9,cursor:"pointer",fontSize:15,fontFamily:"Inter,system-ui",display:"none",flexShrink:0}}>☰</button>
               <div style={{minWidth:0}}>
                 <div style={{fontSize:10.5,color:"#818cf8",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:"Inter,system-ui"}}>
-                  Lesson {lesson.id} of {L.length} · {lesson.module}
+                  {onCert?"Lenamon Calculus":`Lesson ${lesson.id} of ${L.length} · ${lesson.module}`}
                 </div>
-                <div style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{lesson.title}</div>
+                <div style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{onCert?"Certificate of Completion":lesson.title}</div>
               </div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
@@ -2536,12 +2660,16 @@ function Course({session,onSignOut,onBrand}){
                 <span style={{width:1,height:14,background:"rgba(245,158,11,0.3)"}}/>
                 <span style={{fontSize:12.5,fontWeight:700,color:"#fcd34d"}}>{xp} XP</span>
               </div>
+              {onCert?(
+                <button onClick={()=>setOnCert(false)} style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:"#cbd5e1",padding:"9px 16px",borderRadius:10,cursor:"pointer",fontSize:13,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"}}>← Back to lessons</button>
+              ):(<>
               <button disabled={idx===0} onClick={prev} aria-label="Previous lesson" style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:idx===0?"#334155":"#cbd5e1",padding:"9px 15px",borderRadius:10,cursor:idx===0?"default":"pointer",fontSize:13,fontWeight:600,fontFamily:"Inter,system-ui"}}>
                 ←
               </button>
               <button onClick={next} style={{background:done.has(idx)?"rgba(16,185,129,0.12)":"linear-gradient(135deg,#6366f1,#8b5cf6)",border:done.has(idx)?"1px solid rgba(16,185,129,0.25)":"none",color:done.has(idx)?"#6ee7b7":"#fff",padding:"9px 18px",borderRadius:10,cursor:"pointer",fontSize:13,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:done.has(idx)?"none":"0 4px 14px rgba(99,102,241,0.3)",whiteSpace:"nowrap"}}>
                 {done.has(idx)?(idx<L.length-1?"Next →":"✓ Done"):(idx<L.length-1?"Complete →":"Finish ✓")}
               </button>
+              </>)}
               <span className="acct-divider" style={{width:1,height:22,background:"rgba(148,163,184,0.18)",margin:"0 4px"}}/>
               {session&&session.firstName&&<span className="acct-name" style={{fontSize:12.5,color:"#94a3b8",fontWeight:600,whiteSpace:"nowrap"}}>Hi, {session.firstName}</span>}
               <button onClick={onSignOut} style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:"#cbd5e1",padding:"8px 13px",borderRadius:10,cursor:"pointer",fontSize:12.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"}}>Sign out</button>
@@ -2551,6 +2679,9 @@ function Course({session,onSignOut,onBrand}){
 
         {/* Lesson content - this is the only thing that scrolls */}
         <div ref={contentRef} style={{flex:1,overflowY:"auto"}}>
+          {onCert?(
+            <Certificate fullName={fullName} dateStr={certDate} onPrint={()=>window.print()}/>
+          ):(
           <div className="lesson-grid" style={{maxWidth:1220,margin:"0 auto",padding:"34px 40px 110px",display:"grid",gridTemplateColumns:"minmax(0,1fr) 280px",gap:52,alignItems:"start"}}>
             <div key={idx} className="lesson-fade" style={{minWidth:0,maxWidth:780,margin:"0 auto",width:"100%"}}>
               {lesson.content.map((item,i)=>(
@@ -2584,12 +2715,19 @@ function Course({session,onSignOut,onBrand}){
               </div>
             </aside>
           </div>
+          )}
         </div>
       </div>
 
       {/* Responsive CSS + hide body scrollbar */}
       <style>{`
         html, body, #root { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        @media print {
+          html, body, #root { overflow: visible !important; height: auto !important; background: #fff !important; }
+          body * { visibility: hidden !important; }
+          .cert-print, .cert-print * { visibility: visible !important; }
+          .cert-print { position: absolute !important; left: 0; top: 0; width: 100% !important; max-width: none !important; box-shadow: none !important; }
+        }
         @media (min-width: 900px) {
           .sidebar-desktop { display: block !important; }
           .sidebar-toggle { display: none !important; }
