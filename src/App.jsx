@@ -2473,10 +2473,10 @@ function Course({session,onSignOut,onBrand}){
 
   const sidebar=(
     <div style={{height:"100%",overflowY:"auto",padding:"18px 14px",fontFamily:"Inter,system-ui"}}>
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}>
+      <button onClick={onBrand} title="Back to home" style={{display:"flex",alignItems:"center",gap:8,marginBottom:16,width:"100%",background:"transparent",border:"none",padding:0,cursor:"pointer",textAlign:"left"}}>
         <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#fff",flexShrink:0}}>∫</div>
         <div style={{fontSize:17,fontWeight:800,color:"#f1f5f9",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>Lenamon Calculus</div>
-      </div>
+      </button>
       <PB completed={done.size} total={L.length}/>
       {MODULES.map(mod=>(
         <div key={mod} style={{marginBottom:16}}>
@@ -2543,10 +2543,6 @@ function Course({session,onSignOut,onBrand}){
                 {done.has(idx)?(idx<L.length-1?"Next →":"✓ Done"):(idx<L.length-1?"Complete →":"Finish ✓")}
               </button>
               <span className="acct-divider" style={{width:1,height:22,background:"rgba(148,163,184,0.18)",margin:"0 4px"}}/>
-              <button onClick={onBrand} title="Back to home" style={{display:"flex",alignItems:"center",gap:7,background:"transparent",border:"none",cursor:"pointer",padding:"4px 2px",fontFamily:"'Bricolage Grotesque',Inter,sans-serif"}}>
-                <span style={{width:24,height:24,borderRadius:7,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#fff",flexShrink:0}}>∫</span>
-                <span className="acct-brand" style={{fontSize:14,fontWeight:800,color:"#f1f5f9",letterSpacing:"-0.01em",whiteSpace:"nowrap"}}>Lenamon Calculus</span>
-              </button>
               {session&&session.firstName&&<span className="acct-name" style={{fontSize:12.5,color:"#94a3b8",fontWeight:600,whiteSpace:"nowrap"}}>Hi, {session.firstName}</span>}
               <button onClick={onSignOut} style={{background:"rgba(148,163,184,0.08)",border:"1px solid rgba(148,163,184,0.16)",color:"#cbd5e1",padding:"8px 13px",borderRadius:10,cursor:"pointer",fontSize:12.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"}}>Sign out</button>
             </div>
@@ -2621,7 +2617,6 @@ function Course({session,onSignOut,onBrand}){
         .lesson-fade { animation: fadeUp 0.42s cubic-bezier(0.22,1,0.36,1); }
         @media (prefers-reduced-motion: reduce) { .lesson-fade { animation: none; } }
         @media (max-width: 560px) { .xp-chip { display: none !important; } }
-        @media (max-width: 1120px) { .acct-brand { display: none !important; } }
         @media (max-width: 900px) { .acct-name { display: none !important; } }
         @media (max-width: 720px) { .acct-divider { display: none !important; } }
         input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
