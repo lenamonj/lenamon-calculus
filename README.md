@@ -1,6 +1,6 @@
 <div align="center">
 
-# Lenamon Calculus
+# Business Calculus
 
 ### Learn business calculus from absolute zero, one honest step at a time.
 
