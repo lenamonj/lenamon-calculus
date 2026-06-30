@@ -3672,6 +3672,35 @@ function MX({s}){
   return <>{parts.map((p,i)=>(p.length>1&&p[0]==="$"&&p[p.length-1]==="$")?<M key={i} d={p.slice(1,-1)}/>:<span key={i}>{p}</span>)}</>;
 }
 
+// Per-lesson inspiration card (indexed by lesson position). Quotes are genuine and attributed.
+const INSPO=[
+  {t:"Roger Bacon",b:"\"Mathematics is the gate and key to the sciences.\" You are turning that key right now - and it all starts with the humble function."},
+  {t:"The whole course in one idea",b:"Slope answers a single question: how fast is something changing? Every big idea ahead - derivatives, integrals - is a twist on that one question."},
+  {t:"Meet a famous number",b:"The number e turns up wherever growth feeds on itself: savings, populations, even how a hot cup of coffee cools. You will see it for the rest of the course."},
+  {t:"Pierre-Simon Laplace",b:"Laplace said the invention of logarithms, \"by shortening the labours, doubled the life of the astronomer.\" One good idea can give you time back."},
+  {t:"A clever trick",b:"A limit is calculus learning to sneak up on the impossible - getting infinitely close to an answer you cannot reach head-on. Beautiful, once it clicks."},
+  {t:"Georg Cantor",b:"\"The essence of mathematics lies in its freedom.\" Cantor tamed infinity itself - and here you are, looking in that same direction."},
+  {t:"Smooth sailing",b:"Continuity is the math of 'no sudden jumps' - curves you can draw without lifting your pen. It is what makes everything ahead possible."},
+  {t:"Isaac Newton",b:"\"If I have seen further, it is by standing on the shoulders of giants.\" Newton co-invented the very derivative you are about to learn."},
+  {t:"The shortcut",b:"Once you see the pattern, you never unsee it. The power rule turns a whole page of limit algebra into a one-second move."},
+  {t:"Calculus at work",b:"This is calculus earning its keep. 'What does one more unit cost, or earn?' is how real businesses and economists actually decide."},
+  {t:"Its own echo",b:"e^x is the one function that is its own rate of change - it grows exactly as fast as it already is. Nature reuses this trick everywhere."},
+  {t:"Keep asking why",b:"Every rule here was discovered by someone asking 'but why does that work?' - the exact question that is serving you so well right now."},
+  {t:"Rates within rates",b:"The chain rule is how calculus handles a world of nested causes - speeds inside speeds. Once you spot it, you will see it everywhere."},
+  {t:"William Thurston",b:"\"Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding.\" That is exactly what elasticity gives you."},
+  {t:"Albert Einstein",b:"\"Pure mathematics is, in its way, the poetry of logical ideas.\" Finding a curve's peaks and valleys is a little piece of that poetry."},
+  {t:"The second look",b:"Concavity is calculus noticing not just where you are headed, but whether you are speeding up or easing off. Subtle, and powerful."},
+  {t:"Albert Einstein",b:"\"Do not worry about your difficulties in mathematics. I can assure you mine are still greater.\" If Einstein struggled, you are in fine company - keep going."},
+  {t:"Leonhard Euler",b:"\"Nothing takes place in the world whose meaning is not that of some maximum or minimum.\" Optimization is calculus finding the best of everything."},
+  {t:"Reverse gear",b:"Every derivative you learned now runs backward. That reverse gear is what unlocks areas, totals, and even the future."},
+  {t:"Rename and conquer",b:"Substitution is the oldest trick in problem-solving: when something is too hard, rename it into something you already know."},
+  {t:"Infinite slices",b:"An integral adds up infinitely many infinitely-thin slices and still lands on a clean, finite answer. That it works at all is a quiet miracle."},
+  {t:"John von Neumann",b:"\"The calculus was the first achievement of modern mathematics, and it is difficult to overestimate its importance.\" You are now holding its crown jewel."},
+  {t:"Mind the gap",b:"The gap between two curves can mean profit, surplus, or growth. Calculus measures that gap exactly - no guessing."},
+  {t:"Hidden value",b:"Behind every supply-and-demand graph is a real story of value created. Calculus puts a number on the bonus everyone walks away with."},
+  {t:"You made it",b:"From one humble function to pricing the future - look how far you have come. Wherever numbers lead next, you now speak their language."},
+];
+
 const QLETTERS=["A","B","C","D"];
 function Quiz({quiz,passed,onPass}){
   const[step,setStep]=useState(passed?quiz.length:0);
@@ -4046,8 +4075,9 @@ function Course({session,onSignOut,onBrand}){
                 })}
               </div>
               <div style={{background:"linear-gradient(160deg,rgba(99,102,241,0.10),rgba(139,92,246,0.05))",border:"1px solid rgba(99,102,241,0.18)",borderRadius:16,padding:"16px 18px"}}>
-                <div style={{fontSize:13,fontWeight:700,color:"#c7d2fe",marginBottom:6}}>Take it slow</div>
-                <div style={{fontSize:12.5,lineHeight:1.65,color:"#a5b0c2"}}>Read the concept first, then try each "Your turn" on your own before you reveal the steps. That is where the learning happens.</div>
+                <div style={{fontSize:9.5,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#818cf8",marginBottom:8}}>A little inspiration</div>
+                <div style={{fontSize:13,fontWeight:700,color:"#c7d2fe",marginBottom:6}}>{(INSPO[idx]||INSPO[0]).t}</div>
+                <div style={{fontSize:12.5,lineHeight:1.7,color:"#a5b0c2"}}>{(INSPO[idx]||INSPO[0]).b}</div>
               </div>
               <div style={{padding:"4px 4px 0"}}>
                 <div style={{fontSize:11,color:"#64748b",marginBottom:6,fontWeight:600}}>Course progress</div>
