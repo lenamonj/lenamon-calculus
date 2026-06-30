@@ -4,10 +4,11 @@
 
 ### Learn business calculus from absolute zero, one honest step at a time.
 
-A free, interactive web course that teaches calculus to a complete beginner. Every concept is built from the ground up, and nothing is assumed. The guiding rule is simple: **never state a fact without explaining why it is true in terms the learner already understands.**
+A free, interactive web course that teaches **business calculus** to a complete beginner. (Business calculus is the applied, no-trigonometry flavor of calculus used in business, economics, and finance, centered on derivatives, integrals, and their real-world money applications.) Every concept is built from the ground up, and nothing is assumed. The guiding rule is simple: **never state a fact without explaining why it is true in terms the learner already understands.**
 
 <br/>
 
+![Course: Business Calculus](https://img.shields.io/badge/course-business%20calculus-6366f1?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg?style=for-the-badge)](LICENSE)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev)
@@ -167,6 +168,6 @@ Released under the [MIT License](LICENSE). You are free to use, modify, and shar
 
 <div align="center">
 
-Built to prove that calculus is not hard. It was just explained badly.
+Built to prove that business calculus is not hard. It was just explained badly.
 
 </div>
