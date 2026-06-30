@@ -136,16 +136,18 @@ Then open the printed local URL (defaults to `http://localhost:5173`).
 
 ```
 lenamon-calculus/
-├── index.html          # App shell and KaTeX/font loading
+├── index.html          # App shell, KaTeX + font loading
 ├── src/
 │   ├── main.jsx        # React entry point
-│   └── App.jsx         # The entire course: components, lessons, graphs, labs
+│   └── App.jsx         # The whole app: lessons, quizzes, graphs, labs,
+│                       #   accounts, admin, and the completion certificate
+├── docs/specs/         # Design notes
 ├── public/             # Static assets
 ├── package.json
 └── vite.config.js
 ```
 
-All lesson content lives in `src/App.jsx` as structured data, alongside the custom graphing, interactive-lab, and layout components.
+Everything lives in `src/App.jsx` as structured data (lessons, the per-lesson quizzes, and inspiration cards) alongside the custom graphing, interactive-lab, layout, auth, and certificate components.
 
 ---
 

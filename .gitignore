@@ -14,6 +14,7 @@ dist-ssr
 
 # Local tooling
 .claude/
+summary.md
 
 # Editor directories and files
 .vscode/*
