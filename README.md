@@ -17,6 +17,7 @@ A free, interactive web course that teaches calculus to a complete beginner. Eve
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-6366f1?style=flat-square)](#contributing)
 [![No build config](https://img.shields.io/badge/setup-2%20commands-f59e0b?style=flat-square)](#getting-started)
 ![Lessons](https://img.shields.io/badge/lessons-25-818cf8?style=flat-square)
+![Quiz questions](https://img.shields.io/badge/quiz%20questions-75-f472b6?style=flat-square)
 ![Self hosted math](https://img.shields.io/badge/dependencies-2-34d399?style=flat-square)
 
 </div>
@@ -49,18 +50,22 @@ Most courses lose beginners at the exact moment an author assumes something the 
 
 ## Features
 
+- **Knowledge-check quizzes.** Every lesson ends with a 3-question quiz drawn straight from its material, a mix of conceptual and compute-it problems. Questions appear one at a time; a wrong answer gives a friendly explanation of why that choice is wrong and lets you try again, and you must pass all three to move on. (75 questions, every answer independently verified.)
 - **Interactive labs.** Drag a point along a curve and watch the tangent line and the live slope readout change. Slide a parameter and reshape a function in real time while the equation updates.
 - **Custom graphing engine.** A hand-built SVG renderer that breaks the curve across vertical asymptotes (no false connecting lines), shades regions between curves, draws tangent and reference lines, and keeps labels readable over any background.
+- **A real completion certificate.** Finish all 25 lessons to unlock a printable certificate with your name, an engraved masthead, a golden foil seal, a signature, and the date. Print or Save as PDF is built in.
+- **Inspiration on every page.** A card beside each lesson pairs the topic with either a genuine, attributed quote (Newton, Euler, Einstein, Cantor, von Neumann, and more) or a note of encouragement, all aimed at sparking a love of math.
 - **Crisp math typesetting.** All formulas render with KaTeX, with a graceful fallback so a blocked CDN never freezes the page.
-- **Gamified progress.** Earn XP and level up in the header, enjoy a confetti burst on lesson completion, and pick up exactly where you left off (progress is saved locally).
-- **Designed to be read.** A clean three-column layout with module navigation, a focused reading column, and a sticky "on this page" rail. Fully responsive down to mobile.
+- **Gamified progress.** Earn XP and level up in the header, enjoy a confetti burst when you pass a lesson, and pick up exactly where you left off.
+- **Accounts and saved progress.** Create a free account (first name, last name, email) and your progress is saved per learner. A lightweight admin view lists registered learners.
+- **Designed to be read.** A clean three-column layout with module navigation, a focused reading column, and a sticky rail. Fully responsive down to mobile.
 - **Accessible by default.** Keyboard-operable navigation, visible focus outlines, ARIA labels on icon buttons, and respect for reduced-motion preferences.
 
 ---
 
 ## Curriculum
 
-**25 lessons across 6 modules.** Each lesson is built from typed blocks: a plain-English concept, the key formulas, a fully worked example, an optional interactive lab, and a your-turn practice problem with a complete step-by-step solution.
+**25 lessons across 6 modules.** Each lesson is built from typed blocks: a plain-English concept, the key formulas, a fully worked example, an optional interactive lab, a your-turn practice problem with a complete step-by-step solution, and a 3-question quiz you must pass before moving on.
 
 | Module | Lessons |
 | --- | --- |
@@ -70,6 +75,14 @@ Most courses lose beginners at the exact moment an author assumes something the 
 | **4. Applications of Derivatives** | First Derivative Test - Second Derivative and Concavity - Absolute Extrema - Optimization |
 | **5. Integration** | Antiderivatives - Substitution - The Definite Integral - Fundamental Theorem of Calculus |
 | **6. Business Applications** | Area Between Curves - Consumer and Producer Surplus - Income Streams and Present Value |
+
+---
+
+## Accounts and admin
+
+The course is gated behind a free account so progress can be saved per learner. Sign-up asks only for a first name, last name, and email; returning learners sign in by email. An admin view (reached from the landing-page footer) lists every registered learner and can edit a name or email, or remove an account.
+
+This is a deliberately lightweight, **client-side** account system: accounts and progress live in the browser's `localStorage`, so it is not a secure authentication system. It exists to support per-learner progress and the completion certificate. A real backend with proper authentication is the planned next step.
 
 ---
 
