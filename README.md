@@ -8,6 +8,7 @@ A free, interactive web course that teaches **business calculus** to a complete 
 
 <br/>
 
+[![Built with Claude Fable 5](https://img.shields.io/badge/built%20with-Claude%20Fable%205-D97757?style=for-the-badge&logo=anthropic&logoColor=white)](https://www.anthropic.com/news/claude-fable-5-mythos-5)
 ![Course: Business Calculus](https://img.shields.io/badge/course-business%20calculus-6366f1?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg?style=for-the-badge)](LICENSE)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
@@ -20,6 +21,10 @@ A free, interactive web course that teaches **business calculus** to a complete 
 ![Lessons](https://img.shields.io/badge/lessons-25-818cf8?style=flat-square)
 ![Quiz questions](https://img.shields.io/badge/quiz%20questions-75-f472b6?style=flat-square)
 ![Self hosted math](https://img.shields.io/badge/dependencies-2-34d399?style=flat-square)
+
+<br/>
+
+![Lenamon Calculus landing page](docs/landing.png)
 
 </div>
 
@@ -61,6 +66,13 @@ Most courses lose beginners at the exact moment an author assumes something the 
 - **Accounts and saved progress.** Create a free account (first name, last name, email) and your progress is saved per learner. A lightweight admin view lists registered learners.
 - **Designed to be read.** A clean three-column layout with module navigation, a focused reading column, and a sticky rail. Fully responsive down to mobile.
 - **Accessible by default.** Keyboard-operable navigation, visible focus outlines, ARIA labels on icon buttons, and respect for reduced-motion preferences.
+
+<div align="center">
+  <br/>
+  <img src="docs/certificate.png" alt="The completion certificate, unlocked after finishing all 25 lessons" width="560"/>
+  <br/>
+  <sub>The certificate every learner earns after passing all 25 lesson quizzes.</sub>
+</div>
 
 ---
 
