@@ -79,7 +79,7 @@ function Graph({ fn, xMin = -4, xMax = 4, yMin = -4, yMax = 4, width = 440, heig
   return (
     <div style={{ margin: "16px 0", textAlign: "center" }}>
       {label && <div style={{ fontSize: 11, fontWeight: 700, color: "#818cf8", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em", fontFamily: "Inter,system-ui" }}>{label}</div>}
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", maxWidth: 460, background: "rgba(8,11,20,0.55)", borderRadius: 10, border: "1px solid rgba(99,102,241,0.15)" }}>
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", maxWidth: 460, background: "rgba(5,8,16,0.6)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)" }}>
         <defs>
           <clipPath id={`clip${uid}`}><rect x={pad} y={pad} width={w} height={h} /></clipPath>
           <linearGradient id={`gfill${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6366f1" stopOpacity="0.34" /><stop offset="100%" stopColor="#6366f1" stopOpacity="0.05" /></linearGradient>
@@ -95,7 +95,10 @@ function Graph({ fn, xMin = -4, xMax = 4, yMin = -4, yMax = 4, width = 440, heig
         {notes.map((n, i) => <text key={`n${i}`} x={toX(n.x)} y={toY(n.y)} fill={n.color || "#e2e8f0"} fontSize="11" fontWeight="700" textAnchor={n.anchor || "middle"} fontFamily="Inter,system-ui" stroke="#0a0e1a" strokeWidth="3.4" paintOrder="stroke" strokeLinejoin="round">{n.text}</text>)}
         {highlights.map((pt, i) => (
           <g key={i}>
-            <circle cx={toX(pt.x)} cy={toY(pt.y)} r="5" fill={pt.color || "#f59e0b"} stroke="#0a0e1a" strokeWidth="2" />
+            {/* pt.open renders a hollow circle: the standard notation for a hole (a missing point) */}
+            {pt.open
+              ? <circle cx={toX(pt.x)} cy={toY(pt.y)} r="5" fill="#0a0e1a" stroke={pt.color || "#f59e0b"} strokeWidth="2.4" />
+              : <circle cx={toX(pt.x)} cy={toY(pt.y)} r="5" fill={pt.color || "#f59e0b"} stroke="#0a0e1a" strokeWidth="2" />}
             {pt.label && <text x={toX(pt.x) + (pt.lo ? pt.lo[0] : 8)} y={toY(pt.y) + (pt.lo ? pt.lo[1] : -8)} fill={pt.color || "#f59e0b"} fontSize="10" fontWeight="700" fontFamily="Inter,system-ui" stroke="#0a0e1a" strokeWidth="3.4" paintOrder="stroke" strokeLinejoin="round">{pt.label}</text>}
           </g>
         ))}
@@ -147,7 +150,7 @@ function Plot({ curves = [], lines = [], points = [], xMin, xMax, yMin, yMax, wi
   const xT = niceTicks(xMin, xMax, 8), yT = niceTicks(yMin, yMax, 6);
   const palette = ["#818cf8", "#f472b6", "#34d399", "#fbbf24"];
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", background: "rgba(8,11,20,0.5)", borderRadius: 14, border: "1px solid rgba(99,102,241,0.15)" }}>
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: "100%", height: "auto", background: "rgba(5,8,16,0.55)", borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)" }}>
       <defs>
         <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#6366f1" stopOpacity="0.28" />
@@ -274,6 +277,27 @@ function Celebrate({ trigger }) {
   return <canvas ref={ref} style={{ position: "fixed", inset: 0, zIndex: 200, pointerEvents: "none" }} />;
 }
 
+// Crisp stroke icons (lucide-style paths) - consistent across platforms, unlike emoji.
+const ICONS = {
+  bulb: ["M9 18h6", "M10 22h4", "M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"],
+  sigma: ["M18 7V5a1 1 0 0 0-1-1H6.5a.5.5 0 0 0-.4.8l4.5 6a2 2 0 0 1 0 2.4l-4.5 6a.5.5 0 0 0 .4.8H17a1 1 0 0 0 1-1v-2"],
+  chart: ["M3 3v16a2 2 0 0 0 2 2h16", "M7 16v-5", "M12 16V8", "M17 16v-3"],
+  sliders: ["M21 4h-7", "M10 4H3", "M21 12h-9", "M8 12H3", "M21 20h-5", "M12 20H3", "M14 2v4", "M8 10v4", "M16 18v4"],
+  pencil: ["M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z", "m15 5 4 4"],
+  zap: ["M13 2 3 14h9l-1 8 10-12h-9l1-8Z"],
+  steps: ["m3 17 2 2 4-4", "m3 7 2 2 4-4", "M13 6h8", "M13 12h8", "M13 18h8"],
+  award: ["M12 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z", "M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"],
+  menu: ["M4 6h16", "M4 12h16", "M4 18h16"],
+  check: ["M20 6 9 17l-5-5"],
+};
+function Ic({ d, size = 13, sw = 2.2, style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0, ...style }}>
+      {d.map((p, i) => <path key={i} d={p} />)}
+    </svg>
+  );
+}
+
 const L = [
 // ═══════ LESSON 1 ═══════
 {id:1,module:"Foundations",title:"Functions, Domain & Range",time:"10 min",content:[
@@ -308,12 +332,12 @@ const L = [
   <p>Here is the key fact. For most machines you are allowed to feed in <em>any</em> number you like, so the domain is simply "all numbers." But a few machines have a weak spot: certain inputs ask the machine to do something mathematically <strong>impossible</strong>. Sometimes that is only one or two numbers (such as a fraction's denominator (its bottom number) hitting zero); sometimes it is a whole range of numbers (such as every negative number under a square root). When it happens, the machine cannot produce an answer. We say it "jams," and we leave those inputs out of the domain.</p>
   <p>So finding a domain comes down to a single question:</p>
   <Box color="amber"><p><strong>Are there any inputs that would jam this machine? If so, every <em>other</em> number is allowed.</strong></p></Box>
-  <p>The next section shows you the only two ways a machine can ever jam, and explains exactly why each one happens.</p>
+  <p>The next section shows you the two ways a machine can jam with the functions you have right now, and explains exactly why each one happens.</p>
 </div>
 )},
-{type:"rule",label:"The Only Two Things That Jam a Machine",render:()=>(
+{type:"rule",label:"The Two Jams to Hunt for First",render:()=>(
 <div>
-  <p>In all of business calculus, only two situations make a function impossible to compute. If neither one shows up, then every number is allowed and the domain is "all real numbers."</p>
+  <p>For every function built from adding, subtracting, multiplying, dividing, and square roots, only two situations make it impossible to compute. If neither one shows up, then every number is allowed and the domain is "all real numbers." (Later, in Lesson 4, you will meet exactly one more kind of jam, when a new machine called the logarithm arrives. We will flag it loudly when it does.)</p>
   <p>Quick definition so nothing is assumed: <strong>real numbers</strong> are just the ordinary numbers you already use every day, the positives, the negatives, zero, fractions, and decimals. Picture every point on a number line. That is the real numbers.</p>
 
   <p style={{marginTop:14}}><strong>Jam #1: Dividing by zero.</strong></p>
@@ -331,7 +355,7 @@ const L = [
     <p>Try a negative number: <M d="(-2) \times (-2) = 4"/>. Still positive, because a negative times a negative makes a positive.</p>
     <p>No matter what real number you pick, squaring it never gives a negative result. So nothing works, and <M d="\sqrt{-4}"/> has no real answer.</p>
   </Box>
-  <p>That is the complete list. To find a domain, you only ever hunt for these two jams. No fraction? No square root? Then the domain is all real numbers.</p>
+  <p>That is the complete list for now. To find a domain in this module, you only hunt for these two jams. No fraction? No square root? Then the domain is all real numbers.</p>
 </div>
 )},
 {type:"example",label:"Full Walkthrough",render:()=>(
@@ -373,7 +397,7 @@ answer:()=>(
   <Box color="green">
     <p>Domain: all real numbers except <M d="x=2"/> and <M d="x=-2"/>.</p>
     <p>Quick checks:</p>
-    <p><M d="x=0"/>: <M d="\dfrac{5}{0-4}=-\dfrac{5}{4}"/>. Works.</p>
+    <p><M d="x=0"/>: <M d="\dfrac{5}{0^2-4}=\dfrac{5}{0-4}=-\dfrac{5}{4}"/>. Works.</p>
     <p><M d="x=2"/>: <M d="\dfrac{5}{4-4}=\dfrac{5}{0}"/>. Jams, as predicted.</p>
   </Box>
 </div>
@@ -384,7 +408,7 @@ answer:()=>(
 {type:"concept",render:()=>(
 <div>
   <p>Before we draw a single line, here is the playing field every graph lives on. Take two number lines and cross them. The flat one, running left to right, is the <strong>x-axis</strong>, and <M d="x"/> gets bigger as you move right. The standing-up one, running bottom to top, is the <strong>y-axis</strong>, and <M d="y"/> gets bigger as you move up. The spot where they cross is the <strong>origin</strong>. We name any location with a pair of numbers written <M d="(x,\,y)"/>: the first number is how far across, the second is how far up. So <M d="(0,\,1)"/> means "0 across, 1 up."</p>
-  <p>A <strong>linear equation</strong> is just a fancy name for a straight line. The equation that describes any straight line is:</p>
+  <p>A <strong>linear equation</strong> is an equation whose graph is a straight line. Every straight line you can walk along from left to right (that is, every line except a perfectly vertical one, which we will not need in this course) is described by:</p>
   <M d="y=mx+b" block/>
   <p>(When two letters are written side by side like <M d="mx"/>, that means multiply: <M d="mx"/> is <M d="m"/> times <M d="x"/>.)</p>
   <p>This has two pieces you need to understand:</p>
@@ -529,7 +553,8 @@ answer:()=>(
     <p><M d="2^1=2"/>  (that is 4 divided by 2)</p>
     <p><M d="2^0=1"/>  (that is 2 divided by 2)</p>
   </Box>
-  <p>To keep the pattern going, <M d="2^0"/> is forced to be 1. The same logic works for any base, so <M d="b^0=1"/> always.</p>
+  <p>To keep the pattern going, <M d="2^0"/> is forced to be 1. The same logic works for any positive base (the only kind we use in this course), so <M d="b^0=1"/>.</p>
+  <p>And the pattern does not stop at zero. Keep stepping down and each step still divides by <M d="b"/>: <M d="2^{-1}=\tfrac{1}{2}"/>, <M d="2^{-2}=\tfrac{1}{4}"/>, and so on. Even in-between exponents like <M d="e^{0.15}"/> fit the same smooth pattern, and your calculator fills them in for you. So "multiply <M d="x"/> copies of <M d="b"/>" is the whole-number picture that anchors the idea, and the pattern extends it to <em>every</em> number on the number line. That is why we can draw <M d="b^x"/> as one unbroken curve.</p>
 
   <p><strong>What the growth factor <M d="b"/> tells you:</strong></p>
   <p>If <M d="b>1"/>, the amount grows. Take <M d="b=1.05"/>. Why does multiplying by 1.05 mean "plus 5%"? Because <M d="1.05 = 1 + 0.05"/>. The <M d="1"/> keeps everything you already had (that is 100% of it), and the extra <M d="0.05"/> adds another 5% on top.</p>
@@ -624,7 +649,7 @@ answer:()=>(
   </Box>
   <p>Concrete example: <M d="e^2\approx 7.389"/>. Going backward, <M d="\ln(7.389)\approx 2"/>, because 2 is exactly the exponent that produced 7.389. The two operations cancel.</p>
 
-  <p><strong>Why can you only take <M d="\ln"/> of a positive number?</strong> Most courses state this with no reason. Here is the reason. <M d="\ln(x)"/> is hunting for the exponent that makes <M d="e^{\,?}=x"/>. But <M d="e"/> is a positive number (about 2.718), and from Lesson 3 we saw that a positive number raised to <em>any</em> power stays positive, never zero and never negative. So no exponent can ever produce 0 or a negative result. That is exactly why <M d="\ln(0)"/> and <M d="\ln(-5)"/> do not exist.</p>
+  <p><strong>Why can you only take <M d="\ln"/> of a positive number?</strong> Most courses state this with no reason. Here is the reason. <M d="\ln(x)"/> is hunting for the exponent that makes <M d="e^{\,?}=x"/>. But <M d="e"/> is a positive number (about 2.718), and a positive number raised to <em>any</em> power stays positive: multiplying positives gives a positive, and even negative exponents only flip it into a fraction like <M d="\tfrac{1}{e^2}"/>, which is still positive. (You saw this in Lesson 3's decay graph, which sinks toward 0 but never touches it.) So no exponent can ever produce 0 or a negative result. That is exactly why <M d="\ln(0)"/> and <M d="\ln(-5)"/> do not exist.</p>
   <Graph fn={(x) => Math.log(x)} xMin={-1} xMax={8} yMin={-3} yMax={3}
     highlights={[
       { x: 1, y: 0, label: "ln(1) = 0", color: "#f59e0b", lo: [10, 18] },
@@ -637,11 +662,11 @@ answer:()=>(
 )},
 {type:"rule",label:"Log Properties (and Why They Work)",render:()=>(
 <div>
-  <p>These three properties let you break a complicated log into simpler pieces. Each one is really an exponent rule from Lesson 3 wearing a different costume.</p>
+  <p>These three properties let you break a complicated log into simpler pieces (they hold for positive <M d="a"/> and <M d="b"/>, the only inputs <M d="\ln"/> accepts). Each one is really an exponent rule wearing a different costume.</p>
   <M d="\ln(a\cdot b)=\ln a+\ln b" block/>
   <p>Multiplication becomes addition. Why? A log hands you an exponent, and exponents <em>add</em> when you multiply (Lesson 3). Check: <M d="\ln(e^2\cdot e^3)=\ln(e^5)=5"/>, and separately <M d="\ln(e^2)+\ln(e^3)=2+3=5"/>. Same answer.</p>
   <M d="\ln\!\left(\frac{a}{b}\right)=\ln a-\ln b" block/>
-  <p>Division becomes subtraction, the mirror image: dividing powers of the same base subtracts their exponents.</p>
+  <p>Division becomes subtraction, the mirror image. Why? Dividing <em>undoes</em> multiplications, so it removes copies from the stack instead of adding them: <M d="\tfrac{e^5}{e^3}"/> cancels three of the five copies of <M d="e"/>, leaving <M d="e^{5-3}=e^2"/>. The exponent counts subtract, so the logs subtract.</p>
   <M d="\ln(a^n)=n\cdot\ln a" block/>
   <p>A power slides down to the front as a multiplier, because <M d="a^n"/> is <M d="a"/> multiplied <M d="n"/> times, so its log is <M d="\ln a"/> added <M d="n"/> times.</p>
   <p>Two values worth memorizing, both straight from the definition: <M d="\ln(e)=1"/> (the exponent that gives <M d="e"/> is 1) and <M d="\ln(1)=0"/> (the exponent that gives 1 is 0, since <M d="e^0=1"/>).</p>
@@ -725,7 +750,7 @@ answer:()=>(
   <p>One more thing about this example, because it explains the whole picture. That fraction <M d="\dfrac{x^2-4}{x-2}"/> is secretly just the straight line <M d="y=x+2"/>, with a single point punched out at <M d="x=2"/> (we will prove that with algebra in the practice problem below). That is exactly why the table marched so neatly toward 4.</p>
 
   <Graph fn={(x) => x + 2} xMin={-1} xMax={5} yMin={-1} yMax={7}
-    highlights={[{ x: 2, y: 4, label: "hole  -  f(2) undefined", color: "#f59e0b", lo: [12, 16] }]}
+    highlights={[{ x: 2, y: 4, open: true, label: "hole  -  f(2) undefined", color: "#f59e0b", lo: [12, 16] }]}
     label="The graph has a hole at x = 2"
     caption="The function follows y = x + 2, but there's a missing dot at (2, 4). The limit is still 4."
   />
@@ -971,7 +996,7 @@ answer:()=>(
   <p><strong>Diagnosis:</strong> The limit exists (the road leads to 6), but there's no actual value at <M d="x=3"/>. This is a <strong>removable discontinuity</strong>  -  a hole. The bridge goes to the right place; there's just a missing plank at <M d="x=3"/>.</p>
 
   <Graph fn={(x) => x + 3} xMin={-1} xMax={6} yMin={0} yMax={9}
-    highlights={[{ x: 3, y: 6, label: "hole at (3, 6)", color: "#f59e0b", lo: [12, 16] }]}
+    highlights={[{ x: 3, y: 6, open: true, label: "hole at (3, 6)", color: "#f59e0b", lo: [12, 16] }]}
     caption="The function follows y = x + 3, but there's a missing dot at (3, 6)"
   />
 </div>
@@ -1183,13 +1208,13 @@ answer:()=>(
     <p>Where <M d="f(x) = x^2"/> is going <strong>downhill</strong> (left side) → <M d="f'(x) = 2x"/> is <strong>negative</strong></p>
     <p>Where <M d="f(x)"/> is <strong>flat</strong> (bottom, at <M d="x=0"/>) → <M d="f'(x) = 0"/></p>
     <p>Where <M d="f(x)"/> is going <strong>uphill</strong> (right side) → <M d="f'(x)"/> is <strong>positive</strong></p>
-    <p>Where <M d="f(x)"/> gets <strong>steeper</strong> → <M d="f'(x)"/> gets <strong>bigger</strong></p>
+    <p>Where <M d="f(x)"/> gets <strong>steeper</strong> → <M d="f'(x)"/> gets <strong>bigger in size</strong> (further from zero: more positive going uphill, more negative going downhill)</p>
   </Box>
 
   <p>This relationship between a function and its derivative is the heart of calculus. In Lesson 15, we'll use this to find peaks and valleys of any curve.</p>
 </div>
 )},
-{type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>0.25*x*x*x-x} dfn={(x)=>0.75*x*x-1} xMin={-3.2} xMax={3.2} yMin={-3} yMax={3} start={-2.2}
+{type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>0.25*x*x*x-x} dfn={(x)=>0.75*x*x-1} xMin={-3} xMax={3} yMin={-4} yMax={4} start={-2.2}
   intro="Here is the whole idea of calculus in one picture. The derivative is simply the steepness of the curve at a single point. Drag the dot: where the curve climbs the slope is positive, where it falls it is negative, and at the very top or bottom it is exactly zero."/>)},
 {type:"practice",render:()=>(<span>Use the limit definition to find <M d="f'(x)"/> for <M d="f(x) = 3x + 7"/>. Then explain why the answer makes sense.</span>),
 answer:()=>(
@@ -1307,6 +1332,7 @@ answer:()=>(
   <p><strong>The golden rule of profit:</strong> Profit is maximized when marginal revenue equals marginal cost:</p>
   <M d="R'(x) = C'(x)" block/>
   <p>Why? If <M d="R'(x) > C'(x)"/>, the next unit brings in more than it costs  -  keep producing! If <M d="R'(x) < C'(x)"/>, the next unit costs more than it earns  -  stop! The sweet spot is where they're exactly equal.</p>
+  <p>One honest fine print: profit can only <em>peak</em> where <M d="R'(x)=C'(x)"/>, but you should still confirm the point is a peak and not a valley. For the profit curves in this course (downward-opening arches), it always is, and Lesson 16 gives you the formal test.</p>
 </div>
 )},
 {type:"example",label:"Full Walkthrough: Marginal Cost vs. Exact Cost",render:()=>(
@@ -1360,7 +1386,7 @@ answer:()=>(
   <M d="x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" block/>
   <p>You may have met this in algebra; it comes from a technique called completing the square. We will take it as a known tool here and focus on using it correctly.</p>
   <p>Here <M d="a=1"/>, <M d="b=-1000"/>, <M d="c=10000"/>. Watch the two sign traps when <M d="b"/> is negative. The formula opens with <M d="-b"/>, and <M d="b=-1000"/>, so <M d="-b=-(-1000)=+1000"/>. And <M d="b^2"/> means <M d="(-1000)^2"/>, and a negative squared is positive, so <M d="b^2=+1{,}000{,}000"/>. Putting those in:</p>
-  <M d="x=\frac{1000\pm\sqrt{1{,}000{,}000-40{,}000}}{2}=\frac{1000\pm\sqrt{960{,}000}}{2}=\frac{1000\pm 979.8}{2}" block/>
+  <M d="x=\frac{1000\pm\sqrt{1{,}000{,}000-40{,}000}}{2}=\frac{1000\pm\sqrt{960{,}000}}{2}\approx\frac{1000\pm 979.8}{2}" block/>
   <p>The two solutions are <M d="x\approx 10"/> and <M d="x\approx 990"/>.</p>
   <p>So you break even at about <strong>10 units</strong> and again at <strong>990 units</strong>. Between those, you're profitable.</p>
 
@@ -1370,9 +1396,9 @@ answer:()=>(
 
   <Graph fns={[(x) => 12*x - 0.01*x*x, (x) => 100 + 2*x]} xMin={0} xMax={1100} yMin={0} yMax={4500}
     highlights={[
-      { x: 10, y: 120, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
+      { x: 10.102, y: 120.2, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
       { x: 500, y: 3500, label: "Max gap", color: "#10b981", lo: [10, -14] },
-      { x: 990, y: 2080, label: "Break-even", color: "#f59e0b", lo: [-80, -14] },
+      { x: 989.898, y: 2079.8, label: "Break-even", color: "#f59e0b", lo: [-80, -14] },
     ]}
     label={<><span style={{color:"#818cf8"}}>Revenue</span> <span style={{color:"#e2e8f0"}}>vs</span> <span style={{color:"#f472b6"}}>Cost</span></>}
     caption="The curves cross at the break-even points. The biggest gap between them is max profit."
@@ -1380,9 +1406,9 @@ answer:()=>(
 
   <Graph fn={(x) => -0.01*x*x + 10*x - 100} xMin={0} xMax={1100} yMin={-500} yMax={2800}
     highlights={[
-      { x: 10, y: 0, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
+      { x: 10.102, y: 0, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
       { x: 500, y: 2400, label: "Max: $2,400", color: "#10b981", lo: [10, -14] },
-      { x: 990, y: 0, label: "Break-even", color: "#f59e0b", lo: [-80, -14] },
+      { x: 989.898, y: 0, label: "Break-even", color: "#f59e0b", lo: [-80, -14] },
     ]}
     label="Profit: P(x) = R(x) - C(x)"
     caption="Profit is zero at the break-even points, and peaks at x = 500 where P'(x) = 0"
@@ -1544,7 +1570,7 @@ answer:()=>(
   <p><strong>Quotient Rule</strong>  -  when one function is <em>divided</em> by another:</p>
   <p>If <M d="f(x) = \dfrac{u}{v}"/>:</p>
   <M d="\left(\frac{u}{v}\right)' = \frac{u' \cdot v \;-\; u \cdot v'}{v^2}" block/>
-  <p><strong>Why a minus, not a plus?</strong> Unlike the product rule, the bottom function works <em>against</em> the fraction: making <M d="v"/> bigger makes <M d="\tfrac{u}{v}"/> smaller. So the term that carries <M d="v"/>'s change pulls the value <em>down</em>, which is why it is subtracted. (The "over <M d="v^2"/>" part falls out of the algebra when you rebuild this rule from the product rule later; for now, treat the squared bottom as part of the pattern.)</p>
+  <p><strong>Why a minus, not a plus?</strong> Unlike the product rule, the bottom function works <em>against</em> the fraction: when the top is positive (think of revenue or cost, our usual tops), making <M d="v"/> bigger makes <M d="\tfrac{u}{v}"/> smaller. So the term that carries <M d="v"/>'s change pulls the value <em>down</em>, which is why it is subtracted. (The "over <M d="v^2"/>" part falls out of the algebra when you rebuild this rule from the product rule later; for now, treat the squared bottom as part of the pattern.)</p>
   <p>Memory trick: <strong>"Low D-High minus High D-Low, over Low squared."</strong> (Low = bottom = <M d="v"/>, High = top = <M d="u"/>, D = derivative of.)</p>
 </div>
 )},
@@ -1710,7 +1736,7 @@ answer:()=>(
   <p>Outside: <M d="\ln(\;\cdot\;)"/>. Inside: <M d="u = x^2 + 5"/>.</p>
 
   <p><strong>Step 2: Derivative of outside (leave inside alone).</strong></p>
-  <p><M d="\tfrac{d}{dx}[\ln(u)] = \tfrac{1}{u} = \tfrac{1}{x^2 + 5}"/></p>
+  <p>Outside derivative, with the inside left alone: <M d="\tfrac{1}{u} = \tfrac{1}{x^2 + 5}"/></p>
 
   <p><strong>Step 3: Multiply by derivative of inside.</strong></p>
   <p><M d="u' = 2x"/> (power rule on <M d="x^2"/>; the 5 vanishes)</p>
@@ -1764,7 +1790,7 @@ answer:()=>(
     <p><M d="E < 1"/> → <strong>Inelastic</strong>: Customers aren't very sensitive. A 1% price increase causes less than 1% drop in demand. <strong>Raise your price</strong> to increase revenue. Why raise it? A 1% price rise costs you <em>less</em> than 1% of customers, so the higher tag outweighs the few lost sales and revenue climbs.</p>
   </Box>
   <Box>
-    <p><M d="E = 1"/> → <strong>Unit elastic</strong>: You're at the sweet spot. <strong>Revenue is maximized</strong> right here. Why the peak? At <M d="E=1"/> a 1% price change is exactly cancelled by a 1% quantity change, so revenue does not move in either direction  -  "no gain whichever way you step" is the signature of standing on the very top of the revenue hill.</p>
+    <p><M d="E = 1"/> → <strong>Unit elastic</strong>: You're at the sweet spot. <strong>Revenue is maximized</strong> right here. Why the peak? At <M d="E=1"/> a 1% price change is exactly cancelled by a 1% quantity change, so revenue does not move in either direction. And for a typical demand curve, revenue climbs while <M d="E<1"/> and falls once <M d="E>1"/>, so the flat spot at <M d="E=1"/> really is the very top of the revenue hill.</p>
   </Box>
 </div>
 )},
@@ -1831,7 +1857,7 @@ answer:()=>(
   <p>Picture a hike up a hill and back down. While you climb, your path slopes upward (positive slope). At the very top, for one instant, the ground is flat (slope = 0). On the way down, the path slopes downward (negative slope).</p>
   <p>So the top of the hill, the maximum, is exactly where the slope <strong>switches from positive to negative</strong>. A valley bottom (minimum) is where the slope switches from negative to positive.</p>
   <Box>
-    <p><strong>Critical number:</strong> an <M d="x"/>-value where <M d="f'(x)=0"/> (a flat spot) or where <M d="f'(x)"/> does not exist. These are the only places a peak or valley can hide.</p>
+    <p><strong>Critical number:</strong> an <M d="x"/>-value in the domain of <M d="f"/> where <M d="f'(x)=0"/> (a flat spot) or where <M d="f'(x)"/> does not exist. These are the only places a peak or valley can hide. (The "in the domain" part matters: <M d="\tfrac{1}{x}"/> has no derivative at <M d="x=0"/>, but <M d="x=0"/> is not in its domain at all, so it is not a critical number, there is simply no point there.)</p>
     <p>What does "<M d="f'(x)"/> does not exist" mean? It means the curve has no single, clear slope at that <M d="x"/>. The usual cause is a sharp corner. Picture the pointed bottom of a V (the graph of the absolute value <M d="|x|"/>): walk into the point from the left and you are heading downhill, then leave it on the right heading uphill, so right at the tip the curve cannot settle on one slope. Yet the tip is still a genuine valley, which is why corner points join the flat spots on the suspect list.</p>
   </Box>
   <Graph fn={(x)=>x*x*x-3*x+2} xMin={-3} xMax={3} yMin={-2} yMax={6}
@@ -1858,7 +1884,7 @@ answer:()=>(
   <Box color="green"><p>Local minimum of <M d="-4"/> at <M d="x=3"/>. That is the bottom of a parabola, exactly as expected.</p></Box>
 </div>
 )},
-{type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>x*x*x-3*x+2} dfn={(x)=>3*x*x-3} xMin={-3} xMax={3} yMin={-2} yMax={6} start={-2.6}
+{type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>x*x*x-3*x+2} dfn={(x)=>3*x*x-3} xMin={-3} xMax={3} yMin={-2} yMax={6} start={-2.1}
   intro="Drag along this curve and watch the tangent. The slope is positive, flattens to zero at the peak, turns negative, flattens again at the valley, then turns positive. Those flat spots are the critical numbers you are about to find with algebra."/>)},
 {type:"practice",render:()=>(<span>Find and classify the critical numbers of <M d="f(x)=x^3-12x"/>.</span>),
 answer:()=>(<div>
@@ -2126,7 +2152,7 @@ answer:()=>(<div>
   <M d="\int e^{u}\cdot\frac{du}{5}=\frac{1}{5}\int e^{u}\,du=\frac{1}{5}e^{u}+C" block/>
   <p><strong>Step 4:</strong> Put <M d="u=5x"/> back:</p>
   <M d="\frac{e^{5x}}{5}+C" block/>
-  <Box color="green"><p>Answer: <M d="\tfrac{e^{5x}}{5}+C"/>. Handy shortcut to remember: <M d="\int e^{kx}\,dx=\tfrac{e^{kx}}{k}+C"/>.</p></Box>
+  <Box color="green"><p>Answer: <M d="\tfrac{e^{5x}}{5}+C"/>. Handy shortcut to remember: <M d="\int e^{kx}\,dx=\tfrac{e^{kx}}{k}+C"/> (for <M d="k\neq 0"/>; with <M d="k=0"/> you would be integrating the constant 1, which gives <M d="x+C"/>).</p></Box>
 </div>)},
 ]},
 
@@ -2193,7 +2219,7 @@ answer:()=>(<div>
   <M d="\big[2x^2\big]_0^2 = 2(2)^2 - 2(0)^2" block/>
   <p><strong>Step 3: Subtract.</strong></p>
   <M d="= 8 - 0 = 8" block/>
-  <Graph fn={(x)=>4*x} xMin={-0.5} xMax={3} yMin={-1} yMax={10} caption="The area under y = 4x from 0 to 2 is a triangle: half-base-times-height = (1/2)(2)(8) = 8. The theorem agrees."/>
+  <Graph fn={(x)=>4*x} xMin={-0.5} xMax={3} yMin={-1} yMax={10} shades={[{top:(x)=>4*x,bottom:0,from:0,to:2,color:"rgba(99,102,241,0.28)"}]} caption="The shaded area under y = 4x from 0 to 2 is a triangle: half-base-times-height = (1/2)(2)(8) = 8. The theorem agrees."/>
   <Box color="green"><p>Answer: 8. Geometry (triangle area) confirms it.</p></Box>
 </div>
 )},
@@ -2344,7 +2370,7 @@ answer:()=>(<div>
 ];
 
 const MODULES=[...new Set(L.map(l=>l.module))];
-const tc={concept:{bg:"rgba(99,102,241,0.06)",border:"#6366f1",icon:"💡",label:"Core Concept"},rule:{bg:"rgba(245,158,11,0.06)",border:"#f59e0b",icon:"📐",label:"Key Formulas"},example:{bg:"rgba(16,185,129,0.06)",border:"#10b981",icon:"📊",label:"Worked Example"},interactive:{bg:"rgba(34,211,238,0.07)",border:"#22d3ee",icon:"🎮",label:"Play with it"},practice:{bg:"rgba(239,68,68,0.06)",border:"#ef4444",icon:"✏️",label:"Your Turn"}};
+const tc={concept:{bg:"rgba(129,140,248,0.09)",border:"#818cf8",icon:ICONS.bulb,label:"Core Concept"},rule:{bg:"rgba(251,191,36,0.09)",border:"#fbbf24",icon:ICONS.sigma,label:"Key Formulas"},example:{bg:"rgba(52,211,153,0.09)",border:"#34d399",icon:ICONS.chart,label:"Worked Example"},interactive:{bg:"rgba(34,211,238,0.09)",border:"#22d3ee",icon:ICONS.sliders,label:"Play with it"},practice:{bg:"rgba(244,114,182,0.09)",border:"#f472b6",icon:ICONS.pencil,label:"Your Turn"}};
 
 function PB({completed,total}){
   const p=Math.round(completed/total*100);
@@ -2353,8 +2379,8 @@ function PB({completed,total}){
       <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:"#94a3b8",marginBottom:4,fontFamily:"system-ui"}}>
         <span>{completed}/{total}</span><span>{p}%</span>
       </div>
-      <div style={{height:5,background:"#1e293b",borderRadius:3,overflow:"hidden"}}>
-        <div style={{height:"100%",width:`${p}%`,background:"linear-gradient(90deg,#6366f1,#a78bfa)",borderRadius:3,transition:"width 0.5s"}}/>
+      <div style={{height:6,background:"rgba(148,163,184,0.14)",borderRadius:4,overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${p}%`,background:"linear-gradient(90deg,#6366f1,#a78bfa)",borderRadius:4,transition:"width 0.5s cubic-bezier(0.22,1,0.36,1)",boxShadow:"0 0 10px rgba(139,92,246,0.55)"}}/>
       </div>
     </div>
   );
@@ -2363,16 +2389,16 @@ function PB({completed,total}){
 function CC({item,showAnswer,onToggle,id}){
   const c=tc[item.type];
   return(
-    <div id={id} style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:20,padding:"28px 32px",marginBottom:24,boxShadow:"0 1px 2px rgba(0,0,0,0.2)",scrollMarginTop:18}}>
-      <div style={{display:"inline-block",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",color:c.border,background:c.bg,border:`1px solid ${c.border}30`,padding:"5px 12px",borderRadius:999,marginBottom:18,fontFamily:"Inter,system-ui"}}>{c.icon} {item.label||c.label}</div>
-      <div className="prose" style={{fontSize:16,lineHeight:1.85,color:"#dde4ee"}}>{item.render?item.render():null}</div>
+    <div id={id} style={{background:"linear-gradient(180deg,rgba(255,255,255,0.038),rgba(255,255,255,0.016))",border:"1px solid rgba(255,255,255,0.07)",borderTop:"1px solid rgba(255,255,255,0.11)",borderRadius:20,padding:"28px 32px",marginBottom:24,boxShadow:"0 10px 30px rgba(2,4,12,0.35)",scrollMarginTop:18}}>
+      <div style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:c.border,background:c.bg,border:`1px solid ${c.border}38`,padding:"5px 12px",borderRadius:999,marginBottom:18,fontFamily:"Inter,system-ui"}}><Ic d={c.icon} size={12.5}/>{item.label||c.label}</div>
+      <div className="prose" style={{fontSize:17,lineHeight:1.85,color:"#dde4ee"}}>{item.render?item.render():null}</div>
       {item.type==="practice"&&item.answer&&(
         <div style={{marginTop:18}}>
-          <button onClick={onToggle} style={{background:showAnswer?"rgba(148,163,184,0.10)":"linear-gradient(135deg,#6366f1,#8b5cf6)",border:showAnswer?"1px solid rgba(148,163,184,0.2)":"none",color:showAnswer?"#cbd5e1":"#fff",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:13.5,fontWeight:700,fontFamily:"Inter,system-ui",transition:"all 0.2s",boxShadow:showAnswer?"none":"0 6px 18px rgba(99,102,241,0.28)"}}>
+          <button onClick={onToggle} style={{background:showAnswer?"rgba(148,163,184,0.10)":"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",border:showAnswer?"1px solid rgba(148,163,184,0.2)":"none",color:showAnswer?"#cbd5e1":"#fff",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:13.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:showAnswer?"none":"0 6px 18px rgba(99,102,241,0.32), inset 0 1px 0 rgba(255,255,255,0.18)"}}>
             {showAnswer?"Hide solution":"Show me how, step by step"}
           </button>
           {showAnswer&&(
-            <div className="prose" style={{marginTop:16,padding:"22px 26px",background:"rgba(16,185,129,0.05)",border:"1px solid rgba(16,185,129,0.16)",borderRadius:16,color:"#d8f3e3",fontSize:15,lineHeight:1.9}}>
+            <div className="prose lesson-fade" style={{marginTop:16,padding:"22px 26px",background:"rgba(52,211,153,0.05)",border:"1px solid rgba(52,211,153,0.18)",borderRadius:16,color:"#d8f3e3",fontSize:16,lineHeight:1.9}}>
               {typeof item.answer==="function"?item.answer():null}
             </div>
           )}
@@ -2442,7 +2468,7 @@ const QUIZ = {
    "answer": 2,
    "why": [
     "Close, but that describes the range, the outputs, not the domain.",
-    "Not this one, steepness is slope from Lesson 2, not the domain.",
+    "Not this one, steepness is a different idea (called slope, coming in the next lesson), not the domain.",
     "Yes, the domain is the set of all inputs you are allowed to feed in.",
     "Not quite, the rule is how the machine works, not its domain."
    ]
@@ -2592,7 +2618,7 @@ const QUIZ = {
    "answer": 2,
    "why": [
     "Not quite, $\\ln$ handles fractions and decimals too, not just whole numbers.",
-    "Not this one, size is not the issue; the issue is that the result can never be negative.",
+    "Not this one, size is not the issue; the issue is that the result can never be zero or negative.",
     "Exactly, since $e^{?}$ is always positive, no exponent produces 0 or a negative, so $\\ln$ of those does not exist.",
     "Not quite, this has nothing to do with the calculator's digits."
    ]
@@ -2828,7 +2854,7 @@ const QUIZ = {
     "You forgot to bring the exponent down as a multiplier; the 5 must move out front.",
     "The exponent should go down by 1 to 4, not up to 6.",
     "Correct! Bring the 5 down in front and subtract 1 from the exponent: $5x^4$.",
-    "You lowered the coefficient instead of the exponent; bring the 5 down and the exponent becomes 4."
+    "You wrote the reduced exponent out front but kept the power at 5; instead, bring the current exponent 5 down as the multiplier and reduce the power to 4: $5x^4$."
    ]
   },
   {
@@ -3458,9 +3484,9 @@ const QUIZ = {
    "answer": 0,
    "why": [
     "Correct - $2(7)-3=14-3=11$.",
-    "Not quite - only $f$ is doubled: $2(7)-3=11$.",
+    "Not quite - that adds the $g$ integral; it must be subtracted: $2(7)-3=11$.",
     "Not quite - that is $7-3$; remember to double the first integral.",
-    "Not quite - $2\\times 7=14$, then subtract 3 to get $11$."
+    "Not quite - only the $f$ integral is doubled, not $g$: $2(7)-3=11$."
    ]
   }
  ],
@@ -3687,7 +3713,7 @@ const INSPO=[
   {t:"Its own echo",b:"e^x is the one function that is its own rate of change - it grows exactly as fast as it already is. Nature reuses this trick everywhere."},
   {t:"Keep asking why",b:"Every rule here was discovered by someone asking 'but why does that work?' - the exact question that is serving you so well right now."},
   {t:"Rates within rates",b:"The chain rule is how calculus handles a world of nested causes - speeds inside speeds. Once you spot it, you will see it everywhere."},
-  {t:"William Thurston",b:"\"Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding.\" That is exactly what elasticity gives you."},
+  {t:"William Thurston",b:"\"Mathematics is an art of human understanding.\" That is exactly what elasticity gives you - not a formula to memorize, but a way to understand how price and demand pull on each other."},
   {t:"Albert Einstein",b:"\"Pure mathematics is, in its way, the poetry of logical ideas.\" Finding a curve's peaks and valleys is a little piece of that poetry."},
   {t:"The second look",b:"Concavity is calculus noticing not just where you are headed, but whether you are speeding up or easing off. Subtle, and powerful."},
   {t:"Albert Einstein",b:"\"Do not worry about your difficulties in mathematics. I can assure you mine are still greater.\" If Einstein struggled, you are in fine company - keep going."},
@@ -3719,15 +3745,20 @@ function Quiz({quiz,passed,onPass}){
   const qz=quiz[step];
   const isCorrect=chosen!==null&&chosen===qz.answer;
   const isWrong=chosen!==null&&chosen!==qz.answer;
+  // The UI already labels feedback "Correct!" / "Not quite." - strip a duplicate
+  // acknowledgment from the start of the explanation so it never reads twice.
+  const cap=(s)=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+  const whyRight=cap(qz.why[qz.answer].replace(/^(Correct|Yes|Exactly|Right)\b[!.,]?\s*-?\s*/i,""));
+  const whyWrong=isWrong?cap(qz.why[chosen].replace(/^(Not quite|Not this one|Close, but|No)\b[!.,]?\s*-?\s*/i,"")):"";
   const pick=(i)=>{ if(isCorrect)return; setChosen(i); };
   const cont=()=>{ if(step+1>=quiz.length){onPass();setStep(quiz.length);} else {setStep(step+1);setChosen(null);} };
 
   return(
-    <div style={{background:"rgba(139,92,246,0.05)",border:"1px solid rgba(139,92,246,0.22)",borderRadius:20,padding:"28px 32px",marginBottom:24,fontFamily:"Inter,system-ui"}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
-        <div style={{display:"inline-block",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",color:"#c4b5fd",background:"rgba(139,92,246,0.12)",border:"1px solid rgba(139,92,246,0.3)",padding:"5px 12px",borderRadius:999}}>Check your understanding</div>
+    <div style={{background:"linear-gradient(180deg,rgba(139,92,246,0.09),rgba(139,92,246,0.03))",border:"1px solid rgba(139,92,246,0.26)",borderTop:"1px solid rgba(196,181,253,0.3)",borderRadius:20,padding:"28px 32px",marginBottom:24,fontFamily:"Inter,system-ui",boxShadow:"0 10px 30px rgba(2,4,12,0.35)"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+        <div style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:"#c4b5fd",background:"rgba(139,92,246,0.14)",border:"1px solid rgba(139,92,246,0.32)",padding:"5px 12px",borderRadius:999}}><Ic d={ICONS.check} size={12}/>Check your understanding</div>
         <div style={{display:"flex",gap:5,alignItems:"center"}}>
-          {quiz.map((_,i)=><span key={i} style={{width:8,height:8,borderRadius:"50%",background:i<step?"#34d399":i===step?"#a78bfa":"rgba(148,163,184,0.3)"}}/>)}
+          {quiz.map((_,i)=><span key={i} style={{width:i===step?20:8,height:8,borderRadius:999,background:i<step?"#34d399":i===step?"linear-gradient(90deg,#a78bfa,#8b5cf6)":"rgba(148,163,184,0.3)",transition:"width 0.3s cubic-bezier(0.22,1,0.36,1)"}}/>)}
           <span style={{fontSize:12,color:"#94a3b8",marginLeft:6,fontWeight:600}}>Question {step+1} of {quiz.length}</span>
         </div>
       </div>
@@ -3742,8 +3773,8 @@ function Quiz({quiz,passed,onPass}){
           const bg=showRight?"rgba(16,185,129,0.14)":showWrong?"rgba(239,68,68,0.12)":"rgba(8,11,20,0.45)";
           const bd=showRight?"#34d399":showWrong?"#f87171":"rgba(148,163,184,0.2)";
           return(
-            <button key={i} onClick={()=>pick(i)} disabled={isCorrect}
-              style={{display:"flex",alignItems:"center",gap:12,width:"100%",textAlign:"left",background:bg,border:`1px solid ${bd}`,borderRadius:12,padding:"13px 16px",cursor:isCorrect?"default":"pointer",fontFamily:"Inter,system-ui",transition:"background 0.15s,border 0.15s"}}>
+            <button key={i} onClick={()=>pick(i)} disabled={isCorrect} className={showRight||showWrong?undefined:"qopt"}
+              style={{display:"flex",alignItems:"center",gap:12,width:"100%",textAlign:"left",background:bg,border:`1px solid ${bd}`,borderRadius:12,padding:"13px 16px",cursor:isCorrect?"default":"pointer",fontFamily:"Inter,system-ui"}}>
               <span style={{width:26,height:26,flexShrink:0,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,background:showRight?"#10b981":showWrong?"#ef4444":"rgba(148,163,184,0.16)",color:showRight||showWrong?"#fff":"#cbd5e1"}}>{showRight?"✓":showWrong?"✕":QLETTERS[i]}</span>
               <span style={{fontSize:15,color:"#dde4ee",lineHeight:1.5}}><MX s={c}/></span>
             </button>
@@ -3753,15 +3784,15 @@ function Quiz({quiz,passed,onPass}){
 
       {isWrong&&(
         <div style={{marginTop:14,padding:"13px 16px",background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#fcd9a8"}}>
-          <strong style={{color:"#fbbf24"}}>Not quite. </strong><MX s={qz.why[chosen]}/> <span style={{color:"#fbbf24",fontWeight:600}}>Give it another try.</span>
+          <strong style={{color:"#fbbf24"}}>Not quite. </strong><MX s={whyWrong}/> <span style={{color:"#fbbf24",fontWeight:600}}>Give it another try.</span>
         </div>
       )}
       {isCorrect&&(
         <div style={{marginTop:14}}>
           <div style={{padding:"13px 16px",background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#bbf7d0"}}>
-            <strong style={{color:"#6ee7b7"}}>Correct! </strong><MX s={qz.why[qz.answer]}/>
+            <strong style={{color:"#6ee7b7"}}>Correct! </strong><MX s={whyRight}/>
           </div>
-          <button onClick={cont} style={{marginTop:14,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.28)"}}>
+          <button onClick={cont} style={{marginTop:14,background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",color:"#fff",border:"none",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.32), inset 0 1px 0 rgba(255,255,255,0.18)"}}>
             {step+1>=quiz.length?"Finish quiz →":"Next question →"}
           </button>
         </div>
@@ -3951,27 +3982,33 @@ function Course({session,onSignOut,onBrand}){
 
   const sidebar=(
     <div style={{height:"100%",overflowY:"auto",padding:"18px 14px",fontFamily:"Inter,system-ui"}}>
-      <button onClick={onBrand} title="Back to home" style={{display:"flex",alignItems:"center",gap:8,marginBottom:16,width:"100%",background:"transparent",border:"none",padding:0,cursor:"pointer",textAlign:"left"}}>
-        <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#fff",flexShrink:0}}>∫</div>
+      <button onClick={onBrand} title="Back to home" style={{display:"flex",alignItems:"center",gap:9,marginBottom:16,width:"100%",background:"transparent",border:"none",padding:0,cursor:"pointer",textAlign:"left"}}>
+        <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#fff",flexShrink:0,boxShadow:"0 4px 12px rgba(99,102,241,0.4), inset 0 1px 0 rgba(255,255,255,0.25)"}}>∫</div>
         <div style={{fontSize:17,fontWeight:800,color:"#f1f5f9",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>Lenamon Calculus</div>
       </button>
       <PB completed={done.size} total={L.length}/>
-      {MODULES.map(mod=>(
+      {MODULES.map(mod=>{
+        const modLessons=L.filter(l=>l.module===mod);
+        const modDone=modLessons.filter(l=>done.has(L.indexOf(l))).length;
+        return(
         <div key={mod} style={{marginBottom:16}}>
-          <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",color:"#818cf8",marginBottom:6,paddingBottom:4,borderBottom:"1px solid rgba(99,102,241,0.12)"}}>{mod}</div>
-          {L.filter(l=>l.module===mod).map(l=>{
+          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:8,marginBottom:6,paddingBottom:4,borderBottom:"1px solid rgba(99,102,241,0.14)"}}>
+            <span style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",color:"#818cf8"}}>{mod}</span>
+            <span style={{fontSize:9.5,fontWeight:700,color:modDone===modLessons.length?"#34d399":"#64748b"}}>{modDone}/{modLessons.length}</span>
+          </div>
+          {modLessons.map(l=>{
             const i=L.indexOf(l);
             const isDone=done.has(i);
             const isAct=i===idx;
             return(
-              <div key={l.id} role="button" tabIndex={0} aria-current={isAct?"true":undefined} onClick={()=>{setIdx(i);setAns({});setSidebarOpen(false);}} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setIdx(i);setAns({});setSidebarOpen(false);}}} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:2,borderRadius:6,cursor:"pointer",background:isAct?"rgba(99,102,241,0.15)":"transparent",border:isAct?"1px solid rgba(99,102,241,0.25)":"1px solid transparent",transition:"background 0.15s"}}>
-                <div style={{width:22,height:22,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0,background:isDone?"#10b981":isAct?"#6366f1":"rgba(51,65,85,0.5)",color:isDone||isAct?"#fff":"#94a3b8"}}>{isDone?"✓":l.id}</div>
+              <div key={l.id} role="button" tabIndex={0} aria-current={isAct?"true":undefined} onClick={()=>{setIdx(i);setAns({});setSidebarOpen(false);}} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setIdx(i);setAns({});setSidebarOpen(false);}}} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:2,borderRadius:8,cursor:"pointer",background:isAct?"linear-gradient(90deg,rgba(99,102,241,0.22),rgba(139,92,246,0.08))":"transparent",border:isAct?"1px solid rgba(129,140,248,0.3)":"1px solid transparent",transition:"background 0.15s,border 0.15s"}}>
+                <div style={{width:22,height:22,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0,background:isDone?"linear-gradient(135deg,#34d399,#10b981)":isAct?"linear-gradient(135deg,#818cf8,#6366f1)":"rgba(51,65,85,0.5)",color:isDone||isAct?"#fff":"#94a3b8",boxShadow:isDone||isAct?"inset 0 1px 0 rgba(255,255,255,0.25)":"none"}}>{isDone?<Ic d={ICONS.check} size={11} sw={3}/>:l.id}</div>
                 <div style={{flex:1,fontSize:12,fontWeight:isAct?700:500,color:isAct?"#e0e7ff":"#94a3b8",lineHeight:1.3}}>{l.title}</div>
               </div>
             );
           })}
         </div>
-      ))}
+      );})}
       <div style={{marginTop:6,paddingTop:12,borderTop:"1px solid rgba(99,102,241,0.12)"}}>
         <div role={allDone?"button":undefined} tabIndex={allDone?0:undefined} aria-disabled={!allDone}
           onClick={allDone?()=>{setOnCert(true);setSidebarOpen(false);}:undefined}
@@ -4014,7 +4051,7 @@ function Course({session,onSignOut,onBrand}){
         <div style={{flexShrink:0,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)",padding:"12px 28px"}}>
           <div style={{maxWidth:1220,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
             <div style={{display:"flex",alignItems:"center",gap:12,minWidth:0}}>
-              <button onClick={()=>setSidebarOpen(true)} className="sidebar-toggle" aria-label="Open lesson menu" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.25)",color:"#a5b4fc",padding:"7px 11px",borderRadius:9,cursor:"pointer",fontSize:15,fontFamily:"Inter,system-ui",display:"none",flexShrink:0}}>☰</button>
+              <button onClick={()=>setSidebarOpen(true)} className="sidebar-toggle" aria-label="Open lesson menu" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.25)",color:"#a5b4fc",padding:"8px 10px",borderRadius:9,cursor:"pointer",fontFamily:"Inter,system-ui",display:"none",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic d={ICONS.menu} size={16}/></button>
               <div style={{minWidth:0}}>
                 <div style={{fontSize:10.5,color:"#818cf8",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:"Inter,system-ui"}}>
                   {onCert?"Lenamon Calculus":`Lesson ${lesson.id} of ${L.length} · ${lesson.module}`}
@@ -4074,10 +4111,10 @@ function Course({session,onSignOut,onBrand}){
                   );
                 })}
               </div>
-              <div style={{background:"linear-gradient(160deg,rgba(99,102,241,0.10),rgba(139,92,246,0.05))",border:"1px solid rgba(99,102,241,0.18)",borderRadius:16,padding:"16px 18px"}}>
-                <div style={{fontSize:9.5,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#818cf8",marginBottom:8}}>A little inspiration</div>
+              <div style={{background:"linear-gradient(160deg,rgba(99,102,241,0.14),rgba(139,92,246,0.05))",border:"1px solid rgba(129,140,248,0.22)",borderTop:"1px solid rgba(165,180,252,0.3)",borderRadius:16,padding:"16px 18px"}}>
+                <div style={{fontSize:9.5,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#a5b4fc",marginBottom:8}}>A little inspiration</div>
                 <div style={{fontSize:13,fontWeight:700,color:"#c7d2fe",marginBottom:6}}>{(INSPO[idx]||INSPO[0]).t}</div>
-                <div style={{fontSize:12.5,lineHeight:1.7,color:"#a5b0c2"}}>{(INSPO[idx]||INSPO[0]).b}</div>
+                <div style={{fontSize:13,lineHeight:1.75,color:"#b6c0d2",fontFamily:"'Source Serif 4',Georgia,serif"}}>{(INSPO[idx]||INSPO[0]).b}</div>
               </div>
               <div style={{padding:"4px 4px 0"}}>
                 <div style={{fontSize:11,color:"#64748b",marginBottom:6,fontWeight:600}}>Course progress</div>
@@ -4089,50 +4126,6 @@ function Course({session,onSignOut,onBrand}){
         </div>
       </div>
 
-      {/* Responsive CSS + hide body scrollbar */}
-      <style>{`
-        html, body, #root { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        @media print {
-          html, body, #root { overflow: visible !important; height: auto !important; background: #fff !important; }
-          body * { visibility: hidden !important; }
-          .cert-print, .cert-print * { visibility: visible !important; }
-          .cert-print { position: absolute !important; left: 0; top: 0; width: 100% !important; max-width: none !important; box-shadow: none !important; }
-        }
-        @media (min-width: 900px) {
-          .sidebar-desktop { display: block !important; }
-          .sidebar-toggle { display: none !important; }
-        }
-        @media (max-width: 899px) {
-          .sidebar-toggle { display: block !important; }
-        }
-        @media (max-width: 1180px) {
-          .lesson-rail { display: none !important; }
-          .lesson-grid { grid-template-columns: minmax(0,1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .lesson-grid { padding: 22px 18px 90px !important; }
-        }
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.18); border-radius: 6px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.3); }
-        ::-webkit-scrollbar-track { background: transparent; }
-        .prose p { margin-bottom: 11px; }
-        .prose p:last-child { margin-bottom: 0; }
-        .prose strong { color: #f1f5f9; font-weight: 700; }
-        :focus-visible { outline: 2px solid #a5b4fc; outline-offset: 2px; border-radius: 6px; }
-        button:focus:not(:focus-visible) { outline: none; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-        .lesson-fade { animation: fadeUp 0.42s cubic-bezier(0.22,1,0.36,1); }
-        @media (prefers-reduced-motion: reduce) { .lesson-fade { animation: none; } }
-        @media (max-width: 560px) { .xp-chip { display: none !important; } }
-        @media (max-width: 900px) { .acct-name { display: none !important; } }
-        @media (max-width: 720px) { .acct-divider { display: none !important; } }
-        input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
-        input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
-        input[type=range]::-moz-range-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: linear-gradient(135deg,#a78bfa,#8b5cf6); border: 2px solid #0a0e1a; box-shadow: 0 2px 8px rgba(139,92,246,0.5); cursor: pointer; }
-        input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #8b5cf6; border: 2px solid #0a0e1a; cursor: pointer; }
-      `}</style>
     </div>
   );
 }
@@ -4140,8 +4133,8 @@ function Course({session,onSignOut,onBrand}){
 // ---------- Shared styles for the landing / auth / admin screens ----------
 const DISPLAY="'Bricolage Grotesque',Inter,sans-serif";
 const SCREEN_BG={height:"100vh",overflowY:"auto",color:"#e2e8f0",fontFamily:"Inter,system-ui,-apple-system,sans-serif"};
-const BTN_PRIMARY={background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",padding:"13px 24px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 8px 24px rgba(99,102,241,0.32)",whiteSpace:"nowrap"};
-const BTN_GHOST={background:"rgba(148,163,184,0.06)",color:"#cbd5e1",border:"1px solid rgba(148,163,184,0.2)",padding:"13px 22px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap"};
+const BTN_PRIMARY={background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",color:"#fff",border:"none",padding:"13px 24px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 8px 28px rgba(99,102,241,0.38), inset 0 1px 0 rgba(255,255,255,0.18)",whiteSpace:"nowrap"};
+const BTN_GHOST={background:"rgba(148,163,184,0.07)",color:"#dbe2ee",border:"1px solid rgba(148,163,184,0.22)",padding:"13px 22px",borderRadius:12,cursor:"pointer",fontSize:14.5,fontWeight:600,fontFamily:"Inter,system-ui",whiteSpace:"nowrap",backdropFilter:"blur(6px)",WebkitBackdropFilter:"blur(6px)"};
 const LINKBTN={background:"transparent",border:"none",color:"#a5b4fc",cursor:"pointer",fontWeight:700,fontSize:13.5,fontFamily:"Inter,system-ui",padding:0};
 const TH={padding:"14px 18px",fontSize:11.5,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.05em"};
 const TD={padding:"13px 18px"};
@@ -4157,7 +4150,7 @@ const MODULE_BLURB={
 function Brand({onClick,size=22}){
   return(
     <button onClick={onClick} title={onClick?"Back to home":undefined} style={{display:"flex",alignItems:"center",gap:10,background:"transparent",border:"none",cursor:onClick?"pointer":"default",padding:0,fontFamily:DISPLAY}}>
-      <span style={{width:size+12,height:size+12,borderRadius:9,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:size,color:"#fff",flexShrink:0}}>∫</span>
+      <span style={{width:size+12,height:size+12,borderRadius:9,background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:size,color:"#fff",flexShrink:0,boxShadow:"0 4px 14px rgba(99,102,241,0.42), inset 0 1px 0 rgba(255,255,255,0.25)"}}>∫</span>
       <span style={{fontSize:size-3,fontWeight:800,color:"#f1f5f9",letterSpacing:"-0.01em"}}>Lenamon Calculus</span>
     </button>
   );
@@ -4173,23 +4166,25 @@ function Field({label,type,value,onChange,placeholder,autoFocus}){
   );
 }
 
+const MODULE_HUES=["#818cf8","#22d3ee","#a78bfa","#f472b6","#34d399","#fbbf24"];
 function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onSignOut}){
   const modules=MODULES.map(m=>({name:m,count:L.filter(l=>l.module===m).length}));
-  const feature=(title,body)=>(
-    <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:18,padding:"24px 24px"}}>
+  const feature=(icon,title,body)=>(
+    <div className="card-h" style={{background:"linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))",border:"1px solid rgba(255,255,255,0.07)",borderRadius:18,padding:"26px 24px"}}>
+      <div style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,rgba(129,140,248,0.2),rgba(139,92,246,0.12))",border:"1px solid rgba(129,140,248,0.3)",display:"flex",alignItems:"center",justifyContent:"center",color:"#a5b4fc",marginBottom:16}}><Ic d={icon} size={19} sw={2}/></div>
       <div style={{fontSize:17,fontWeight:800,color:"#f1f5f9",marginBottom:8,fontFamily:DISPLAY}}>{title}</div>
       <div style={{fontSize:14.5,lineHeight:1.7,color:"#a5b0c2"}}>{body}</div>
     </div>
   );
   const stat=(big,small)=>(
-    <div style={{textAlign:"center"}}>
-      <div style={{fontSize:30,fontWeight:800,color:"#c7d2fe",fontFamily:DISPLAY,lineHeight:1}}>{big}</div>
-      <div style={{fontSize:12.5,color:"#94a3b8",marginTop:6,fontWeight:600,letterSpacing:"0.02em"}}>{small}</div>
+    <div style={{textAlign:"center",minWidth:110}}>
+      <div style={{fontSize:32,fontWeight:800,fontFamily:DISPLAY,lineHeight:1,background:"linear-gradient(135deg,#c7d2fe,#818cf8 55%,#a78bfa)",WebkitBackgroundClip:"text",backgroundClip:"text",WebkitTextFillColor:"transparent",color:"transparent"}}>{big}</div>
+      <div style={{fontSize:12.5,color:"#94a3b8",marginTop:7,fontWeight:600,letterSpacing:"0.02em"}}>{small}</div>
     </div>
   );
   return(
     <div style={SCREEN_BG}>
-      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)"}}>
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,10,20,0.7)",backdropFilter:"blur(14px)",WebkitBackdropFilter:"blur(14px)",borderBottom:"1px solid rgba(148,163,184,0.10)"}}>
         <div style={{maxWidth:1140,margin:"0 auto",padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
           <Brand/>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -4205,22 +4200,32 @@ function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onS
         </div>
       </div>
 
-      <div style={{maxWidth:900,margin:"0 auto",padding:"86px 28px 60px",textAlign:"center"}}>
-        <div style={{display:"inline-block",fontSize:12,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:"#a5b4fc",background:"rgba(99,102,241,0.10)",border:"1px solid rgba(99,102,241,0.22)",padding:"6px 14px",borderRadius:999,marginBottom:24}}>Business calculus, from absolute zero</div>
-        <h1 style={{fontSize:"clamp(34px,6vw,60px)",lineHeight:1.05,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,letterSpacing:"-0.02em",margin:0}}>Calculus is not hard.<br/>It was just explained badly.</h1>
-        <p style={{fontSize:"clamp(16px,2.4vw,19px)",lineHeight:1.7,color:"#aeb8c8",maxWidth:640,margin:"22px auto 0"}}>An interactive course that builds every idea from the ground up and assumes nothing. If you can do basic arithmetic, you can start today. Free, and made to be understood by anyone of any age.</p>
-        <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:34}}>
-          {loggedIn?(
-            <button onClick={onContinue} style={BTN_PRIMARY}>Continue learning →</button>
-          ):(<>
-            <button onClick={onCreate} style={BTN_PRIMARY}>Create your free account</button>
-            <button onClick={onSignIn} style={BTN_GHOST}>I already have an account</button>
-          </>)}
+      <div style={{position:"relative",overflow:"hidden"}}>
+        <div className="orb-a" aria-hidden="true" style={{position:"absolute",top:-120,left:"12%",width:420,height:420,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.22),transparent 65%)",filter:"blur(30px)",pointerEvents:"none"}}/>
+        <div className="orb-b" aria-hidden="true" style={{position:"absolute",top:40,right:"6%",width:380,height:380,borderRadius:"50%",background:"radial-gradient(circle,rgba(45,212,191,0.13),transparent 65%)",filter:"blur(30px)",pointerEvents:"none"}}/>
+        <div style={{position:"relative",maxWidth:920,margin:"0 auto",padding:"92px 28px 64px",textAlign:"center"}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:8,fontSize:12,fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:"#a5b4fc",background:"rgba(99,102,241,0.10)",border:"1px solid rgba(99,102,241,0.25)",padding:"7px 15px",borderRadius:999,marginBottom:26,backdropFilter:"blur(6px)",WebkitBackdropFilter:"blur(6px)"}}><Ic d={ICONS.zap} size={12.5}/>Business calculus, from absolute zero</div>
+          <h1 style={{fontSize:"clamp(36px,6.4vw,66px)",lineHeight:1.06,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,letterSpacing:"-0.025em",margin:0}}>
+            Calculus is not hard.<br/>
+            <span style={{fontFamily:"'Source Serif 4',Georgia,serif",fontStyle:"italic",fontWeight:600,background:"linear-gradient(100deg,#a5b4fc,#c4b5fd 55%,#67e8f9)",WebkitBackgroundClip:"text",backgroundClip:"text",WebkitTextFillColor:"transparent",color:"transparent"}}>It was just explained badly.</span>
+          </h1>
+          <p style={{fontSize:"clamp(16px,2.4vw,19px)",lineHeight:1.7,color:"#aeb8c8",maxWidth:640,margin:"24px auto 0"}}>An interactive course that builds every idea from the ground up and assumes nothing. If you can do basic arithmetic, you can start today. Free, and made to be understood by anyone of any age.</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginTop:36}}>
+            {loggedIn?(
+              <button onClick={onContinue} style={{...BTN_PRIMARY,padding:"14px 28px",fontSize:15}}>Continue learning →</button>
+            ):(<>
+              <button onClick={onCreate} style={{...BTN_PRIMARY,padding:"14px 28px",fontSize:15}}>Create your free account</button>
+              <button onClick={onSignIn} style={{...BTN_GHOST,padding:"14px 26px",fontSize:15}}>I already have an account</button>
+            </>)}
+          </div>
+          <div style={{display:"flex",gap:18,justifyContent:"center",flexWrap:"wrap",marginTop:22,fontSize:13,color:"#7c8aa0",fontWeight:600}}>
+            <span>Free forever</span><span style={{color:"#3d4a61"}}>·</span><span>No prerequisites</span><span style={{color:"#3d4a61"}}>·</span><span>Certificate on completion</span>
+          </div>
         </div>
       </div>
 
-      <div style={{maxWidth:760,margin:"0 auto",padding:"0 28px"}}>
-        <div style={{display:"flex",justifyContent:"space-around",flexWrap:"wrap",gap:24,padding:"26px 24px",background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:18}}>
+      <div style={{maxWidth:800,margin:"0 auto",padding:"0 28px"}}>
+        <div style={{display:"flex",justifyContent:"space-around",flexWrap:"wrap",gap:24,padding:"28px 24px",background:"linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))",border:"1px solid rgba(255,255,255,0.08)",borderRadius:20,boxShadow:"0 14px 40px rgba(2,4,12,0.4)"}}>
           {stat(L.length,"Lessons")}
           {stat(MODULES.length,"Modules")}
           {stat("Live","Interactive labs")}
@@ -4228,42 +4233,48 @@ function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onS
         </div>
       </div>
 
-      <div style={{maxWidth:840,margin:"0 auto",padding:"74px 28px 0",textAlign:"center"}}>
-        <h2 style={{fontSize:"clamp(26px,4vw,38px)",fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY,letterSpacing:"-0.01em",margin:0}}>The one rule this course follows</h2>
-        <p style={{fontSize:17,lineHeight:1.8,color:"#aeb8c8",maxWidth:680,margin:"18px auto 0"}}>Never state a fact without explaining <em>why</em> it is true, in terms you already understand. No skipped steps, no silent assumptions, no "you should already know this." You will learn why you cannot divide by zero, why the chain rule multiplies, and why an integral measures area, not just the rules.</p>
+      <div style={{maxWidth:840,margin:"0 auto",padding:"80px 28px 0",textAlign:"center"}}>
+        <div style={{fontSize:12,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#818cf8",marginBottom:14}}>The one rule this course follows</div>
+        <p style={{fontFamily:"'Source Serif 4',Georgia,serif",fontSize:"clamp(20px,3.2vw,28px)",lineHeight:1.55,color:"#e3e9f4",maxWidth:720,margin:"0 auto",fontWeight:400}}>
+          "Never state a fact without explaining <em style={{color:"#c4b5fd"}}>why</em> it is true, in terms you already understand."
+        </p>
+        <p style={{fontSize:16,lineHeight:1.8,color:"#9aa7ba",maxWidth:660,margin:"18px auto 0"}}>No skipped steps, no silent assumptions, no "you should already know this." You will learn why you cannot divide by zero, why the chain rule multiplies, and why an integral measures area, not just the rules.</p>
       </div>
 
-      <div style={{maxWidth:1040,margin:"0 auto",padding:"44px 28px 0",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:18}}>
-        {feature("Interactive labs","Drag a point along a curve and watch the tangent line and live slope change. Reshape a function with a slider and see the equation update in real time.")}
-        {feature("Worked, step by step","Every example shows the full algebra, including the sign traps and the lines most textbooks skip. Then you try one yourself with a complete solution.")}
-        {feature("Progress that sticks","Earn XP, level up, and celebrate each finished lesson. Your place is saved automatically, so you can pick up exactly where you left off.")}
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"50px 28px 0",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:18}}>
+        {feature(ICONS.sliders,"Interactive labs","Drag a point along a curve and watch the tangent line and live slope change. Reshape a function with a slider and see the equation update in real time.")}
+        {feature(ICONS.steps,"Worked, step by step","Every example shows the full algebra, including the sign traps and the lines most textbooks skip. Then you try one yourself with a complete solution.")}
+        {feature(ICONS.award,"Progress that sticks","Earn XP, level up, and celebrate each finished lesson. Your place is saved automatically, and finishing all 25 lessons unlocks a printable certificate.")}
       </div>
 
-      <div style={{maxWidth:1040,margin:"0 auto",padding:"74px 28px 0"}}>
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"80px 28px 0"}}>
         <h2 style={{fontSize:"clamp(26px,4vw,38px)",fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY,letterSpacing:"-0.01em",textAlign:"center",margin:"0 0 8px"}}>What you will learn</h2>
-        <p style={{fontSize:15,color:"#94a3b8",textAlign:"center",margin:"0 0 28px"}}>{L.length} lessons across {MODULES.length} modules, building from the basics to real business applications.</p>
+        <p style={{fontSize:15,color:"#94a3b8",textAlign:"center",margin:"0 0 30px"}}>{L.length} lessons across {MODULES.length} modules, building from the basics to real business applications.</p>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:16}}>
-          {modules.map((m,i)=>(
-            <div key={m.name} style={{display:"flex",gap:16,background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:16,padding:"20px 22px"}}>
-              <div style={{width:38,height:38,flexShrink:0,borderRadius:11,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800,color:"#fff",fontFamily:DISPLAY}}>{i+1}</div>
+          {modules.map((m,i)=>{
+            const hue=MODULE_HUES[i%MODULE_HUES.length];
+            return(
+            <div key={m.name} className="card-h" style={{display:"flex",gap:16,background:"linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))",border:"1px solid rgba(255,255,255,0.07)",borderRadius:16,padding:"20px 22px"}}>
+              <div style={{width:38,height:38,flexShrink:0,borderRadius:11,background:`${hue}1c`,border:`1px solid ${hue}45`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800,color:hue,fontFamily:DISPLAY}}>{i+1}</div>
               <div>
                 <div style={{fontSize:16,fontWeight:800,color:"#f1f5f9",fontFamily:DISPLAY}}>{m.name}</div>
-                <div style={{fontSize:11.5,color:"#818cf8",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",margin:"3px 0 7px"}}>{m.count} lessons</div>
+                <div style={{fontSize:11.5,color:hue,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em",margin:"3px 0 7px"}}>{m.count} lessons</div>
                 <div style={{fontSize:14,lineHeight:1.6,color:"#a5b0c2"}}>{MODULE_BLURB[m.name]}</div>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </div>
 
-      <div style={{maxWidth:1040,margin:"0 auto",padding:"74px 28px 20px"}}>
-        <div style={{textAlign:"center",padding:"48px 28px",borderRadius:22,background:"linear-gradient(160deg,rgba(99,102,241,0.16),rgba(139,92,246,0.06))",border:"1px solid rgba(99,102,241,0.22)"}}>
-          <h2 style={{fontSize:"clamp(24px,4vw,34px)",fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:0}}>Ready to start?</h2>
-          <p style={{fontSize:16,color:"#aeb8c8",margin:"14px auto 26px",maxWidth:520}}>Create a free account with your name and email. That is all it takes.</p>
+      <div style={{maxWidth:1040,margin:"0 auto",padding:"80px 28px 20px"}}>
+        <div style={{position:"relative",overflow:"hidden",textAlign:"center",padding:"54px 28px",borderRadius:24,background:"linear-gradient(160deg,rgba(99,102,241,0.18),rgba(139,92,246,0.07))",border:"1px solid rgba(129,140,248,0.28)",borderTop:"1px solid rgba(165,180,252,0.4)",boxShadow:"0 20px 60px rgba(2,4,12,0.45)"}}>
+          <div aria-hidden="true" style={{position:"absolute",top:-90,left:"50%",transform:"translateX(-50%)",width:520,height:220,borderRadius:"50%",background:"radial-gradient(ellipse,rgba(129,140,248,0.28),transparent 70%)",filter:"blur(24px)",pointerEvents:"none"}}/>
+          <h2 style={{position:"relative",fontSize:"clamp(24px,4vw,34px)",fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:0}}>Ready to start?</h2>
+          <p style={{position:"relative",fontSize:16,color:"#b6c0d2",margin:"14px auto 26px",maxWidth:520}}>Create a free account with your name and email. That is all it takes.</p>
           {loggedIn?(
-            <button onClick={onContinue} style={BTN_PRIMARY}>Continue learning →</button>
+            <button onClick={onContinue} style={{...BTN_PRIMARY,position:"relative"}}>Continue learning →</button>
           ):(
-            <button onClick={onCreate} style={BTN_PRIMARY}>Create your free account</button>
+            <button onClick={onCreate} style={{...BTN_PRIMARY,position:"relative"}}>Create your free account</button>
           )}
         </div>
       </div>
@@ -4297,7 +4308,7 @@ function AuthScreen({mode,onSignup,onSignin,onAdmin,onBack,goSignup,goSignin}){
     <div style={{...SCREEN_BG,display:"flex",flexDirection:"column"}}>
       <div style={{padding:"22px 28px"}}><Brand onClick={onBack} size={20}/></div>
       <div style={{flex:1,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"10px 20px 60px"}}>
-        <form onSubmit={submit} style={{width:"100%",maxWidth:420,background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.12)",borderRadius:20,padding:"32px 30px",marginTop:"4vh"}}>
+        <form onSubmit={submit} className="lesson-fade" style={{width:"100%",maxWidth:420,background:"linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.018))",border:"1px solid rgba(255,255,255,0.09)",borderTop:"1px solid rgba(255,255,255,0.14)",borderRadius:20,padding:"32px 30px",marginTop:"4vh",boxShadow:"0 20px 50px rgba(2,4,12,0.45)"}}>
           <h1 style={{fontSize:25,fontWeight:800,color:"#f8fafc",fontFamily:DISPLAY,margin:"0 0 6px"}}>{titles[mode]}</h1>
           <p style={{fontSize:14,color:"#94a3b8",margin:"0 0 22px"}}>{subs[mode]}</p>
 
@@ -4388,7 +4399,7 @@ function AdminDashboard({onEnterCourse,onSignOut,onBrand}){
         {users.length===0?(
           <div style={{padding:"48px 24px",textAlign:"center",background:"rgba(255,255,255,0.022)",border:"1px dashed rgba(148,163,184,0.2)",borderRadius:18,color:"#94a3b8",fontSize:15}}>No accounts yet. New sign-ups will appear here.</div>
         ):(
-          <div style={{overflowX:"auto",background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.12)",borderRadius:18}}>
+          <div style={{overflowX:"auto",background:"linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))",border:"1px solid rgba(255,255,255,0.08)",borderRadius:18,boxShadow:"0 14px 40px rgba(2,4,12,0.35)"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:680}}>
               <thead>
                 <tr style={{color:"#94a3b8"}}>
