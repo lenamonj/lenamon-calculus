@@ -8,9 +8,10 @@
     <meta name="theme-color" content="#070a14" />
     <title>Business Calculus</title>
 
-    <!-- KaTeX CSS & JS (math rendering) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <!-- KaTeX CSS & JS (math rendering). Subresource Integrity pins the exact
+         cdnjs bytes so a CDN compromise cannot inject arbitrary JS. -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- App fonts: Inter (UI) + Bricolage Grotesque (display) + Source Serif 4 (lesson reading) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

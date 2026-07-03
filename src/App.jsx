@@ -1,18 +1,55 @@
-import { useState, useEffect, useRef, useId } from "react";
+import { useState, useEffect, useRef, useId, Component } from "react";
 
-function M({ d, block }) {
-  const ref = useRef(null);
+// Shared KaTeX readiness signal: every <M> renders raw LaTeX immediately, then
+// re-typesets once the CDN script finishes loading. A single poller notifies
+// every mounted <M>, so late or blocked CDN loads never leave a formula blank.
+let katexReady = typeof window !== "undefined" && !!window.katex;
+const katexWaiters = new Set();
+let katexPolling = false;
+
+function ensureKatexPoll() {
+  if (katexPolling || katexReady || typeof window === "undefined") return;
+  katexPolling = true;
+  const iv = setInterval(() => {
+    if (!window.katex) return;
+    clearInterval(iv);
+    katexReady = true;
+    katexWaiters.forEach((cb) => cb());
+    katexWaiters.clear();
+  }, 50);
+  setTimeout(() => clearInterval(iv), 10000);
+}
+
+function useKatexReady() {
+  const [ready, setReady] = useState(katexReady);
   useEffect(() => {
-    if (ref.current && window.katex) {
-      try { window.katex.render(d, ref.current, { throwOnError: false, displayMode: !!block, trust: true }); }
-      catch (e) { ref.current.textContent = d; }
+    if (katexReady) { setReady(true); return; }
+    const cb = () => setReady(true);
+    katexWaiters.add(cb);
+    ensureKatexPoll();
+    return () => katexWaiters.delete(cb);
+  }, []);
+  return ready;
+}
+
+export function M({ d, block }) {
+  const ref = useRef(null);
+  const ready = useKatexReady();
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (window.katex) {
+      try { window.katex.render(d, node, { throwOnError: false, displayMode: !!block, trust: true }); }
+      catch (e) { node.textContent = d; }
+    } else {
+      node.textContent = d;
     }
-  }, [d, block]);
+  }, [d, block, ready]);
   if (block) return <div ref={ref} style={{ margin: "10px 0", overflowX: "auto" }} />;
   return <span ref={ref} />;
 }
 
-function niceTicks(lo, hi, maxTicks = 8) {
+export function niceTicks(lo, hi, maxTicks = 8) {
   const range = hi - lo;
   if (range === 0) return [lo];
   const rough = range / maxTicks;
@@ -25,7 +62,7 @@ function niceTicks(lo, hi, maxTicks = 8) {
   return ticks;
 }
 
-function fmtLabel(v) {
+export function fmtLabel(v) {
   const abs = Math.abs(v);
   if (abs >= 1e6) return (v / 1e6).toFixed(abs >= 1e7 ? 0 : 1) + "M";
   if (abs >= 1e3) return (v / 1e3).toFixed(abs >= 1e4 ? 0 : 1) + "K";
@@ -196,10 +233,12 @@ function Plot({ curves = [], lines = [], points = [], xMin, xMax, yMin, yMax, wi
   );
 }
 
-function Slider({ value, min, max, step = 0.01, onChange, labelLeft, labelRight }) {
+function Slider({ value, min, max, step = 0.01, onChange, labelLeft, labelRight, ariaLabel, ariaValueText }) {
   return (
     <div style={{ margin: "16px 0 4px" }}>
-      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(parseFloat(e.target.value))}
+      <input type="range" min={min} max={max} step={step} value={value}
+        aria-label={ariaLabel} aria-valuetext={ariaValueText}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
         style={{ width: "100%", accentColor: "#8b5cf6", cursor: "pointer", height: 6 }} />
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: "#94a3b8", fontFamily: "Inter,system-ui", marginTop: 4 }}>
         <span style={{ fontWeight: 700, color: "#c4b5fd" }}>{labelLeft}</span><span>{labelRight}</span>
@@ -208,26 +247,27 @@ function Slider({ value, min, max, step = 0.01, onChange, labelLeft, labelRight 
   );
 }
 
-function SlopeExplorer({ fn, dfn, xMin, xMax, yMin, yMax, start, intro }) {
+export function SlopeExplorer({ fn, dfn, xMin, xMax, yMin, yMax, start, intro }) {
   const [x, setX] = useState(start != null ? start : (xMin + xMax) / 2);
   const y = fn(x), m = dfn(x);
   const seg = (xMax - xMin) * 0.16;
   const lines = [{ x1: x - seg, y1: y - m * seg, x2: x + seg, y2: y + m * seg, color: "#fbbf24", width: 3 }];
   const sign = m > 0.05 ? "climbing uphill" : m < -0.05 ? "heading downhill" : "perfectly flat (a peak, valley, or pause)";
   const sColor = m > 0.05 ? "#4ade80" : m < -0.05 ? "#f87171" : "#fbbf24";
+  const readout = `x = ${x.toFixed(2)}, slope ${m.toFixed(2)}, the curve is ${sign}`;
   return (
     <div>
       {intro && <p style={{ marginBottom: 12 }}>{intro}</p>}
       <Plot curves={[{ f: fn, color: "#818cf8", fill: true }]} lines={lines} points={[{ x, y, color: "#fbbf24", label: "you are here", lx: m >= 0 ? -12 : 12, ly: -15, anchor: m >= 0 ? "end" : "start" }]} xMin={xMin} xMax={xMax} yMin={yMin} yMax={yMax} />
-      <Slider value={x} min={xMin} max={xMax} step={(xMax - xMin) / 220} onChange={setX} labelLeft={`x = ${x.toFixed(2)}`} labelRight="drag to slide the point along the curve" />
-      <div style={{ marginTop: 8, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>
+      <Slider value={x} min={xMin} max={xMax} step={(xMax - xMin) / 220} onChange={setX} ariaLabel="Point position along the curve" ariaValueText={readout} labelLeft={`x = ${x.toFixed(2)}`} labelRight="drag to slide the point along the curve" />
+      <div aria-live="polite" style={{ marginTop: 8, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>
         The orange line is the <strong>tangent</strong>: it shows the slope right at that spot. Here <M d={`f'(${x.toFixed(2)})=${m.toFixed(2)}`} />, so the curve is <span style={{ color: sColor, fontWeight: 700 }}>{sign}</span>.
       </div>
     </div>
   );
 }
 
-function ParamExplorer({ xMin, xMax, yMin, yMax, min, max, step = 0.05, start, name, hint, build, intro }) {
+export function ParamExplorer({ xMin, xMax, yMin, yMax, min, max, step = 0.05, start, name, hint, build, intro }) {
   const [v, setV] = useState(start);
   const spec = build(v);
   return (
@@ -235,8 +275,8 @@ function ParamExplorer({ xMin, xMax, yMin, yMax, min, max, step = 0.05, start, n
       {intro && <p style={{ marginBottom: 12 }}>{intro}</p>}
       <Plot curves={spec.curves} points={spec.points || []} lines={spec.lines || []} xMin={xMin} xMax={xMax} yMin={yMin} yMax={yMax} />
       {spec.formula && <div style={{ textAlign: "center", margin: "10px 0 0" }}><M d={spec.formula} block /></div>}
-      <Slider value={v} min={min} max={max} step={step} onChange={setV} labelLeft={`${name} = ${v.toFixed(2)}`} labelRight={hint || "drag to change it"} />
-      {spec.caption && <div style={{ marginTop: 6, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>{spec.caption}</div>}
+      <Slider value={v} min={min} max={max} step={step} onChange={setV} ariaLabel={`Parameter ${name}`} ariaValueText={`${name} = ${v.toFixed(2)}`} labelLeft={`${name} = ${v.toFixed(2)}`} labelRight={hint || "drag to change it"} />
+      {spec.caption && <div aria-live="polite" style={{ marginTop: 6, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>{spec.caption}</div>}
     </div>
   );
 }
@@ -2386,11 +2426,11 @@ function PB({completed,total}){
   );
 }
 
-function CC({item,showAnswer,onToggle,id}){
+export function CC({item,showAnswer,onToggle,id}){
   const c=tc[item.type];
   return(
     <div id={id} style={{background:"linear-gradient(180deg,rgba(255,255,255,0.038),rgba(255,255,255,0.016))",border:"1px solid rgba(255,255,255,0.07)",borderTop:"1px solid rgba(255,255,255,0.11)",borderRadius:20,padding:"28px 32px",marginBottom:24,boxShadow:"0 10px 30px rgba(2,4,12,0.35)",scrollMarginTop:18}}>
-      <div style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:c.border,background:c.bg,border:`1px solid ${c.border}38`,padding:"5px 12px",borderRadius:999,marginBottom:18,fontFamily:"Inter,system-ui"}}><Ic d={c.icon} size={12.5}/>{item.label||c.label}</div>
+      <h2 style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:c.border,background:c.bg,border:`1px solid ${c.border}38`,padding:"5px 12px",borderRadius:999,marginBottom:18,fontFamily:"Inter,system-ui"}}><Ic d={c.icon} size={12.5}/>{item.label||c.label}</h2>
       <div className="prose" style={{fontSize:17,lineHeight:1.85,color:"#dde4ee"}}>{item.render?item.render():null}</div>
       {item.type==="practice"&&item.answer&&(
         <div style={{marginTop:18}}>
@@ -2432,14 +2472,14 @@ const SESSION_KEY="lenamon_session_v1";
 const ADMIN_USER="user";      // temporary admin credentials - not secure, dev only
 const ADMIN_PASS="password";  // temporary admin credentials - not secure, dev only
 function loadUsers(){try{const u=JSON.parse(localStorage.getItem(USERS_KEY));if(Array.isArray(u))return u;}catch(e){}return[];}
-function saveUsers(u){try{localStorage.setItem(USERS_KEY,JSON.stringify(u));}catch(e){}}
+export function saveUsers(u){try{localStorage.setItem(USERS_KEY,JSON.stringify(u));return true;}catch(e){console.error("Failed to persist users:",e);return false;}}
 function loadSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY));if(s)return s;}catch(e){}return null;}
 function saveSession(s){try{if(s)localStorage.setItem(SESSION_KEY,JSON.stringify(s));else localStorage.removeItem(SESSION_KEY);}catch(e){}}
 function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 function findUser(email){const e=(email||"").trim().toLowerCase();return loadUsers().find(u=>u.email===e)||null;}
 
 // Per-lesson quizzes (lesson id -> 3 questions). Injected/verified separately.
-const QUIZ = {
+export const QUIZ = {
  "1": [
   {
    "q": "The lesson describes a function as a 'machine for numbers.' What does this machine do?",
@@ -3728,10 +3768,18 @@ const INSPO=[
 ];
 
 const QLETTERS=["A","B","C","D"];
-function Quiz({quiz,passed,onPass}){
+export function Quiz({quiz,passed,onPass}){
   const[step,setStep]=useState(passed?quiz.length:0);
   const[chosen,setChosen]=useState(null);
+  const continueRef=useRef(null);
   const finished=step>=quiz.length;
+  const qz=finished?null:quiz[step];
+  const isCorrect=!finished&&chosen!==null&&chosen===qz.answer;
+  // When the answer is right, move focus to the revealed continue button so
+  // keyboard users are not left hunting for it.
+  useEffect(()=>{
+    if(isCorrect&&continueRef.current) continueRef.current.focus();
+  },[isCorrect,step]);
 
   if(finished){
     return(
@@ -3742,8 +3790,6 @@ function Quiz({quiz,passed,onPass}){
     );
   }
 
-  const qz=quiz[step];
-  const isCorrect=chosen!==null&&chosen===qz.answer;
   const isWrong=chosen!==null&&chosen!==qz.answer;
   // The UI already labels feedback "Correct!" / "Not quite." - strip a duplicate
   // acknowledgment from the start of the explanation so it never reads twice.
@@ -3782,21 +3828,23 @@ function Quiz({quiz,passed,onPass}){
         })}
       </div>
 
-      {isWrong&&(
-        <div style={{marginTop:14,padding:"13px 16px",background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#fcd9a8"}}>
-          <strong style={{color:"#fbbf24"}}>Not quite. </strong><MX s={whyWrong}/> <span style={{color:"#fbbf24",fontWeight:600}}>Give it another try.</span>
-        </div>
-      )}
-      {isCorrect&&(
-        <div style={{marginTop:14}}>
-          <div style={{padding:"13px 16px",background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#bbf7d0"}}>
-            <strong style={{color:"#6ee7b7"}}>Correct! </strong><MX s={whyRight}/>
+      <div role="status" aria-live="polite">
+        {isWrong&&(
+          <div style={{marginTop:14,padding:"13px 16px",background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#fcd9a8"}}>
+            <strong style={{color:"#fbbf24"}}>Not quite. </strong><MX s={whyWrong}/> <span style={{color:"#fbbf24",fontWeight:600}}>Give it another try.</span>
           </div>
-          <button onClick={cont} style={{marginTop:14,background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",color:"#fff",border:"none",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.32), inset 0 1px 0 rgba(255,255,255,0.18)"}}>
-            {step+1>=quiz.length?"Finish quiz →":"Next question →"}
-          </button>
-        </div>
-      )}
+        )}
+        {isCorrect&&(
+          <div style={{marginTop:14}}>
+            <div style={{padding:"13px 16px",background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.28)",borderRadius:12,fontSize:14,lineHeight:1.6,color:"#bbf7d0"}}>
+              <strong style={{color:"#6ee7b7"}}>Correct! </strong><MX s={whyRight}/>
+            </div>
+            <button ref={continueRef} onClick={cont} style={{marginTop:14,background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",color:"#fff",border:"none",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.32), inset 0 1px 0 rgba(255,255,255,0.18)"}}>
+              {step+1>=quiz.length?"Finish quiz →":"Next question →"}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -3900,7 +3948,76 @@ function Certificate({fullName,dateStr,onPrint}){
   );
 }
 
-function Course({session,onSignOut,onBrand}){
+// Error boundary around the lesson content so a throw in any hand-authored
+// lesson render/answer function shows a recoverable fallback instead of
+// white-screening the whole app. Keyed by lesson idx at the use site, so
+// navigating to another lesson remounts a fresh boundary.
+export class LessonErrorBoundary extends Component {
+  constructor(props){
+    super(props);
+    this.state={error:null};
+  }
+  static getDerivedStateFromError(error){
+    return {error};
+  }
+  componentDidCatch(error,info){
+    console.error("Lesson render failed:",error,info);
+  }
+  render(){
+    if(this.state.error){
+      return(
+        <div role="alert" style={{background:"rgba(244,114,182,0.06)",border:"1px solid rgba(244,114,182,0.28)",borderRadius:16,padding:"28px 32px",margin:"0 0 24px",color:"#f4d4e4",fontFamily:"Inter,system-ui"}}>
+          <div style={{fontSize:16,fontWeight:700,marginBottom:8,color:"#fbcfe8"}}>This lesson hit a snag while rendering.</div>
+          <div style={{fontSize:14,lineHeight:1.7,color:"#e6bfd2",marginBottom:18}}>The rest of the course is fine. Try again, or pick another lesson from the sidebar.</div>
+          <button onClick={()=>this.setState({error:null})} style={{background:"linear-gradient(135deg,#818cf8,#6366f1 45%,#8b5cf6)",border:"none",color:"#fff",padding:"11px 22px",borderRadius:12,cursor:"pointer",fontSize:13.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(99,102,241,0.32), inset 0 1px 0 rgba(255,255,255,0.18)"}}>Try again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function getFocusable(container){
+  if(!container) return [];
+  return Array.from(container.querySelectorAll(
+    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+  ));
+}
+
+// Accessible modal drawer: labels itself as a dialog, moves focus to its first
+// item on open, traps Tab within it, closes on Escape, and restores focus to
+// the control that opened it (passed via restoreFocusRef) on close.
+export function MobileDrawer({onClose,restoreFocusRef,label,children}){
+  const panelRef=useRef(null);
+  useEffect(()=>{
+    const focusables=getFocusable(panelRef.current);
+    (focusables[0]||panelRef.current)?.focus();
+    return ()=>{
+      const t=restoreFocusRef&&restoreFocusRef.current;
+      if(t&&typeof t.focus==="function") t.focus();
+    };
+  },[]);
+  const onKeyDown=(e)=>{
+    if(e.key==="Escape"){e.preventDefault();onClose();return;}
+    if(e.key!=="Tab") return;
+    const f=getFocusable(panelRef.current);
+    if(!f.length){e.preventDefault();return;}
+    const first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(e.shiftKey&&(a===first||!panelRef.current.contains(a))){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&(a===last||!panelRef.current.contains(a))){e.preventDefault();first.focus();}
+  };
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:50,display:"flex"}}>
+      <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.5)"}} onClick={onClose}/>
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1} onKeyDown={onKeyDown}
+        style={{position:"relative",width:280,background:"#0b1120",borderRight:"1px solid rgba(99,102,241,0.15)",height:"100%",overflowY:"auto",zIndex:1,outline:"none"}}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function Course({session,onSignOut,onBrand}){
   const storeKey=progressKey(session);
   const saved=loadSave(storeKey);
   const[idx,setIdx]=useState(()=>firstIncompleteIdx(saved.done));
@@ -3913,6 +4030,7 @@ function Course({session,onSignOut,onBrand}){
   const[ready,setReady]=useState(false);
   const[burst,setBurst]=useState(0);
   const contentRef=useRef(null);
+  const menuToggleRef=useRef(null);
 
   useEffect(()=>{
     // KaTeX is loaded via index.html <script> tag
@@ -3932,12 +4050,6 @@ function Course({session,onSignOut,onBrand}){
     if(contentRef.current) contentRef.current.scrollTo({top:0,behavior:scrollBehavior});
   },[idx,onCert]);
 
-  useEffect(()=>{
-    if(!sidebarOpen) return;
-    const onKey=(e)=>{if(e.key==="Escape")setSidebarOpen(false);};
-    window.addEventListener("keydown",onKey);
-    return ()=>window.removeEventListener("keydown",onKey);
-  },[sidebarOpen]);
 
   useEffect(()=>{
     try{localStorage.setItem(storeKey,JSON.stringify({done:[...done],idx,xp,completedAt}));}catch(e){}
@@ -4037,12 +4149,9 @@ function Course({session,onSignOut,onBrand}){
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen&&(
-        <div style={{position:"fixed",inset:0,zIndex:50,display:"flex"}}>
-          <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.5)"}} onClick={()=>setSidebarOpen(false)}/>
-          <div style={{position:"relative",width:280,background:"#0b1120",borderRight:"1px solid rgba(99,102,241,0.15)",height:"100%",overflowY:"auto",zIndex:1}}>
-            {sidebar}
-          </div>
-        </div>
+        <MobileDrawer onClose={()=>setSidebarOpen(false)} restoreFocusRef={menuToggleRef} label="Lesson menu">
+          {sidebar}
+        </MobileDrawer>
       )}
 
       {/* Main content */}
@@ -4051,12 +4160,12 @@ function Course({session,onSignOut,onBrand}){
         <div style={{flexShrink:0,background:"rgba(10,14,26,0.72)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",borderBottom:"1px solid rgba(148,163,184,0.10)",padding:"12px 28px"}}>
           <div style={{maxWidth:1220,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
             <div style={{display:"flex",alignItems:"center",gap:12,minWidth:0}}>
-              <button onClick={()=>setSidebarOpen(true)} className="sidebar-toggle" aria-label="Open lesson menu" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.25)",color:"#a5b4fc",padding:"8px 10px",borderRadius:9,cursor:"pointer",fontFamily:"Inter,system-ui",display:"none",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic d={ICONS.menu} size={16}/></button>
+              <button ref={menuToggleRef} onClick={()=>setSidebarOpen(true)} className="sidebar-toggle" aria-label="Open lesson menu" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.25)",color:"#a5b4fc",padding:"8px 10px",borderRadius:9,cursor:"pointer",fontFamily:"Inter,system-ui",display:"none",alignItems:"center",justifyContent:"center",flexShrink:0}}><Ic d={ICONS.menu} size={16}/></button>
               <div style={{minWidth:0}}>
                 <div style={{fontSize:10.5,color:"#818cf8",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:"Inter,system-ui"}}>
                   {onCert?"Lenamon Calculus":`Lesson ${lesson.id} of ${L.length} · ${lesson.module}`}
                 </div>
-                <div style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{onCert?"Certificate of Completion":lesson.title}</div>
+                <h1 style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{onCert?"Certificate of Completion":lesson.title}</h1>
               </div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
@@ -4089,10 +4198,12 @@ function Course({session,onSignOut,onBrand}){
           ):(
           <div className="lesson-grid" style={{maxWidth:1220,margin:"0 auto",padding:"34px 40px 110px",display:"grid",gridTemplateColumns:"minmax(0,1fr) 280px",gap:52,alignItems:"start"}}>
             <div key={idx} className="lesson-fade" style={{minWidth:0,maxWidth:780,margin:"0 auto",width:"100%"}}>
-              {lesson.content.map((item,i)=>(
-                <CC key={`${idx}-${i}`} id={`blk-${idx}-${i}`} item={item} showAnswer={!!ans[`${idx}-${i}`]} onToggle={()=>toggle(i)}/>
-              ))}
-              {hasQuiz&&<Quiz key={`quiz-${idx}`} quiz={lessonQuiz} passed={passed} onPass={passQuiz}/>}
+              <LessonErrorBoundary>
+                {lesson.content.map((item,i)=>(
+                  <CC key={`${idx}-${i}`} id={`blk-${idx}-${i}`} item={item} showAnswer={!!ans[`${idx}-${i}`]} onToggle={()=>toggle(i)}/>
+                ))}
+                {hasQuiz&&<Quiz key={`quiz-${idx}`} quiz={lessonQuiz} passed={passed} onPass={passQuiz}/>}
+              </LessonErrorBoundary>
             </div>
             <aside className="lesson-rail" style={{position:"sticky",top:0,alignSelf:"start",fontFamily:"Inter,system-ui",display:"flex",flexDirection:"column",gap:14}}>
               <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:16,padding:"16px 18px"}}>
@@ -4461,7 +4572,7 @@ export default function App(){
     if(findUser(em)) return "That email already has an account. Try signing in instead.";
     const users=loadUsers();
     users.push({firstName:fn,lastName:ln,email:em,createdAt:new Date().toISOString()});
-    saveUsers(users);
+    if(!saveUsers(users)) return "We could not save your account on this device. Your browser storage may be full or disabled - free up space or try another browser, then try again.";
     setSession({role:"user",email:em,firstName:fn,lastName:ln});
     setView("course");
     return null;
