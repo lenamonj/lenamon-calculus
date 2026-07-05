@@ -116,7 +116,7 @@ This is a deliberately lightweight, **client-side** account system: accounts and
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org) 18 or newer (includes npm)
+- [Node.js](https://nodejs.org) 20.19 or newer (includes npm); pinned via `engines` and `.nvmrc`
 
 ### Run it locally
 

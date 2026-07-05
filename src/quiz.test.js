@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { QUIZ } from './App.jsx';
+import { QUIZ } from './content.jsx';
 
 // Flatten the per-lesson quiz map into one list of {lessonId, i, q} records so
 // every question can be asserted individually.
