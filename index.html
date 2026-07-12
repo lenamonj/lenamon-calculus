@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A free, interactive business calculus course that builds every idea from the ground up and assumes nothing." />
-    <meta name="theme-color" content="#070a14" />
+    <meta name="theme-color" content="#05080f" />
     <title>Business Calculus</title>
 
     <!-- KaTeX CSS & JS (math rendering). Subresource Integrity pins the exact
@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- App fonts: Inter (UI) + Bricolage Grotesque (display) + Source Serif 4 (lesson reading) -->
+    <!-- App fonts: Inter (UI) + Bricolage Grotesque (display) + Source Serif 4 (lesson reading) + IBM Plex Mono (data readouts) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <!-- Certificate fonts: Playfair Display (engraved serif) + Pinyon Script (signature) -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Pinyon+Script&display=swap" rel="stylesheet" />
@@ -28,27 +28,30 @@
         height: 100%;
         overflow: hidden;
         background:
-          radial-gradient(1200px 800px at 80% -10%, rgba(99,102,241,0.16), transparent 60%),
-          radial-gradient(900px 620px at 4% 0%, rgba(45,212,191,0.08), transparent 55%),
-          radial-gradient(1000px 900px at 50% 115%, rgba(139,92,246,0.10), transparent 60%),
-          #070a14;
+          radial-gradient(1100px 520px at 50% -14%, rgba(126,152,200,0.075), transparent 62%),
+          #05080f;
         background-attachment: fixed;
       }
-      /* Fine film grain so large dark surfaces never look flat */
-      body::after {
+      /* Graph paper under everything: the whole product lives on a coordinate plane. */
+      body::before {
         content: "";
-        position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+        position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background-image:
+          linear-gradient(rgba(148,166,200,0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148,166,200,0.055) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(ellipse 130% 100% at 50% 0%, black 25%, rgba(0,0,0,0.3) 100%);
+        -webkit-mask-image: radial-gradient(ellipse 130% 100% at 50% 0%, black 25%, rgba(0,0,0,0.3) 100%);
       }
       #root { position: relative; z-index: 1; }
 
-      ::selection { background: rgba(129,140,248,0.36); color: #f8fafc; }
+      ::selection { background: rgba(230,180,90,0.34); color: #fbfdff; }
       ::-webkit-scrollbar { width: 10px; height: 10px; }
       ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.18); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
       ::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.32); background-clip: padding-box; border: 2px solid transparent; }
       ::-webkit-scrollbar-track { background: transparent; }
 
-      :focus-visible { outline: 2px solid #a5b4fc; outline-offset: 2px; border-radius: 6px; }
+      :focus-visible { outline: 2px solid #e6b45a; outline-offset: 2px; border-radius: 6px; }
       button:focus:not(:focus-visible) { outline: none; }
 
       /* Micro-interactions: every enabled control responds to touch */
@@ -57,8 +60,8 @@
       button:not(:disabled):active { transform: translateY(1px); filter: brightness(0.97); }
 
       input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, input:not([type]):focus {
-        border-color: rgba(129,140,248,0.6) !important;
-        box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+        border-color: rgba(230,180,90,0.62) !important;
+        box-shadow: 0 0 0 3px rgba(230,180,90,0.15);
       }
 
       /* Lesson reading typography: editorial serif that harmonizes with KaTeX math */
@@ -69,19 +72,68 @@
       .prose em { color: #e8edf6; }
 
       .card-h { transition: transform 0.24s cubic-bezier(0.22,1,0.36,1), border-color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease; }
-      .card-h:hover { transform: translateY(-3px); border-color: rgba(165,180,252,0.28) !important; box-shadow: 0 14px 40px rgba(3,6,18,0.5); }
+      .card-h:hover { transform: translateY(-3px); border-color: rgba(230,180,90,0.34) !important; box-shadow: 0 14px 40px rgba(2,4,10,0.5); }
 
-      .qopt:not(:disabled):hover { border-color: rgba(165,180,252,0.5) !important; background: rgba(99,102,241,0.09) !important; filter: none; }
+      .qopt:not(:disabled):hover { border-color: rgba(230,180,90,0.5) !important; background: rgba(230,180,90,0.07) !important; filter: none; }
 
       @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
       .lesson-fade { animation: fadeUp 0.42s cubic-bezier(0.22,1,0.36,1); }
-      @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-24px) scale(1.08); } }
-      @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-34px,20px) scale(0.94); } }
-      .orb-a { animation: drift1 16s ease-in-out infinite; }
-      .orb-b { animation: drift2 19s ease-in-out infinite; }
+
+      /* ---------- Landing: layout grids ---------- */
+      .lp-hero-grid { display: grid; grid-template-columns: minmax(0,1.04fr) minmax(0,0.96fr); gap: 60px; align-items: center; }
+      .lp-beats-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 26px; align-items: start; }
+      .lp-syll-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 26px 52px; align-items: start; }
+      .lp-syll-col2 { margin-top: 56px; }
+      .lp-proof-grid { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: 26px; align-items: stretch; }
+      @media (max-width: 1000px) {
+        .lp-hero-grid { grid-template-columns: minmax(0,1fr); gap: 40px; }
+        .lp-beats-grid { grid-template-columns: minmax(0,1fr); max-width: 480px; margin: 0 auto; }
+        .lp-syll-grid { grid-template-columns: minmax(0,1fr); }
+        .lp-syll-col2 { margin-top: 0; }
+        .lp-proof-grid { grid-template-columns: minmax(0,1fr); }
+      }
+      @media (max-width: 520px) { .brand-text { display: none; } }
+
+      /* Scroll reveals: sections rise in once. Ignored entirely under reduced motion. */
+      .reveal { opacity: 0; transform: translateY(18px); }
+      .reveal.in { opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+
+      /* ---------- The Living Graph: hero entrance orchestration ----------
+         Default styles are the FINISHED graph; .lg-anim (sans .lg-in) is the
+         hidden start state and JS adds .lg-in one frame after mount. If
+         animations cannot run anywhere, the graph is simply visible. */
+      .lg-anim:not(.lg-in) .lg-grid, .lg-anim:not(.lg-in) .lg-tan, .lg-anim:not(.lg-in) .lg-ro { opacity: 0; }
+      .lg-anim:not(.lg-in) .lg-draw, .lg-anim:not(.lg-in) .lg-curve { stroke-dashoffset: var(--len); }
+      .lg-anim:not(.lg-in) .lg-pt { opacity: 0; transform: scale(0); }
+      .lg-anim .lg-grid { transition: opacity 0.9s ease 0.15s; }
+      .lg-anim .lg-draw { stroke-dasharray: var(--len); stroke-dashoffset: 0; transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1) 0.45s; }
+      .lg-anim .lg-curve { stroke-dasharray: var(--len); stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s cubic-bezier(0.45,0,0.2,1) 0.9s; }
+      .lg-anim .lg-pt { transform-box: fill-box; transform-origin: center; transition: opacity 0.5s cubic-bezier(0.34,1.56,0.64,1) 2.3s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 2.3s; }
+      .lg-anim .lg-tan { transition: opacity 0.6s ease 2.5s; }
+      .lg-anim .lg-ro { transition: opacity 0.6s ease 2.65s; }
+      @keyframes lgFade { to { opacity: 1; } }
+
+      /* ---------- Story beats: each act plays once when scrolled into view ----------
+         Ghost trails and bar phases are decorative keyframes; the gold finals are
+         class-toggled transitions so they can never be stuck invisible. */
+      .beat .b-step, .beat .b-phase { opacity: 0; }
+      .beat .b-final { opacity: 0; transition: opacity 0.7s ease var(--d, 0s); }
+      .beat.play .b-step { animation: beatGhost 2.6s ease var(--d, 0s) forwards; }
+      .beat.play .b-phase { animation: beatPhase 2.3s ease var(--d, 0s) forwards; }
+      .beat.play .b-final { opacity: 1; }
+      @keyframes beatGhost { 0% { opacity: 0; } 12% { opacity: 1; } 40% { opacity: 1; } 72% { opacity: 0.13; } 100% { opacity: 0.13; } }
+      @keyframes beatPhase { 0% { opacity: 0; } 16% { opacity: 1; } 55% { opacity: 1; } 82% { opacity: 0; } 100% { opacity: 0; } }
+
       @media (prefers-reduced-motion: reduce) {
-        .lesson-fade, .orb-a, .orb-b { animation: none; }
+        .lesson-fade { animation: none; }
         .card-h, button { transition: none; }
+        .reveal { opacity: 1; transform: none; }
+        .lg-anim .lg-grid, .lg-anim .lg-draw, .lg-anim .lg-curve, .lg-anim .lg-pt, .lg-anim .lg-tan, .lg-anim .lg-ro {
+          transition: none !important; opacity: 1 !important; transform: none !important; stroke-dashoffset: 0 !important;
+        }
+        .beat .b-step { animation: none !important; opacity: 0.13; }
+        .beat .b-phase { animation: none !important; opacity: 0; }
+        .beat .b-final { animation: none !important; transition: none !important; opacity: 1; }
       }
 
       /* Course layout responsiveness */
@@ -103,13 +155,13 @@
       input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
       input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
       input[type=range]::-moz-range-track { height: 6px; border-radius: 4px; background: rgba(148,163,184,0.22); }
-      input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: linear-gradient(135deg,#a78bfa,#8b5cf6); border: 2px solid #070a14; box-shadow: 0 2px 8px rgba(139,92,246,0.5); cursor: pointer; }
-      input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #8b5cf6; border: 2px solid #070a14; cursor: pointer; }
+      input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: linear-gradient(135deg,#f0c878,#d9a53e); border: 2px solid #05080f; box-shadow: 0 2px 8px rgba(230,180,90,0.5); cursor: pointer; }
+      input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #e6b45a; border: 2px solid #05080f; cursor: pointer; }
 
       /* Certificate printing */
       @media print {
         html, body, #root { overflow: visible !important; height: auto !important; background: #fff !important; }
-        body::after { display: none; }
+        body::before { display: none; }
         body * { visibility: hidden !important; }
         .cert-print, .cert-print * { visibility: visible !important; }
         .cert-print { position: absolute !important; left: 0; top: 0; width: 100% !important; max-width: none !important; box-shadow: none !important; }
