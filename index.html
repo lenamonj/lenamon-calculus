@@ -98,6 +98,14 @@
       .reveal { opacity: 0; transform: translateY(18px); }
       .reveal.in { opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
 
+      /* Reading progress: a gold thread across the top of the lesson scroller,
+         driven entirely by CSS scroll-timeline. Invisible where unsupported. */
+      .readbar { position: sticky; top: 0; z-index: 6; height: 2px; margin-bottom: -2px; background: linear-gradient(90deg,#b8892f,#e6b45a); transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+      @supports (animation-timeline: scroll()) {
+        .readbar { animation: readGrow linear both; animation-timeline: scroll(nearest); }
+      }
+      @keyframes readGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
       /* ---------- The Living Graph: hero entrance orchestration ----------
          Default styles are the FINISHED graph; .lg-anim (sans .lg-in) is the
          hidden start state and JS adds .lg-in one frame after mount. If

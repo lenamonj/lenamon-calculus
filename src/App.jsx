@@ -389,12 +389,37 @@ function PB({completed,total}){
   );
 }
 
-export function CC({item,showAnswer,onToggle,id}){
+// A lesson block is a document section, not a card: a thin type-colored label
+// rules across the page, and only two block types get a container because the
+// container means something - formulas sit on a certificate-cornered gold
+// plate, interactive labs sit on an instrument bench.
+export function CC({item,showAnswer,onToggle,id,first=false}){
   const c=tc[item.type];
+  const prose=<div className="prose" style={{fontSize:17,lineHeight:1.85,color:"#dde4ee"}}>{item.render?item.render():null}</div>;
+  const plateCorner=(pos)=>{
+    const b="2px solid rgba(230,180,90,0.6)",s={position:"absolute",width:15,height:15,pointerEvents:"none"};
+    if(pos==="tl")return <span aria-hidden="true" style={{...s,top:6,left:6,borderTop:b,borderLeft:b}}/>;
+    if(pos==="tr")return <span aria-hidden="true" style={{...s,top:6,right:6,borderTop:b,borderRight:b}}/>;
+    if(pos==="bl")return <span aria-hidden="true" style={{...s,bottom:6,left:6,borderBottom:b,borderLeft:b}}/>;
+    return <span aria-hidden="true" style={{...s,bottom:6,right:6,borderBottom:b,borderRight:b}}/>;
+  };
   return(
-    <div id={id} style={{background:"linear-gradient(180deg,rgba(255,255,255,0.038),rgba(255,255,255,0.016))",border:"1px solid rgba(255,255,255,0.07)",borderTop:"1px solid rgba(255,255,255,0.11)",borderRadius:20,padding:"28px 32px",marginBottom:24,boxShadow:"0 10px 30px rgba(2,4,12,0.35)",scrollMarginTop:18}}>
-      <h2 style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:c.border,background:c.bg,border:`1px solid ${c.border}38`,padding:"5px 12px",borderRadius:999,marginBottom:18,fontFamily:"Inter,system-ui"}}><Ic d={c.icon} size={12.5}/>{item.label||c.label}</h2>
-      <div className="prose" style={{fontSize:17,lineHeight:1.85,color:"#dde4ee"}}>{item.render?item.render():null}</div>
+    <section id={id} style={{position:"relative",padding:first?"2px 0 34px":"28px 0 34px",borderTop:first?"none":"1px solid rgba(148,166,200,0.14)",scrollMarginTop:22}}>
+      <h2 style={{display:"flex",alignItems:"center",gap:9,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.09em",color:c.border,margin:"0 0 18px",fontFamily:"Inter,system-ui"}}>
+        <Ic d={c.icon} size={13}/>
+        {item.label||c.label}
+        <span aria-hidden="true" style={{flex:1,minWidth:40,height:1,background:`linear-gradient(90deg,${c.border}42,transparent 78%)`,marginLeft:8}}/>
+      </h2>
+      {item.type==="rule"?(
+        <div style={{position:"relative",background:"rgba(230,180,90,0.05)",border:"1px solid rgba(230,180,90,0.22)",padding:"24px 30px"}}>
+          {plateCorner("tl")}{plateCorner("tr")}{plateCorner("bl")}{plateCorner("br")}
+          {prose}
+        </div>
+      ):item.type==="interactive"?(
+        <div style={{background:"rgba(8,12,22,0.62)",border:"1px solid rgba(148,166,200,0.14)",borderTop:"1px solid rgba(255,255,255,0.08)",borderRadius:16,padding:"22px 26px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.04)"}}>
+          {prose}
+        </div>
+      ):prose}
       {item.type==="practice"&&item.answer&&(
         <div style={{marginTop:18}}>
           <button onClick={onToggle} aria-expanded={showAnswer} aria-controls={`${id}-sol`} style={{background:showAnswer?"rgba(148,166,200,0.10)":"linear-gradient(180deg,#f0c880,#e6b45a 55%,#d9a53e)",border:showAnswer?"1px solid rgba(148,166,200,0.2)":"none",color:showAnswer?"#cbd5e1":"#231603",padding:"11px 22px",borderRadius:10,cursor:"pointer",fontSize:13.5,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:showAnswer?"none":"0 6px 18px rgba(230,180,90,0.26), inset 0 1px 0 rgba(255,255,255,0.4)"}}>
@@ -407,7 +432,7 @@ export function CC({item,showAnswer,onToggle,id}){
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -479,7 +504,7 @@ const INSPO=[
 ];
 
 const QLETTERS=["A","B","C","D"];
-export function Quiz({quiz,passed,onPass}){
+export function Quiz({quiz,passed,onPass,onNext,nextLabel}){
   const[step,setStep]=useState(passed?quiz.length:0);
   const[chosen,setChosen]=useState(null);
   const continueRef=useRef(null);
@@ -494,9 +519,12 @@ export function Quiz({quiz,passed,onPass}){
 
   if(finished){
     return(
-      <div style={{background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.22)",borderRadius:20,padding:"24px 30px",marginBottom:24,textAlign:"center"}}>
+      <div style={{background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.22)",borderRadius:20,padding:"26px 30px",marginBottom:24,textAlign:"center"}}>
         <div style={{fontSize:15,fontWeight:800,color:"#6ee7b7",fontFamily:"Inter,system-ui"}}>✓ Quiz complete</div>
-        <div style={{fontSize:13.5,color:"#a5b0c2",marginTop:6,fontFamily:"Inter,system-ui"}}>You answered all {quiz.length} questions correctly. This lesson is unlocked - use the Next button up top to continue.</div>
+        <div style={{fontSize:13.5,color:"#a5b0c2",marginTop:6,fontFamily:"Inter,system-ui"}}>You answered all {quiz.length} questions correctly. This lesson is unlocked.</div>
+        {onNext&&(
+          <button onClick={onNext} style={{marginTop:16,background:"linear-gradient(180deg,#f0c880,#e6b45a 55%,#d9a53e)",color:"#231603",border:"none",padding:"12px 26px",borderRadius:10,cursor:"pointer",fontSize:14,fontWeight:700,fontFamily:"Inter,system-ui",boxShadow:"0 6px 18px rgba(230,180,90,0.26), inset 0 1px 0 rgba(255,255,255,0.4)"}}>{nextLabel||"Next →"}</button>
+        )}
       </div>
     );
   }
@@ -624,7 +652,7 @@ function Certificate({fullName,dateStr,onPrint}){
         <div style={corner("tl")}/><div style={corner("tr")}/><div style={corner("bl")}/><div style={corner("br")}/>
 
         <div style={{fontSize:28,color:"#b8860b",marginBottom:2,fontFamily:serif,lineHeight:1}}>∫</div>
-        <div style={{fontSize:"clamp(28px,5vw,44px)",fontWeight:800,letterSpacing:"0.12em",textTransform:"uppercase",color:ink,lineHeight:1.05}}>Lenamon Calculus</div>
+        <h1 style={{fontSize:"clamp(28px,5vw,44px)",fontWeight:800,letterSpacing:"0.12em",textTransform:"uppercase",color:ink,lineHeight:1.05,margin:0,fontFamily:serif}}>Lenamon Calculus</h1>
         <div style={{height:1,width:210,background:`linear-gradient(90deg,transparent,${gold},transparent)`,margin:"12px auto 8px"}}/>
         <div style={{fontSize:11.5,letterSpacing:"0.34em",textTransform:"uppercase",color:goldDk,fontFamily:ui,fontWeight:600}}>Department of Business Calculus</div>
 
@@ -780,6 +808,27 @@ export function Course({session,onSignOut,onBrand}){
     if(done.size>=L.length&&!completedAt) setCompletedAt(new Date().toISOString());
   },[done,completedAt]);
 
+  // Scroll-spy: the "On this page" rail tracks which block is being read.
+  // Spy state is keyed by lesson idx so switching lessons resets to the top
+  // by derivation instead of a synchronous setState.
+  const[spy,setSpy]=useState({idx:0,blk:0});
+  const activeBlk=spy.idx===idx?spy.blk:0;
+  useEffect(()=>{
+    if(onCert||typeof IntersectionObserver==="undefined")return;
+    const io=new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{
+        if(!e.isIntersecting)return;
+        const m=/-(\d+)$/.exec(e.target.id);
+        if(m)setSpy({idx,blk:+m[1]});
+      });
+    },{root:contentRef.current,rootMargin:"-12% 0px -72% 0px",threshold:0});
+    L[idx].content.forEach((_,i)=>{
+      const el=document.getElementById(`blk-${idx}-${i}`);
+      if(el)io.observe(el);
+    });
+    return ()=>io.disconnect();
+  },[idx,onCert]);
+
   const level=Math.floor(xp/XP_PER_LEVEL)+1;
   const lesson=L[idx];
   const allDone=done.size>=L.length;
@@ -889,7 +938,7 @@ export function Course({session,onSignOut,onBrand}){
                 <div style={{fontSize:10.5,color:"#94a1b7",fontWeight:500,textTransform:"uppercase",letterSpacing:"0.07em",fontFamily:"'IBM Plex Mono',ui-monospace,monospace"}}>
                   {onCert?"Lenamon Calculus":`Lesson ${lesson.id} of ${L.length} · ${lesson.module}`}
                 </div>
-                <h1 style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{onCert?"Certificate of Completion":lesson.title}</h1>
+                <div style={{fontSize:18,fontWeight:800,color:"#f1f5f9",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.01em"}}>{onCert?"Certificate of Completion":lesson.title}</div>
               </div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
@@ -917,34 +966,67 @@ export function Course({session,onSignOut,onBrand}){
 
         {/* Lesson content - this is the only thing that scrolls */}
         <div ref={contentRef} style={{flex:1,overflowY:"auto"}}>
+          {!onCert&&<div className="readbar" aria-hidden="true"/>}
           {onCert?(
             <Certificate fullName={fullName} dateStr={certDate} onPrint={()=>window.print()}/>
           ):(
-          <div className="lesson-grid" style={{maxWidth:1220,margin:"0 auto",padding:"34px 40px 110px",display:"grid",gridTemplateColumns:"minmax(0,1fr) 280px",gap:52,alignItems:"start"}}>
-            <div key={idx} className="lesson-fade" style={{minWidth:0,maxWidth:780,margin:"0 auto",width:"100%"}}>
+          <div className="lesson-grid" style={{maxWidth:1220,margin:"0 auto",padding:"26px 40px 110px",display:"grid",gridTemplateColumns:"minmax(0,1fr) 280px",gap:52,alignItems:"start"}}>
+            <div key={idx} style={{minWidth:0,maxWidth:780,margin:"0 auto",width:"100%"}}>
+              <Reveal>
+                <div style={{position:"relative",overflow:"hidden",padding:"16px 0 28px"}}>
+                  <div aria-hidden="true" style={{position:"absolute",top:-30,right:-6,fontFamily:"'Bricolage Grotesque',Inter,sans-serif",fontWeight:800,fontSize:168,lineHeight:1,color:"transparent",WebkitTextStroke:"1.5px rgba(148,166,200,0.15)",pointerEvents:"none",userSelect:"none"}}>{String(lesson.id).padStart(2,"0")}</div>
+                  <div style={{display:"flex",alignItems:"baseline",gap:12,fontFamily:"'IBM Plex Mono',ui-monospace,monospace",fontSize:11.5,position:"relative"}}>
+                    <span style={{color:"#e6b45a"}}>{lesson.module}</span>
+                    <span style={{color:"#5b6880"}}>Lesson {String(lesson.id).padStart(2,"0")}</span>
+                  </div>
+                  <h1 style={{fontSize:"clamp(28px,4vw,40px)",lineHeight:1.12,fontWeight:800,color:"#edf1f8",fontFamily:"'Bricolage Grotesque',Inter,sans-serif",letterSpacing:"-0.02em",margin:"12px 0 0",position:"relative",maxWidth:600}}>{lesson.title}</h1>
+                  <div aria-hidden="true" style={{width:64,height:2,background:"linear-gradient(90deg,#b8892f,#e6b45a)",marginTop:20,borderRadius:1}}/>
+                </div>
+              </Reveal>
               <LessonErrorBoundary>
                 {lesson.content.map((item,i)=>(
-                  <CC key={`${idx}-${i}`} id={`blk-${idx}-${i}`} item={item} showAnswer={!!ans[`${idx}-${i}`]} onToggle={()=>toggle(i)}/>
+                  <Reveal key={`${idx}-${i}`}>
+                    <CC id={`blk-${idx}-${i}`} first={i===0} item={item} showAnswer={!!ans[`${idx}-${i}`]} onToggle={()=>toggle(i)}/>
+                  </Reveal>
                 ))}
-                {hasQuiz&&<Quiz key={`quiz-${idx}`} quiz={lessonQuiz} passed={passed} onPass={passQuiz}/>}
+                {hasQuiz&&(
+                  <Reveal>
+                    <div id={`quiz-${idx}`} style={{scrollMarginTop:22,paddingTop:8}}>
+                      <Quiz key={`quiz-${idx}`} quiz={lessonQuiz} passed={passed} onPass={passQuiz} onNext={nextDisabled?undefined:next} nextLabel={nextLabel}/>
+                    </div>
+                  </Reveal>
+                )}
               </LessonErrorBoundary>
             </div>
             <aside className="lesson-rail" style={{position:"sticky",top:0,alignSelf:"start",fontFamily:"Inter,system-ui",display:"flex",flexDirection:"column",gap:14}}>
-              <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,163,184,0.10)",borderRadius:16,padding:"16px 18px"}}>
-                <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",color:"#94a3b8",marginBottom:12}}>On this page</div>
+              <div style={{background:"rgba(255,255,255,0.022)",border:"1px solid rgba(148,166,200,0.10)",borderRadius:16,padding:"16px 18px"}}>
+                <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",color:"#94a1b7",marginBottom:12}}>On this page</div>
                 {lesson.content.map((item,i)=>{
                   const c=tc[item.type];
+                  const isRead=activeBlk===i;
                   const go=()=>{const el=document.getElementById(`blk-${idx}-${i}`);if(el)el.scrollIntoView({behavior:scrollBehavior,block:"start"});};
                   return(
-                    <div key={i} role="button" tabIndex={0} onClick={go} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}}}
-                      style={{display:"flex",alignItems:"center",gap:9,padding:"7px 8px",borderRadius:8,cursor:"pointer",marginBottom:1}}
-                      onMouseEnter={e=>e.currentTarget.style.background="rgba(148,163,184,0.08)"}
-                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <span style={{width:7,height:7,borderRadius:"50%",background:c.border,flexShrink:0}}/>
-                      <span style={{fontSize:13,color:"#cbd5e1",fontWeight:500}}>{item.label||c.label}</span>
+                    <div key={i} role="button" tabIndex={0} aria-current={isRead?"true":undefined} onClick={go} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}}}
+                      style={{display:"flex",alignItems:"center",gap:9,padding:"7px 8px",borderRadius:8,cursor:"pointer",marginBottom:1,background:isRead?"rgba(230,180,90,0.07)":"transparent",transition:"background 0.2s"}}
+                      onMouseEnter={e=>{if(!isRead)e.currentTarget.style.background="rgba(148,166,200,0.08)";}}
+                      onMouseLeave={e=>{e.currentTarget.style.background=isRead?"rgba(230,180,90,0.07)":"transparent";}}>
+                      <span style={{width:7,height:7,borderRadius:"50%",background:c.border,flexShrink:0,transform:isRead?"scale(1.3)":"none",transition:"transform 0.2s"}}/>
+                      <span style={{fontSize:13,color:isRead?"#f3d18a":"#cbd5e1",fontWeight:isRead?700:500,transition:"color 0.2s"}}>{item.label||c.label}</span>
                     </div>
                   );
                 })}
+                {hasQuiz&&(()=>{
+                  const go=()=>{const el=document.getElementById(`quiz-${idx}`);if(el)el.scrollIntoView({behavior:scrollBehavior,block:"start"});};
+                  return(
+                    <div role="button" tabIndex={0} onClick={go} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}}}
+                      style={{display:"flex",alignItems:"center",gap:9,padding:"7px 8px",borderRadius:8,cursor:"pointer",marginTop:5,borderTop:"1px solid rgba(148,166,200,0.12)",paddingTop:10}}
+                      onMouseEnter={e=>e.currentTarget.style.background="rgba(148,166,200,0.08)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                      <span style={{width:7,height:7,borderRadius:"50%",background:passed?"#34d399":"#e6b45a",flexShrink:0}}/>
+                      <span style={{fontSize:13,color:"#cbd5e1",fontWeight:500}}>{passed?"Quiz passed":"Check your understanding"}</span>
+                    </div>
+                  );
+                })()}
               </div>
               <div style={{background:"linear-gradient(160deg,rgba(230,180,90,0.10),rgba(230,180,90,0.03))",border:"1px solid rgba(230,180,90,0.24)",borderTop:"1px solid rgba(240,205,140,0.32)",borderRadius:16,padding:"16px 18px"}}>
                 <div style={{fontSize:9.5,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#e9c37a",marginBottom:8}}>A little inspiration</div>
@@ -1157,7 +1239,7 @@ function Reveal({children,style}){
   useEffect(()=>{
     if(inView||typeof IntersectionObserver==="undefined")return;
     const el=ref.current;if(!el)return;
-    const io=new IntersectionObserver(([e])=>{if(e.isIntersecting){setInView(true);io.disconnect();}},{threshold:0.15,rootMargin:"0px 0px -36px 0px"});
+    const io=new IntersectionObserver(([e])=>{if(e.isIntersecting){setInView(true);io.disconnect();}},{threshold:0,rootMargin:"0px 0px -36px 0px"});
     io.observe(el);
     return ()=>io.disconnect();
   },[inView]);
