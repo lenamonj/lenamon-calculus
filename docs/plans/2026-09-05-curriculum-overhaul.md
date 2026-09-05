@@ -18,6 +18,7 @@
 - Every number in prose must appear in `scratchpad/verify_content.py` and pass. Extend the script whenever a new number is written.
 - Tests green, lint at or below 12 warnings, `npm run build` clean, before every commit. Commit locally only; never push.
 - Lesson block order: concept(s), rule, example(s), optional interactive, practice, practice. Labels are short noun phrases.
+- Four existing lessons have no Key Formulas block today (derivative, marginal, optimization, substitution). Each gets one in its content phase; Phase 6 tightens the contract test to exactly one `rule` block per lesson.
 - Cross-references use `<Ref to="slug"/>` (renders "Lesson N") or `<Ref to="slug" bare/>` (renders "N"). Never type a lesson number in prose.
 
 ---

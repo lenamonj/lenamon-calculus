@@ -1,10 +1,10 @@
 // Lesson corpus and quiz bank, split out of App.jsx so content edits no longer
 // churn the app engine. buildLessons receives the presentational components as
 // arguments, so this module imports nothing from App.jsx (no circular import).
-export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer }) {
+export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer, Ref }) {
   return [
 // ═══════ LESSON 1 ═══════
-{id:1,module:"Foundations",title:"Functions, Domain & Range",time:"10 min",content:[
+{slug:"functions",module:"Foundations",title:"Functions, Domain & Range",time:"10 min",content:[
 {type:"concept",label:"A Function Is a Machine",render:()=>(
 <div>
   <p>Let's start with the most important word in this whole course: <strong>function</strong>. Forget any scary definition you have heard. A function is just a <strong>machine for numbers</strong>.</p>
@@ -41,7 +41,7 @@ export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExp
 )},
 {type:"rule",label:"The Two Jams to Hunt for First",render:()=>(
 <div>
-  <p>For every function built from adding, subtracting, multiplying, dividing, and square roots, only two situations make it impossible to compute. If neither one shows up, then every number is allowed and the domain is "all real numbers." (Later, in Lesson 4, you will meet exactly one more kind of jam, when a new machine called the logarithm arrives. We will flag it loudly when it does.)</p>
+  <p>For every function built from adding, subtracting, multiplying, dividing, and square roots, only two situations make it impossible to compute. If neither one shows up, then every number is allowed and the domain is "all real numbers." (Later, in <Ref to="logarithms"/>, you will meet exactly one more kind of jam, when a new machine called the logarithm arrives. We will flag it loudly when it does.)</p>
   <p>Quick definition so nothing is assumed: <strong>real numbers</strong> are just the ordinary numbers you already use every day, the positives, the negatives, zero, fractions, and decimals. Picture every point on a number line. That is the real numbers.</p>
 
   <p style={{marginTop:14}}><strong>Jam #1: Dividing by zero.</strong></p>
@@ -82,7 +82,7 @@ export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExp
 {type:"practice",render:()=>(<span>Find the domain of <M d="f(x)=\dfrac{5}{x^2-4}"/></span>),
 answer:()=>(
 <div>
-  <p>First, a quick word on that small raised 2. We read <M d="x^2"/> as "x squared," and it just means <M d="x"/> multiplied by itself: <M d="x\times x"/>. (Exponents get the full treatment in Lesson 3; here you only need this one idea.) So <M d="x^2-4"/> means "(x times x) minus 4."</p>
+  <p>First, a quick word on that small raised 2. We read <M d="x^2"/> as "x squared," and it just means <M d="x"/> multiplied by itself: <M d="x\times x"/>. (Exponents get the full treatment in <Ref to="exponentials"/>; here you only need this one idea.) So <M d="x^2-4"/> means "(x times x) minus 4."</p>
   <p><strong>Step 1: Which jam is possible?</strong> This is a fraction, so the danger is Jam #1: the denominator <M d="x^2-4"/> hitting zero. No square root, so that is the only thing to check.</p>
 
   <p><strong>Step 2: Find the forbidden inputs.</strong> Set the denominator equal to zero and solve:</p>
@@ -108,7 +108,7 @@ answer:()=>(
 )},
 ]},
 
-{id:2,module:"Foundations",title:"Linear Equations & Slope",time:"10 min",content:[
+{slug:"lines",module:"Foundations",title:"Linear Equations & Slope",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>Before we draw a single line, here is the playing field every graph lives on. Take two number lines and cross them. The flat one, running left to right, is the <strong>x-axis</strong>, and <M d="x"/> gets bigger as you move right. The standing-up one, running bottom to top, is the <strong>y-axis</strong>, and <M d="y"/> gets bigger as you move up. The spot where they cross is the <strong>origin</strong>. We name any location with a pair of numbers written <M d="(x,\,y)"/>: the first number is how far across, the second is how far up. So <M d="(0,\,1)"/> means "0 across, 1 up."</p>
@@ -233,10 +233,10 @@ answer:()=>(
 ]},
 
 // ═══════ LESSON 3 ═══════
-{id:3,module:"Foundations",title:"Exponential Functions & e",time:"11 min",content:[
+{slug:"exponentials",module:"Foundations",title:"Exponential Functions & e",time:"11 min",content:[
 {type:"concept",label:"What Exponential Growth Is",render:()=>(
 <div>
-  <p>In Lesson 2, growth was <strong>linear</strong>: you add the <em>same amount</em> every period, like +$0.50 a month. This lesson is a faster kind of growth where you <em>multiply</em> by the same amount every period. That is <strong>exponential</strong> growth.</p>
+  <p>In <Ref to="lines"/>, growth was <strong>linear</strong>: you add the <em>same amount</em> every period, like +$0.50 a month. This lesson is a faster kind of growth where you <em>multiply</em> by the same amount every period. That is <strong>exponential</strong> growth.</p>
   <p>Real example: a savings account at 5% interest. You do not earn a fixed number of dollars. You earn 5% <em>of whatever you currently have</em>. The more you have, the more you earn, so it snowballs.</p>
 
   <p><strong>First, what does an exponent even mean?</strong> Let's not assume it. An exponent is just repeated multiplication. The expression <M d="b^x"/> means "multiply <M d="x"/> copies of <M d="b"/> together":</p>
@@ -341,7 +341,7 @@ answer:()=>(
 )},
 ]},
 
-{id:4,module:"Foundations",title:"Logarithmic Functions",time:"10 min",content:[
+{slug:"logarithms",module:"Foundations",title:"Logarithmic Functions",time:"10 min",content:[
 {type:"concept",label:"What a Logarithm Is",render:()=>(
 <div>
   <p>In the last lesson we used <M d="\ln"/> to free <M d="t"/> from an exponent in <M d="2=e^{0.06t}"/>. Now let's understand what <M d="\ln"/> actually is, from scratch.</p>
@@ -353,7 +353,7 @@ answer:()=>(
   </Box>
   <p>Concrete example: <M d="e^2\approx 7.389"/>. Going backward, <M d="\ln(7.389)\approx 2"/>, because 2 is exactly the exponent that produced 7.389. The two operations cancel.</p>
 
-  <p><strong>Why can you only take <M d="\ln"/> of a positive number?</strong> Most courses state this with no reason. Here is the reason. <M d="\ln(x)"/> is hunting for the exponent that makes <M d="e^{\,?}=x"/>. But <M d="e"/> is a positive number (about 2.718), and a positive number raised to <em>any</em> power stays positive: multiplying positives gives a positive, and even negative exponents only flip it into a fraction like <M d="\tfrac{1}{e^2}"/>, which is still positive. (You saw this in Lesson 3's decay graph, which sinks toward 0 but never touches it.) So no exponent can ever produce 0 or a negative result. That is exactly why <M d="\ln(0)"/> and <M d="\ln(-5)"/> do not exist.</p>
+  <p><strong>Why can you only take <M d="\ln"/> of a positive number?</strong> Most courses state this with no reason. Here is the reason. <M d="\ln(x)"/> is hunting for the exponent that makes <M d="e^{\,?}=x"/>. But <M d="e"/> is a positive number (about 2.718), and a positive number raised to <em>any</em> power stays positive: multiplying positives gives a positive, and even negative exponents only flip it into a fraction like <M d="\tfrac{1}{e^2}"/>, which is still positive. (You saw this in <Ref to="exponentials"/>'s decay graph, which sinks toward 0 but never touches it.) So no exponent can ever produce 0 or a negative result. That is exactly why <M d="\ln(0)"/> and <M d="\ln(-5)"/> do not exist.</p>
   <Graph fn={(x) => Math.log(x)} xMin={-1} xMax={8} yMin={-3} yMax={3}
     highlights={[
       { x: 1, y: 0, label: "ln(1) = 0", color: "#f59e0b", lo: [10, 18] },
@@ -368,7 +368,7 @@ answer:()=>(
 <div>
   <p>These three properties let you break a complicated log into simpler pieces (they hold for positive <M d="a"/> and <M d="b"/>, the only inputs <M d="\ln"/> accepts). Each one is really an exponent rule wearing a different costume.</p>
   <M d="\ln(a\cdot b)=\ln a+\ln b" block/>
-  <p>Multiplication becomes addition. Why? A log hands you an exponent, and exponents <em>add</em> when you multiply (Lesson 3). Check: <M d="\ln(e^2\cdot e^3)=\ln(e^5)=5"/>, and separately <M d="\ln(e^2)+\ln(e^3)=2+3=5"/>. Same answer.</p>
+  <p>Multiplication becomes addition. Why? A log hands you an exponent, and exponents <em>add</em> when you multiply (<Ref to="exponentials"/>). Check: <M d="\ln(e^2\cdot e^3)=\ln(e^5)=5"/>, and separately <M d="\ln(e^2)+\ln(e^3)=2+3=5"/>. Same answer.</p>
   <M d="\ln\!\left(\frac{a}{b}\right)=\ln a-\ln b" block/>
   <p>Division becomes subtraction, the mirror image. Why? Dividing <em>undoes</em> multiplications, so it removes copies from the stack instead of adding them: <M d="\tfrac{e^5}{e^3}"/> cancels three of the five copies of <M d="e"/>, leaving <M d="e^{5-3}=e^2"/>. The exponent counts subtract, so the logs subtract.</p>
   <M d="\ln(a^n)=n\cdot\ln a" block/>
@@ -416,7 +416,7 @@ answer:()=>(
 )},
 ]},
 
-{id:5,module:"Limits & Continuity",title:"Introduction to Limits",time:"10 min",content:[
+{slug:"limits",module:"Limits & Continuity",title:"Introduction to Limits",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>Before we learn derivatives (the main event of calculus), we need to understand <strong>limits</strong>. The idea is actually simpler than it sounds.</p>
@@ -516,10 +516,10 @@ answer:()=>(
 ]},
 
 // ═══════ LESSON 6 ═══════
-{id:6,module:"Limits & Continuity",title:"Infinite Limits & Limits at Infinity",time:"10 min",content:[
+{slug:"infinite-limits",module:"Limits & Continuity",title:"Infinite Limits & Limits at Infinity",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>In Lesson 5, we found limits where the answer was a <em>number</em>  -  like <M d="\lim_{x\to 2}f(x)=4"/>. But sometimes limits don't settle on a nice number. This lesson covers two new situations:</p>
+  <p>In <Ref to="limits"/>, we found limits where the answer was a <em>number</em>  -  like <M d="\lim_{x\to 2}f(x)=4"/>. But sometimes limits don't settle on a nice number. This lesson covers two new situations:</p>
 
   <p><strong>Situation 1: Infinite Limits</strong>  -  "What happens as <M d="x"/> approaches a specific number, but the function blows up?"</p>
   <p>Think about the function <M d="f(x)=\dfrac{1}{x}"/>. What happens as <M d="x"/> gets really close to 0?</p>
@@ -633,10 +633,10 @@ answer:()=>(
 ]},
 
 // ═══════ LESSON 7 ═══════
-{id:7,module:"Limits & Continuity",title:"Continuity",time:"9 min",content:[
+{slug:"continuity",module:"Limits & Continuity",title:"Continuity",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>In Lessons 5 and 6, we found limits  -  the value a function is <em>heading toward</em>. But sometimes the function actually <em>arrives</em> there, and sometimes it doesn't. Continuity tells us which.</p>
+  <p>In Lessons <Ref to="limits" bare/> and <Ref to="infinite-limits" bare/>, we found limits  -  the value a function is <em>heading toward</em>. But sometimes the function actually <em>arrives</em> there, and sometimes it doesn't. Continuity tells us which.</p>
 
   <p><strong>Why should you care?</strong> In the next module, we'll learn derivatives  -  the most powerful tool in calculus. But here's the catch: <em>you can only take a derivative where the function is continuous</em>. A derivative measures the slope of a smooth curve, and if the curve has a hole or a jump, there's no slope to measure. So continuity is a requirement for taking a derivative. (To be fully precise, continuity is required but is not the whole story. Picture the sharp point at the bottom of a V: coming in from the left, the line tilts one way; coming in from the right, it tilts the other way. Because the two sides disagree about which direction the curve is heading, there is no single slope right at the corner, so a derivative cannot be taken exactly there. We will unpack this when we reach derivatives. For the smooth business curves in this course, continuous means you are good to go.)</p>
 
@@ -645,13 +645,13 @@ answer:()=>(
   <p><strong>Three types of breaks (discontinuities):</strong></p>
 
   <Box>
-    <p><strong>1. Hole (removable discontinuity)</strong>  -  The function is heading toward a value, but there's a missing point. Like a bridge with one plank removed. We saw this in Lesson 5: <M d="\tfrac{x^2-4}{x-2}"/> has a hole at <M d="x=2"/>.</p>
+    <p><strong>1. Hole (removable discontinuity)</strong>  -  The function is heading toward a value, but there's a missing point. Like a bridge with one plank removed. We saw this in <Ref to="limits"/>: <M d="\tfrac{x^2-4}{x-2}"/> has a hole at <M d="x=2"/>.</p>
   </Box>
   <Box>
     <p><strong>2. Jump</strong>  -  The function suddenly leaps from one value to another. Like a staircase. The left-side limit and right-side limit exist but don't agree.</p>
   </Box>
   <Box>
-    <p><strong>3. Vertical asymptote (infinite discontinuity)</strong>  -  The function shoots to <M d="\pm\infty"/>. We just saw this in Lesson 6: <M d="\tfrac{1}{x}"/> at <M d="x=0"/>.</p>
+    <p><strong>3. Vertical asymptote (infinite discontinuity)</strong>  -  The function shoots to <M d="\pm\infty"/>. We just saw this in <Ref to="infinite-limits"/>: <M d="\tfrac{1}{x}"/> at <M d="x=0"/>.</p>
   </Box>
 </div>
 )},
@@ -665,7 +665,7 @@ answer:()=>(
   </Box>
   <Box>
     <p><strong>Condition 2:</strong> <M d="\lim_{x\to c}f(x)"/> <strong>exists</strong>.</p>
-    <p>The function has to be heading toward <em>something</em> from both sides, and both sides must agree. (Remember from Lesson 5: if left ≠ right, the limit doesn't exist.)</p>
+    <p>The function has to be heading toward <em>something</em> from both sides, and both sides must agree. (Remember from <Ref to="limits"/>: if left ≠ right, the limit doesn't exist.)</p>
   </Box>
   <Box>
     <p><strong>Condition 3:</strong> <M d="\lim_{x\to c}f(x) = f(c)"/>  -  <strong>the limit equals the actual value</strong>.</p>
@@ -676,8 +676,8 @@ answer:()=>(
 
   <p><strong>Good news  -  many functions are always continuous:</strong></p>
   <p>Polynomials (like <M d="x^3-2x+1"/>): continuous everywhere. No fractions, no square roots, nothing to break.</p>
-  <p><M d="e^x"/> (the exponential function from Lesson 3): continuous everywhere. Its graph is one smooth, rising curve that never breaks.</p>
-  <p><M d="\ln(x)"/> (the natural log from Lesson 4): continuous for all <M d="x>0"/>. (Recall it is only defined for positive inputs, since you cannot take the log of zero or a negative number; but everywhere it does exist, it is smooth.)</p>
+  <p><M d="e^x"/> (the exponential function from <Ref to="exponentials"/>): continuous everywhere. Its graph is one smooth, rising curve that never breaks.</p>
+  <p><M d="\ln(x)"/> (the natural log from <Ref to="logarithms"/>): continuous for all <M d="x>0"/>. (Recall it is only defined for positive inputs, since you cannot take the log of zero or a negative number; but everywhere it does exist, it is smooth.)</p>
   <p><strong>Rational functions</strong> (fraction with polynomials): continuous everywhere <em>except</em> where the denominator = 0.</p>
 </div>
 )},
@@ -691,7 +691,7 @@ answer:()=>(
   <p>(Technically, we can stop here  -  one failure is enough. But let's keep going to understand <em>what kind</em> of discontinuity this is.)</p>
 
   <p><strong>Check Condition 2: Does the limit exist?</strong></p>
-  <p>Even though <M d="f(3)"/> is undefined, the <em>limit</em> might still exist. Remember from Lesson 5: a limit is about where the function is <em>heading</em>, not where it actually is.</p>
+  <p>Even though <M d="f(3)"/> is undefined, the <em>limit</em> might still exist. Remember from <Ref to="limits"/>: a limit is about where the function is <em>heading</em>, not where it actually is.</p>
   <p>Factor the top: <M d="x^2-9=(x-3)(x+3)"/></p>
   <M d="f(x)=\frac{(x-3)(x+3)}{x-3}=x+3\quad\text{(when }x\neq 3\text{)}" block/>
   <M d="\lim_{x\to 3}(x+3)=6" block/>
@@ -734,7 +734,7 @@ answer:()=>(
 ]},
 
 // ═══════ LESSON 8 ═══════
-{id:8,module:"Derivatives",title:"The Derivative  -  What It Means",time:"12 min",content:[
+{slug:"derivative",module:"Derivatives",title:"The Derivative  -  What It Means",time:"12 min",content:[
 {type:"concept",label:"The Big Idea (No Formulas Yet)",render:()=>(
 <div>
   <p>The derivative is <strong>THE</strong> big idea in calculus. Everything before this was setup. Everything after builds on this. So let's take our time.</p>
@@ -749,14 +749,14 @@ answer:()=>(
   <p>At 2:00 PM you might be going 60 mph. At 2:05 PM you might be going 45 mph. The speed (derivative) changes from moment to moment  -  it tells you the <em>rate</em> of change at each instant.</p>
 
   <p><strong>On a graph, the derivative is the SLOPE of the curve at a specific point.</strong></p>
-  <p>For a straight line, the slope is the same everywhere (Lesson 2). But for a <em>curve</em>, the slope keeps changing  -  steeper here, flatter there, maybe even going downhill somewhere else. The derivative captures that changing slope.</p>
+  <p>For a straight line, the slope is the same everywhere (<Ref to="lines"/>). But for a <em>curve</em>, the slope keeps changing  -  steeper here, flatter there, maybe even going downhill somewhere else. The derivative captures that changing slope.</p>
 </div>
 )},
 {type:"concept",label:"Step 1: Slope Between Two Points (Rise/Run)",render:()=>(
 <div>
   <p>Let's work with <M d="f(x) = x^2"/>  -  a simple parabola. We want to find "how steep is this curve at <M d="x = 1"/>?"</p>
 
-  <p>We don't yet have a tool for curves. But we DO know how to find the slope of a <strong>straight line</strong>  -  rise over run (Lesson 2):</p>
+  <p>We don't yet have a tool for curves. But we DO know how to find the slope of a <strong>straight line</strong>  -  rise over run (<Ref to="lines"/>):</p>
   <M d="\text{slope} = \frac{\text{rise}}{\text{run}} = \frac{y_2 - y_1}{x_2 - x_1}" block/>
 
   <p>So here's the idea: pick two points on the curve and draw a straight line through them. That line's slope gives us an <em>approximation</em> of the curve's steepness.</p>
@@ -817,7 +817,7 @@ answer:()=>(
 )},
 {type:"concept",label:"Step 3: The Notation (Putting It in Math Language)",render:()=>(
 <div>
-  <p>Let's translate what we just did into math notation. We used Lesson 5's big idea  -  <strong>limits</strong>  -  without even realizing it!</p>
+  <p>Let's translate what we just did into math notation. We used <Ref to="limits"/>'s big idea  -  <strong>limits</strong>  -  without even realizing it!</p>
 
   <p>Here's what we did in words: "Start at <M d="x = 1"/>. Pick a second point that's <M d="h"/> units away (at <M d="x = 1 + h"/>). Compute rise/run. Then let <M d="h"/> shrink to 0."</p>
 
@@ -837,7 +837,7 @@ answer:()=>(
   <p>Now let the second point slide toward the first  -  let <M d="h \to 0"/>:</p>
   <M d="f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}" block/>
 
-  <p>This is the <strong>formal definition of the derivative</strong>. But notice  -  it's just rise/run from Lesson 2, combined with limits from Lesson 5. Nothing new, just combined.</p>
+  <p>This is the <strong>formal definition of the derivative</strong>. But notice  -  it's just rise/run from <Ref to="lines"/>, combined with limits from <Ref to="limits"/>. Nothing new, just combined.</p>
 
   <Box color="amber">
     <p><strong>Reading the notation:</strong></p>
@@ -867,7 +867,7 @@ answer:()=>(
   <M d="\frac{2xh + h^2}{h}" block/>
   <p>Factor out <M d="h"/> from the top:</p>
   <M d="= \frac{h(2x + h)}{h} = 2x + h" block/>
-  <p>(We can cancel the <M d="h"/>'s because <M d="h"/> is approaching 0 but isn't <em>exactly</em> 0  -  same reasoning as Lesson 5's limit problems.)</p>
+  <p>(We can cancel the <M d="h"/>'s because <M d="h"/> is approaching 0 but isn't <em>exactly</em> 0  -  same reasoning as <Ref to="limits"/>'s limit problems.)</p>
 
   <p><strong>Step 4: Take the limit as <M d="h \to 0"/>.</strong></p>
   <M d="\lim_{h \to 0}(2x + h) = 2x + 0 = 2x" block/>
@@ -915,7 +915,7 @@ answer:()=>(
     <p>Where <M d="f(x)"/> gets <strong>steeper</strong> → <M d="f'(x)"/> gets <strong>bigger in size</strong> (further from zero: more positive going uphill, more negative going downhill)</p>
   </Box>
 
-  <p>This relationship between a function and its derivative is the heart of calculus. In Lesson 15, we'll use this to find peaks and valleys of any curve.</p>
+  <p>This relationship between a function and its derivative is the heart of calculus. In <Ref to="first-derivative-test"/>, we'll use this to find peaks and valleys of any curve.</p>
 </div>
 )},
 {type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>0.25*x*x*x-x} dfn={(x)=>0.75*x*x-1} xMin={-3} xMax={3} yMin={-4} yMax={4} start={-2.2}
@@ -940,21 +940,21 @@ answer:()=>(
 
   <Box color="green">
     <p>✅ <M d="f'(x) = 3"/></p>
-    <p><strong>Why this makes sense:</strong> <M d="f(x) = 3x + 7"/> is a straight line with slope 3 (Lesson 2). A line has the <em>same slope everywhere</em>  -  it doesn't curve. So the derivative is just the constant 3, at every point. The derivative of a line IS its slope.</p>
-    <p><strong>Looking ahead:</strong> Computing derivatives using this 4-step limit process works, but it's slow. Imagine doing this for <M d="x^{10}"/>! In Lesson 9, we'll learn the <strong>Power Rule</strong>  -  a shortcut that lets you differentiate in seconds.</p>
+    <p><strong>Why this makes sense:</strong> <M d="f(x) = 3x + 7"/> is a straight line with slope 3 (<Ref to="lines"/>). A line has the <em>same slope everywhere</em>  -  it doesn't curve. So the derivative is just the constant 3, at every point. The derivative of a line IS its slope.</p>
+    <p><strong>Looking ahead:</strong> Computing derivatives using this 4-step limit process works, but it's slow. Imagine doing this for <M d="x^{10}"/>! In <Ref to="power-rule"/>, we'll learn the <strong>Power Rule</strong>  -  a shortcut that lets you differentiate in seconds.</p>
   </Box>
 </div>
 )},
 ]},
 
 // ═══════ LESSON 9 ═══════
-{id:9,module:"Derivatives",title:"Power Rule & Basic Rules",time:"9 min",content:[
+{slug:"power-rule",module:"Derivatives",title:"Power Rule & Basic Rules",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>In Lesson 8 we found derivatives with the limit definition. It works, but it is slow. Doing it for <M d="x^{10}"/> would take most of a page.</p>
+  <p>In <Ref to="derivative"/> we found derivatives with the limit definition. It works, but it is slow. Doing it for <M d="x^{10}"/> would take most of a page.</p>
   <p>The good news: there is a pattern hiding inside all those limit calculations, and once you see it you never need the slow method again. It is called the <strong>power rule</strong>, and it is the single most-used rule in the course.</p>
-  <p>Before trusting any shortcut, let's check it against something we already proved the hard way. In Lesson 8 we showed the slope of <M d="f(x)=x^2"/> works out to <M d="2x"/>. The power rule (next section) says: bring the 2 down in front and drop the exponent by 1, which gives <M d="2x^{1}=2x"/>. Exact same answer, in one second instead of a page. That match is why the rule is worth memorizing.</p>
-  <p>One example is a coincidence; two is a pattern. So let's also grind <M d="f(x)=x^3"/> through the slow Lesson 8 method and watch the same shortcut appear. We need <M d="(x+h)^3"/>, which multiplies out to <M d="x^3+3x^2h+3xh^2+h^3"/>. The rise is <M d="3x^2h+3xh^2+h^3"/>; divide by the run <M d="h"/> to get <M d="3x^2+3xh+h^2"/>; now let <M d="h\to 0"/> and the slope is <M d="3x^2"/>. Line the two cases up: <M d="x^2"/> gave <M d="2x^1"/>, and <M d="x^3"/> gives <M d="3x^2"/>. Each time the old exponent drops to the front and the new exponent is one smaller  -  exactly the power rule. (Proving it for <em>every</em> power at once needs a tool called the binomial theorem, more than we need here; but you have now watched the pattern appear twice from scratch instead of being handed it.)</p>
+  <p>Before trusting any shortcut, let's check it against something we already proved the hard way. In <Ref to="derivative"/> we showed the slope of <M d="f(x)=x^2"/> works out to <M d="2x"/>. The power rule (next section) says: bring the 2 down in front and drop the exponent by 1, which gives <M d="2x^{1}=2x"/>. Exact same answer, in one second instead of a page. That match is why the rule is worth memorizing.</p>
+  <p>One example is a coincidence; two is a pattern. So let's also grind <M d="f(x)=x^3"/> through the slow <Ref to="derivative"/> method and watch the same shortcut appear. We need <M d="(x+h)^3"/>, which multiplies out to <M d="x^3+3x^2h+3xh^2+h^3"/>. The rise is <M d="3x^2h+3xh^2+h^3"/>; divide by the run <M d="h"/> to get <M d="3x^2+3xh+h^2"/>; now let <M d="h\to 0"/> and the slope is <M d="3x^2"/>. Line the two cases up: <M d="x^2"/> gave <M d="2x^1"/>, and <M d="x^3"/> gives <M d="3x^2"/>. Each time the old exponent drops to the front and the new exponent is one smaller  -  exactly the power rule. (Proving it for <em>every</em> power at once needs a tool called the binomial theorem, more than we need here; but you have now watched the pattern appear twice from scratch instead of being handed it.)</p>
 </div>
 )},
 {type:"rule",render:()=>(
@@ -966,7 +966,7 @@ answer:()=>(
   <Box>
     <p><M d="x^5\to 5x^4"/> (bring 5 down, exponent becomes 4)</p>
     <p><M d="x^3\to 3x^2"/> (bring 3 down, exponent becomes 2)</p>
-    <p><M d="x^1\to 1\cdot x^0=1"/> (bring 1 down, exponent becomes 0, and <M d="x^0=1"/>, since any nonzero number to the power 0 is 1  -  from the exponent rules in Lesson 3)</p>
+    <p><M d="x^1\to 1\cdot x^0=1"/> (bring 1 down, exponent becomes 0, and <M d="x^0=1"/>, since any nonzero number to the power 0 is 1  -  from the exponent rules in <Ref to="exponentials"/>)</p>
     <p><M d="x^0=1"/>, which is a constant, so its derivative is <M d="0"/> (constants have zero rate of change)</p>
   </Box>
   <p><strong>Other rules:</strong></p>
@@ -1011,10 +1011,10 @@ answer:()=>(
 ]},
 
 // ═══════ LESSON 10 ═══════
-{id:10,module:"Derivatives",title:"Marginal Analysis",time:"10 min",content:[
+{slug:"marginal",module:"Derivatives",title:"Marginal Analysis",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>In Lesson 9, we learned the power rule  -  a fast way to find derivatives. But <em>why</em> do businesses care about derivatives? This lesson connects derivatives to real business decisions.</p>
+  <p>In <Ref to="power-rule"/>, we learned the power rule  -  a fast way to find derivatives. But <em>why</em> do businesses care about derivatives? This lesson connects derivatives to real business decisions.</p>
 
   <p>In business, the derivative gets a special name: the <strong>marginal</strong> function. "Marginal" just means "the next one"  -  what happens when you produce or sell <em>one more</em> unit?</p>
 
@@ -1036,7 +1036,7 @@ answer:()=>(
   <p><strong>The golden rule of profit:</strong> Profit is maximized when marginal revenue equals marginal cost:</p>
   <M d="R'(x) = C'(x)" block/>
   <p>Why? If <M d="R'(x) > C'(x)"/>, the next unit brings in more than it costs  -  keep producing! If <M d="R'(x) < C'(x)"/>, the next unit costs more than it earns  -  stop! The sweet spot is where they're exactly equal.</p>
-  <p>One honest fine print: profit can only <em>peak</em> where <M d="R'(x)=C'(x)"/>, but you should still confirm the point is a peak and not a valley. For the profit curves in this course (downward-opening arches), it always is, and Lesson 16 gives you the formal test.</p>
+  <p>One honest fine print: profit can only <em>peak</em> where <M d="R'(x)=C'(x)"/>, but you should still confirm the point is a peak and not a valley. For the profit curves in this course (downward-opening arches), it always is, and <Ref to="concavity"/> gives you the formal test.</p>
 </div>
 )},
 {type:"example",label:"Full Walkthrough: Marginal Cost vs. Exact Cost",render:()=>(
@@ -1044,7 +1044,7 @@ answer:()=>(
   <p><em>"A factory's cost function is <M d="C(x) = 1000 + 25x - 0.05x^2"/>. Find the marginal cost at <M d="x = 50"/> and compare it to the exact cost of producing item #51."</em></p>
 
   <p><strong>Part A: Find marginal cost (the derivative way).</strong></p>
-  <p>Differentiate <M d="C(x)"/> term by term using the power rule from Lesson 9:</p>
+  <p>Differentiate <M d="C(x)"/> term by term using the power rule from <Ref to="power-rule"/>:</p>
   <Box>
     <p><M d="1000"/> → constant → <M d="0"/></p>
     <p><M d="25x = 25x^1"/> → bring 1 down: <M d="1 \times 25 = 25"/>, new exponent <M d="1-1=0"/>: → <M d="25"/></p>
@@ -1076,7 +1076,7 @@ answer:()=>(
 
   <p><strong>Break-even</strong> is where Revenue = Cost. On the graph, it's where the two curves <em>cross</em>. Below that point, cost is higher than revenue (you're losing money). Above it, revenue exceeds cost (you're making money).</p>
 
-  <p><strong>Max profit</strong> is where the <em>gap</em> between Revenue and Cost is largest. How do we find it? The gap is <M d="P(x) = R(x) - C(x)"/>. The gap is largest where it stops growing, which is where <M d="P'(x) = 0"/>. (A flat spot where <M d="P'(x)=0"/> could in principle be a peak or a valley; here the profit curve opens downward, so its one flat spot is the peak. Lesson 15 shows how to tell a peak from a valley without graphing.)</p>
+  <p><strong>Max profit</strong> is where the <em>gap</em> between Revenue and Cost is largest. How do we find it? The gap is <M d="P(x) = R(x) - C(x)"/>. The gap is largest where it stops growing, which is where <M d="P'(x) = 0"/>. (A flat spot where <M d="P'(x)=0"/> could in principle be a peak or a valley; here the profit curve opens downward, so its one flat spot is the peak. <Ref to="first-derivative-test"/> shows how to tell a peak from a valley without graphing.)</p>
 
   <p>Let's find both:</p>
 
@@ -1151,21 +1151,21 @@ answer:()=>(
 
   <Box color="green">
     <p>✅ Produce <strong>1,000 units</strong> for maximum profit of <strong>$19,800</strong>.</p>
-    <p><strong>Connection to Lesson 8:</strong> The derivative told us the <em>rate</em> profit is changing. When that rate hits zero, profit has peaked - it's not going up anymore.</p>
+    <p><strong>Connection to <Ref to="derivative"/>:</strong> The derivative told us the <em>rate</em> profit is changing. When that rate hits zero, profit has peaked - it's not going up anymore.</p>
   </Box>
 </div>
 )},
 ]},
 
-{id:11,module:"Derivatives",title:"Derivatives of eˣ and ln(x)",time:"9 min",content:[
+{slug:"exp-log-derivatives",module:"Derivatives",title:"Derivatives of eˣ and ln(x)",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>In Lessons 3 and 4, we learned that <M d="e^x"/> and <M d="\ln(x)"/> are inverses  -  they undo each other. In Lesson 9, we learned the power rule for derivatives. But the power rule only works on <M d="x^n"/>  -  what about <M d="e^x"/> and <M d="\ln(x)"/>?</p>
+  <p>In Lessons <Ref to="exponentials" bare/> and <Ref to="logarithms" bare/>, we learned that <M d="e^x"/> and <M d="\ln(x)"/> are inverses  -  they undo each other. In <Ref to="power-rule"/>, we learned the power rule for derivatives. But the power rule only works on <M d="x^n"/>  -  what about <M d="e^x"/> and <M d="\ln(x)"/>?</p>
 
   <p>These two functions have their own special derivative rules, and they're beautifully simple.</p>
 
   <p><strong>Why is <M d="e"/> so special?</strong></p>
-  <p>Remember from Lesson 3: <M d="e \approx 2.71828"/> is the "continuous compounding" number. Here's what makes it magical for calculus:</p>
+  <p>Remember from <Ref to="exponentials"/>: <M d="e \approx 2.71828"/> is the "continuous compounding" number. Here's what makes it magical for calculus:</p>
 
   <Box color="amber">
     <p><M d="e^x"/> is its <strong>own derivative</strong>: if <M d="f(x) = e^x"/>, then <M d="f'(x) = e^x"/>. The rate at which it grows always equals its current value.</p>
@@ -1174,7 +1174,7 @@ answer:()=>(
 
   <p>Think about what that means: at the point where <M d="e^x = 5"/>, the function is growing at rate 5. Where <M d="e^x = 100"/>, it's growing at rate 100. The bigger it gets, the faster it grows  -  and the rate is always <em>exactly</em> equal to the value. No other base does this.</p>
 
-  <p>Let's verify with the limit definition from Lesson 8. At <M d="x = 0"/>, <M d="e^0 = 1"/>. The derivative should also be 1:</p>
+  <p>Let's verify with the limit definition from <Ref to="derivative"/>. At <M d="x = 0"/>, <M d="e^0 = 1"/>. The derivative should also be 1:</p>
   <M d="f'(0) = \lim_{h\to 0}\frac{e^{0+h}-e^0}{h} = \lim_{h\to 0}\frac{e^h - 1}{h}" block/>
   <Box>
     <p><M d="h = 0.1"/>: <M d="\tfrac{e^{0.1}-1}{0.1} = \tfrac{0.10517}{0.1} = 1.0517"/></p>
@@ -1182,7 +1182,7 @@ answer:()=>(
     <p><M d="h = 0.001"/>: <M d="1.0005"/>  -  heading toward exactly <strong>1</strong> ✓</p>
   </Box>
 
-  <p>That checked the slope only at <M d="x=0"/>. Here is why the slope equals the height at <em>every</em> point, using the exponent rule <M d="e^{x+h}=e^x\cdot e^h"/> from Lesson 3:</p>
+  <p>That checked the slope only at <M d="x=0"/>. Here is why the slope equals the height at <em>every</em> point, using the exponent rule <M d="e^{x+h}=e^x\cdot e^h"/> from <Ref to="exponentials"/>:</p>
   <M d="f'(x)=\lim_{h\to 0}\frac{e^{x+h}-e^x}{h}=\lim_{h\to 0}\frac{e^x e^h-e^x}{h}=\lim_{h\to 0}e^x\cdot\frac{e^h-1}{h}" block/>
   <p>The <M d="e^x"/> has no <M d="h"/> inside it, so it slides outside the limit as a constant:</p>
   <M d="f'(x)=e^x\cdot\lim_{h\to 0}\frac{e^h-1}{h}=e^x\cdot 1=e^x" block/>
@@ -1201,20 +1201,20 @@ answer:()=>(
 {type:"rule",render:()=>(
 <div>
   <M d="\frac{d}{dx}[e^x] = e^x" block/>
-  <p><M d="e^x"/> is its own derivative. The constant multiplier rule from Lesson 9 still applies:</p>
+  <p><M d="e^x"/> is its own derivative. The constant multiplier rule from <Ref to="power-rule"/> still applies:</p>
   <M d="\frac{d}{dx}[5e^x] = 5e^x\qquad\frac{d}{dx}[-3e^x] = -3e^x" block/>
 
   <M d="\frac{d}{dx}[\ln x] = \frac{1}{x}" block/>
   <p>The derivative of <M d="\ln(x)"/> is <M d="\tfrac{1}{x}"/>. Notice: the output of <M d="\ln"/> is a slow-growing curve, and <M d="\tfrac{1}{x}"/> is a shrinking function  -  the slope gets flatter and flatter as <M d="x"/> grows. This makes sense because <M d="\ln(x)"/> grows more and more slowly.</p>
   <p>Let's check it the same way we checked <M d="e^x"/>. At <M d="x=1"/> the formula predicts a slope of <M d="\tfrac{1}{1}=1"/>. Using the limit definition with <M d="\ln(1)=0"/>, we compute <M d="\tfrac{\ln(1+h)}{h}"/>: at <M d="h=0.1"/> it is <M d="0.953"/>, at <M d="h=0.01"/> it is <M d="0.995"/>, at <M d="h=0.001"/> it is <M d="0.9995"/>  -  heading toward exactly 1, which matches <M d="\tfrac{1}{x}"/> at <M d="x=1"/>. (The full reason the answer is <em>exactly</em> <M d="\tfrac1x"/> comes from <M d="\ln"/> being the inverse of <M d="e^x"/>: a function and its inverse have reciprocal-related slopes. More on that idea later.)</p>
 
-  <p><strong>Watch out:</strong> <M d="\ln(x)"/> is only defined for <M d="x > 0"/> (Lesson 4), so <M d="\tfrac{1}{x}"/> as a derivative also only applies for <M d="x > 0"/>.</p>
+  <p><strong>Watch out:</strong> <M d="\ln(x)"/> is only defined for <M d="x > 0"/> (<Ref to="logarithms"/>), so <M d="\tfrac{1}{x}"/> as a derivative also only applies for <M d="x > 0"/>.</p>
 </div>
 )},
 {type:"example",label:"Combining Power Rule with eˣ and ln",render:()=>(
 <div>
   <p>Differentiate <M d="f(x) = x^3 + 4e^x - 7\ln(x)"/>.</p>
-  <p>Take each term separately (sum rule from Lesson 9):</p>
+  <p>Take each term separately (sum rule from <Ref to="power-rule"/>):</p>
   <Box>
     <p><strong>Term 1: <M d="x^3"/></strong> → power rule: bring 3 down → <M d="3x^2"/></p>
     <p><strong>Term 2: <M d="4e^x"/></strong> → <M d="e^x"/> is its own derivative, 4 comes along → <M d="4e^x"/></p>
@@ -1242,7 +1242,7 @@ answer:()=>(
 )},
 ]},
 
-{id:12,module:"Derivatives",title:"Product & Quotient Rules",time:"10 min",content:[
+{slug:"product-quotient",module:"Derivatives",title:"Product & Quotient Rules",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>So far our derivative toolkit handles: individual terms (<M d="x^n"/>, <M d="e^x"/>, <M d="\ln x"/>) added or subtracted. But what about functions that are <strong>multiplied</strong> or <strong>divided</strong>?</p>
@@ -1250,7 +1250,7 @@ answer:()=>(
   <p><strong>Here's the trap.</strong> It's tempting to think: "derivative of a product = product of the derivatives." Let's test that with <M d="f(x) = x \cdot x = x^2"/>:</p>
   <Box>
     <p>If the "just multiply" rule worked: <M d="\tfrac{d}{dx}[x] \cdot \tfrac{d}{dx}[x] = 1 \cdot 1 = 1"/></p>
-    <p>But we <em>know</em> from Lesson 8: <M d="\tfrac{d}{dx}[x^2] = 2x"/></p>
+    <p>But we <em>know</em> from <Ref to="derivative"/>: <M d="\tfrac{d}{dx}[x^2] = 2x"/></p>
     <p><strong>1 ≠ 2x.</strong> The "just multiply" approach is <strong>wrong</strong>!</p>
   </Box>
   <p><strong>So what IS the right reasoning?</strong> Picture a rectangle whose width is <M d="u"/> and whose height is <M d="v"/>. Its area is <M d="u\cdot v"/>  -  exactly our product. Now nudge <M d="x"/> up a tiny bit. The width grows by a thin sliver (it grows at rate <M d="u'"/>) and the height grows by a thin sliver (rate <M d="v'"/>). The area picks up a strip along one side, a strip along the other, and a tiny corner square:</p>
@@ -1285,8 +1285,8 @@ answer:()=>(
   <p><M d="u = x^2"/> (first function), <M d="v = e^x"/> (second function)</p>
 
   <p><strong>Step 2: Find their derivatives.</strong></p>
-  <p><M d="u' = 2x"/> (power rule from Lesson 9)</p>
-  <p><M d="v' = e^x"/> (Lesson 11: <M d="e^x"/> is its own derivative)</p>
+  <p><M d="u' = 2x"/> (power rule from <Ref to="power-rule"/>)</p>
+  <p><M d="v' = e^x"/> (<Ref to="exp-log-derivatives"/>: <M d="e^x"/> is its own derivative)</p>
 
   <p><strong>Step 3: Apply <M d="u'v + uv'"/>.</strong></p>
   <M d="f'(x) = (2x)(e^x) + (x^2)(e^x)" block/>
@@ -1333,7 +1333,7 @@ answer:()=>(
 
   <p><strong>Step 2: Find their derivatives.</strong></p>
   <p><M d="u' = 1"/> (power rule: <M d="x^1 \to 1"/>)</p>
-  <p><M d="v' = \tfrac{1}{x}"/> (derivative of <M d="\ln x"/> from Lesson 11)</p>
+  <p><M d="v' = \tfrac{1}{x}"/> (derivative of <M d="\ln x"/> from <Ref to="exp-log-derivatives"/>)</p>
 
   <p><strong>Step 3: Apply product rule <M d="u'v + uv'"/>.</strong></p>
   <M d="f'(x) = (1) \cdot \ln(x) + (x) \cdot \frac{1}{x}" block/>
@@ -1351,10 +1351,10 @@ answer:()=>(
 )},
 ]},
 
-{id:13,module:"Derivatives",title:"The Chain Rule",time:"10 min",content:[
+{slug:"chain-rule",module:"Derivatives",title:"The Chain Rule",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>Our derivative toolkit now handles: single terms (power rule), <M d="e^x"/> and <M d="\ln(x)"/> (Lesson 11), products (product rule), and quotients (quotient rule). But there's one more situation we haven't covered.</p>
+  <p>Our derivative toolkit now handles: single terms (power rule), <M d="e^x"/> and <M d="\ln(x)"/> (<Ref to="exp-log-derivatives"/>), products (product rule), and quotients (quotient rule). But there's one more situation we haven't covered.</p>
 
   <p>What about <M d="(3x^2 + 1)^4"/>? Or <M d="e^{5x}"/>? Or <M d="\ln(x^2 + 1)"/>?</p>
 
@@ -1430,7 +1430,7 @@ answer:()=>(
   <p><strong>Step 3:</strong> Multiply by derivative of inside: <M d="u' = 5"/>.</p>
   <M d="f'(x) = e^{5x} \cdot 5 = 5e^{5x}" block/>
   <p><strong>Shortcut to remember:</strong> <M d="\tfrac{d}{dx}[e^{kx}] = k \cdot e^{kx}"/>. The constant in the exponent comes down as a multiplier.</p>
-  <p>This comes up constantly in continuous compounding from Lesson 3. If <M d="A = Pe^{rt}"/>, then <M d="\tfrac{dA}{dt} = Pr \cdot e^{rt}"/>. Here <M d="P"/> and <M d="r"/> are constants: <M d="P"/> is a constant multiplier, so it rides along untouched, and the inside is <M d="rt"/>, whose derivative with respect to <M d="t"/> is <M d="r"/>. That <M d="r"/> is the "derivative of the inside," so it comes out front.</p>
+  <p>This comes up constantly in continuous compounding from <Ref to="exponentials"/>. If <M d="A = Pe^{rt}"/>, then <M d="\tfrac{dA}{dt} = Pr \cdot e^{rt}"/>. Here <M d="P"/> and <M d="r"/> are constants: <M d="P"/> is a constant multiplier, so it rides along untouched, and the inside is <M d="rt"/>, whose derivative with respect to <M d="t"/> is <M d="r"/>. That <M d="r"/> is the "derivative of the inside," so it comes out front.</p>
 </div>
 )},
 {type:"practice",render:()=>(<span>Differentiate <M d="f(x) = \ln(x^2 + 5)"/></span>),
@@ -1450,13 +1450,13 @@ answer:()=>(
 
   <Box color="green">
     <p>✅ <M d="f'(x) = \dfrac{2x}{x^2+5}"/></p>
-    <p><strong>Full toolkit recap:</strong> Power rule (L9) → <M d="e^x"/>, <M d="\ln x"/> (L11) → product/quotient (L12) → chain rule (L13). You now have every differentiation tool you need for this course!</p>
+    <p><strong>Full toolkit recap:</strong> Power rule (<Ref to="power-rule"/>) → <M d="e^x"/>, <M d="\ln x"/> (<Ref to="exp-log-derivatives"/>) → product/quotient (<Ref to="product-quotient"/>) → chain rule (<Ref to="chain-rule"/>). You now have every differentiation tool you need for this course!</p>
   </Box>
 </div>
 )},
 ]},
 
-{id:14,module:"Derivatives",title:"Elasticity of Demand",time:"10 min",content:[
+{slug:"elasticity",module:"Derivatives",title:"Elasticity of Demand",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>This lesson ties together everything from the Derivatives module into a powerful business concept.</p>
@@ -1481,7 +1481,7 @@ answer:()=>(
   <p>Let's break this apart:</p>
   <Box>
     <p><M d="f(p)"/> = the current demand (how many units you sell at price <M d="p"/>)</p>
-    <p><M d="f'(p)"/> = the derivative of demand  -  how fast demand is changing with respect to price (this is where your derivative skills from Lessons 9-13 come in!)</p>
+    <p><M d="f'(p)"/> = the derivative of demand  -  how fast demand is changing with respect to price (this is where your derivative skills from Lessons <Ref to="power-rule" bare/> to <Ref to="chain-rule" bare/> come in!)</p>
     <p><M d="p"/> = the current price</p>
     <p>The negative sign makes <M d="E"/> positive (since <M d="f'(p)"/> is typically negative  -  higher price means less demand).</p>
   </Box>
@@ -1554,7 +1554,7 @@ answer:()=>(
 )},
 ]},
 
-{id:15,module:"Applications of Derivatives",title:"First Derivative Test",time:"10 min",content:[
+{slug:"first-derivative-test",module:"Applications of Derivatives",title:"First Derivative Test",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>This is where derivatives start paying off. The derivative <M d="f'(x)"/> is the <strong>slope</strong> at every point, and the slope tells you whether the function is climbing or falling. That lets you find the <strong>peaks and valleys</strong> of any curve.</p>
@@ -1607,11 +1607,11 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:16,module:"Applications of Derivatives",title:"Second Derivative & Concavity",time:"8 min",content:[
+{slug:"concavity",module:"Applications of Derivatives",title:"Second Derivative & Concavity",time:"8 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>The first derivative told you if a curve goes up or down. The <strong>second derivative</strong> <M d="f''(x)"/> (the derivative of the derivative) tells you how the curve <em>bends</em>. This is called <strong>concavity</strong>.</p>
-  <p>Here is <em>why</em> the sign of <M d="f''"/> tells you the bend, not just a trick to memorize. <M d="f''"/> is the derivative of <M d="f'"/>, and Lesson 15 taught us that when a derivative is positive, the thing it measures is <em>increasing</em>. So <M d="f''(x)>0"/> means the slope <M d="f'"/> is increasing. Picture walking left to right through the bottom of a bowl: the slope starts steeply negative (falling hard), eases up to 0 at the very bottom, then grows steeply positive (rising hard). The slope climbs the whole way, and that steady rise in the slope is exactly what curls the curve upward into a bowl. <M d="f''(x)<0"/> is the mirror image: the slope is dropping (from positive, through 0, to negative), which arches the curve over into a dome.</p>
+  <p>Here is <em>why</em> the sign of <M d="f''"/> tells you the bend, not just a trick to memorize. <M d="f''"/> is the derivative of <M d="f'"/>, and <Ref to="first-derivative-test"/> taught us that when a derivative is positive, the thing it measures is <em>increasing</em>. So <M d="f''(x)>0"/> means the slope <M d="f'"/> is increasing. Picture walking left to right through the bottom of a bowl: the slope starts steeply negative (falling hard), eases up to 0 at the very bottom, then grows steeply positive (rising hard). The slope climbs the whole way, and that steady rise in the slope is exactly what curls the curve upward into a bowl. <M d="f''(x)<0"/> is the mirror image: the slope is dropping (from positive, through 0, to negative), which arches the curve over into a dome.</p>
   <p>Two quick ways to remember it:</p>
   <Box>
     <p><strong>Concave UP</strong> (<M d="f''(x)>0"/>): the curve holds water like a bowl or a smile. The slope is increasing.</p>
@@ -1630,7 +1630,7 @@ answer:()=>(<div>
   <Box>
     <p>If <M d="f''(c)>0"/> (bowl) then <M d="c"/> is a local <strong>MIN</strong>.</p>
     <p>If <M d="f''(c)<0"/> (dome) then <M d="c"/> is a local <strong>MAX</strong>.</p>
-    <p>If <M d="f''(c)=0"/> the bend is too flat to tell a peak from a valley from a pause, so this shortcut gives no answer. When that happens, fall back to the first derivative sign chart from Lesson 15.</p>
+    <p>If <M d="f''(c)=0"/> the bend is too flat to tell a peak from a valley from a pause, so this shortcut gives no answer. When that happens, fall back to the first derivative sign chart from <Ref to="first-derivative-test"/>.</p>
   </Box>
   <p>Intuition: at the bottom of a bowl you are at a minimum; at the top of a dome you are at a maximum.</p>
 </div>
@@ -1668,7 +1668,7 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:17,module:"Applications of Derivatives",title:"Absolute Extrema",time:"7 min",content:[
+{slug:"absolute-extrema",module:"Applications of Derivatives",title:"Absolute Extrema",time:"7 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>A <strong>local</strong> max is just the top of one hill. An <strong>absolute</strong> max is the single highest point over an <em>entire</em> interval, the tallest hill in the whole mountain range.</p>
@@ -1700,7 +1700,7 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:18,module:"Applications of Derivatives",title:"Optimization",time:"10 min",content:[
+{slug:"optimization",module:"Applications of Derivatives",title:"Optimization",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>Optimization is the headline reason business students take calculus. The question is always the same: <strong>"What choice makes profit as big as possible, or cost as small as possible?"</strong></p>
@@ -1766,14 +1766,14 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:19,module:"Integration",title:"Antiderivatives",time:"8 min",content:[
+{slug:"antiderivatives",module:"Integration",title:"Antiderivatives",time:"8 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>Every operation in math has a reverse. Addition undoes subtraction. Squaring undoes square-rooting. <strong>Integration is the reverse of differentiation.</strong></p>
   <p>Differentiation asks: "I have a position, what is the speed?" Integration asks the opposite: "I know the speed at every moment, what was the position?" In business terms: if you know the <em>rate</em> money flows in (marginal revenue), integration recovers the <em>total</em> (total revenue).</p>
   <p>An <strong>antiderivative</strong> of <M d="f(x)"/> is any function whose derivative is <M d="f(x)"/>. We write it with the integral sign:</p>
   <M d="\int f(x)\,dx = F(x)+C" block/>
-  <p>Read it as "the integral of <M d="f(x)"/>." That stretched-S shape <M d="\int"/> is literally an old-style letter "S," chosen because an integral is really a <strong>S</strong>um. You cannot see the sum yet, but in Lesson 21 the integral becomes a sum of areas and the symbol pays off. The <M d="dx"/> tells you which variable you are integrating with respect to (here, <M d="x"/>); it is also a leftover reminder of <em>width</em>  -  a tiny step along the <M d="x"/>-axis  -  which is the picture that matters for area in Lesson 21 and for the bit of algebra in the next lesson.</p>
+  <p>Read it as "the integral of <M d="f(x)"/>." That stretched-S shape <M d="\int"/> is literally an old-style letter "S," chosen because an integral is really a <strong>S</strong>um. You cannot see the sum yet, but in <Ref to="definite-integral"/> the integral becomes a sum of areas and the symbol pays off. The <M d="dx"/> tells you which variable you are integrating with respect to (here, <M d="x"/>); it is also a leftover reminder of <em>width</em>  -  a tiny step along the <M d="x"/>-axis  -  which is the picture that matters for area in <Ref to="definite-integral"/> and for the bit of algebra in the next lesson.</p>
   <Box>
     <p><strong>Why the mysterious <M d="+C"/>?</strong> The derivative of <M d="x^2"/> is <M d="2x"/>. But so is the derivative of <M d="x^2+7"/>, and <M d="x^2-100"/>. A constant always differentiates to 0, so when you reverse the process you cannot know which constant was there. We cover all of them at once by writing <M d="+C"/>.</p>
   </Box>
@@ -1787,7 +1787,7 @@ answer:()=>(<div>
   <p><strong>Two special functions reverse to themselves or to a log:</strong></p>
   <M d="\int e^x\,dx=e^x+C\qquad\int\frac{1}{x}\,dx=\ln|x|+C" block/>
   <p>That <M d="\tfrac{1}{x}"/> case is exactly the <M d="n=-1"/> the power rule forbids (you cannot divide by <M d="n+1=0"/>), which is why it gets its own rule.</p>
-  <p>Why the bars in <M d="\ln|x|"/>? The function <M d="\tfrac{1}{x}"/> works for negative <M d="x"/> too, but a plain <M d="\ln"/> only accepts positive inputs (Lesson 4). The absolute value <M d="|x|"/> strips off any minus sign so the log is always fed a positive number, letting the answer cover both sides.</p>
+  <p>Why the bars in <M d="\ln|x|"/>? The function <M d="\tfrac{1}{x}"/> works for negative <M d="x"/> too, but a plain <M d="\ln"/> only accepts positive inputs (<Ref to="logarithms"/>). The absolute value <M d="|x|"/> strips off any minus sign so the log is always fed a positive number, letting the answer cover both sides.</p>
   <p><strong>Helpers:</strong> constants slide out front, and you can integrate term by term:</p>
   <M d="\int k\,f(x)\,dx=k\int f(x)\,dx\qquad\int[f+g]\,dx=\int f\,dx+\int g\,dx" block/>
 </div>
@@ -1818,7 +1818,7 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:20,module:"Integration",title:"Substitution",time:"9 min",content:[
+{slug:"substitution",module:"Integration",title:"Substitution",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>The power rule and the <M d="e^x"/> rule only handle simple, "bare" expressions. But what about <M d="\int e^{5x}\,dx"/> or <M d="\int 2x(x^2+1)^3\,dx"/>, where one function is buried <em>inside</em> another?</p>
@@ -1844,7 +1844,7 @@ answer:()=>(<div>
   <M d="\int (x^2+1)^3\,(2x\,dx)=\int u^3\,du=\frac{u^4}{4}+C" block/>
   <p><strong>Step 4: Substitute back</strong> <M d="u=x^2+1"/>:</p>
   <M d="\frac{(x^2+1)^4}{4}+C" block/>
-  <p><strong>Check it the Lesson 19 way, by differentiating.</strong> The derivative of <M d="\tfrac{(x^2+1)^4}{4}"/> is, by the chain rule, <M d="\tfrac{4(x^2+1)^3}{4}"/> times the derivative of the inside <M d="2x"/>, which is <M d="(x^2+1)^3\cdot 2x"/>  -  exactly the integrand we started with. Watching the chain rule hand back that <M d="2x"/> is watching <em>why</em> substitution works.</p>
+  <p><strong>Check it the <Ref to="antiderivatives"/> way, by differentiating.</strong> The derivative of <M d="\tfrac{(x^2+1)^4}{4}"/> is, by the chain rule, <M d="\tfrac{4(x^2+1)^3}{4}"/> times the derivative of the inside <M d="2x"/>, which is <M d="(x^2+1)^3\cdot 2x"/>  -  exactly the integrand we started with. Watching the chain rule hand back that <M d="2x"/> is watching <em>why</em> substitution works.</p>
   <Box color="green"><p>Answer: <M d="\tfrac{(x^2+1)^4}{4}+C"/>. The hard nested integral became a simple power-rule problem once we renamed the inside.</p></Box>
 </div>
 )},
@@ -1860,11 +1860,11 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:21,module:"Integration",title:"The Definite Integral",time:"7 min",content:[
+{slug:"definite-integral",module:"Integration",title:"The Definite Integral",time:"7 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>So far our integrals gave back a <em>function</em> (plus <M d="C"/>). A <strong>definite integral</strong> has two numbers attached and gives back a single <em>number</em>: the <strong>area</strong> under the curve between those two points.</p>
-  <p><strong>Wait  -  why would an integral measure <em>area</em>, when in Lesson 19 the same <M d="\int"/> symbol meant "find the antiderivative"?</strong> Start with the simplest case. If money flows in at a steady $50 per day for 4 days, the total collected is <M d="50\times 4=\$200"/>  -  which is exactly the area of a rectangle 4 wide and 50 tall, sitting under the flat line <M d="y=50"/>. Total = height times width = area. When the rate is a curve instead of a flat line, picture many skinny rectangles doing the same job, so the total collected is the area under the rate curve. (The next lesson reveals why the antiderivative from Lesson 19 and this area are the same thing  -  that is the big payoff.)</p>
+  <p><strong>Wait  -  why would an integral measure <em>area</em>, when in <Ref to="antiderivatives"/> the same <M d="\int"/> symbol meant "find the antiderivative"?</strong> Start with the simplest case. If money flows in at a steady $50 per day for 4 days, the total collected is <M d="50\times 4=\$200"/>  -  which is exactly the area of a rectangle 4 wide and 50 tall, sitting under the flat line <M d="y=50"/>. Total = height times width = area. When the rate is a curve instead of a flat line, picture many skinny rectangles doing the same job, so the total collected is the area under the rate curve. (The next lesson reveals why the antiderivative from <Ref to="antiderivatives"/> and this area are the same thing  -  that is the big payoff.)</p>
   <M d="\int_a^b f(x)\,dx = \text{signed area from }x=a\text{ to }x=b" block/>
   <p>The bottom number <M d="a"/> is where you start, the top number <M d="b"/> is where you stop.</p>
   <p><strong>Why "signed" area?</strong> Area above the x-axis counts as positive; area below counts as negative. So an integral can come out negative, which makes sense in business: area under a profit-rate curve that has dipped below zero represents losses.</p>
@@ -1894,10 +1894,10 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:22,module:"Integration",title:"Fundamental Theorem of Calculus",time:"9 min",content:[
+{slug:"ftc",module:"Integration",title:"Fundamental Theorem of Calculus",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
-  <p>This is the single most important result in all of calculus. It connects the two halves of the subject: <strong>antiderivatives</strong> (Lesson 19) and <strong>area</strong> (Lesson 21). It says they are secretly the same thing.</p>
+  <p>This is the single most important result in all of calculus. It connects the two halves of the subject: <strong>antiderivatives</strong> (<Ref to="antiderivatives"/>) and <strong>area</strong> (<Ref to="definite-integral"/>). It says they are secretly the same thing.</p>
   <p>The astonishing claim: to find the exact area under a curve, you do <em>not</em> need the slow way. (The slow way is to slice the region into many thin rectangles, add up all their areas, then repeat with more and more, thinner and thinner rectangles to creep toward the true area, an endless process.) Instead, you just find an antiderivative and subtract two values: plug in the top limit, plug in the bottom limit, subtract.</p>
   <M d="\int_a^b f(x)\,dx = F(b)-F(a)" block/>
   <p>where <M d="F"/> is any antiderivative of <M d="f"/>. The <M d="+C"/> cancels out in the subtraction  -  using <M d="F(x)+C"/> gives <M d="(F(b)+C)-(F(a)+C)=F(b)-F(a)"/>, and the <M d="C"/>'s cancel  -  so we drop it for definite integrals.</p>
@@ -1941,7 +1941,7 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:23,module:"Business Applications",title:"Area Between Curves",time:"8 min",content:[
+{slug:"area-between-curves",module:"Business Applications",title:"Area Between Curves",time:"8 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>A single integral gives the area between a curve and the x-axis. But business problems usually compare <em>two</em> curves: revenue versus cost, demand versus supply, this year's sales versus last year's. The gap between them is what matters, and that gap is an <strong>area between curves</strong>.</p>
@@ -1977,7 +1977,7 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:24,module:"Business Applications",title:"Consumer & Producer Surplus",time:"10 min",content:[
+{slug:"surplus",module:"Business Applications",title:"Consumer & Producer Surplus",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>This is one of the most useful ideas in microeconomics, and it is pure area-between-curves. It measures the hidden "bonus" value that buyers and sellers walk away with at the market price.</p>
@@ -2029,11 +2029,11 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{id:25,module:"Business Applications",title:"Income Streams & Present Value",time:"10 min",content:[
+{slug:"income-streams",module:"Business Applications",title:"Income Streams & Present Value",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
   <p>This lesson ties together everything: integration, the exponential function, and a core finance idea. It answers a question every investor asks: <strong>what is a future stream of money worth today?</strong></p>
-  <p>A dollar arriving five years from now is worth less than a dollar today, because today's dollar could be invested and grow. In Lesson 3 we found that under continuous compounding a dollar invested today grows to <M d="e^{rt}"/> dollars after <M d="t"/> years. Present value runs that in reverse: if a dollar today becomes <M d="e^{rt}"/> dollars later, then a dollar that arrives later is worth only <M d="\tfrac{1}{e^{rt}}=e^{-rt}"/> dollars today  -  you <em>divide</em> by the growth factor to undo the growth. That dividing-back is what <strong>discounting</strong> means, and <M d="e^{-rt}"/> is called the discount factor. The minus sign in the exponent is simply growth run backwards.</p>
+  <p>A dollar arriving five years from now is worth less than a dollar today, because today's dollar could be invested and grow. In <Ref to="exponentials"/> we found that under continuous compounding a dollar invested today grows to <M d="e^{rt}"/> dollars after <M d="t"/> years. Present value runs that in reverse: if a dollar today becomes <M d="e^{rt}"/> dollars later, then a dollar that arrives later is worth only <M d="\tfrac{1}{e^{rt}}=e^{-rt}"/> dollars today  -  you <em>divide</em> by the growth factor to undo the growth. That dividing-back is what <strong>discounting</strong> means, and <M d="e^{-rt}"/> is called the discount factor. The minus sign in the exponent is simply growth run backwards.</p>
   <p>What does earning money "continuously" mean? Picture income flowing like water from a tap, instead of arriving in monthly lumps. A <strong>continuous income stream</strong> has a flow rate <M d="f(t)"/>  -  dollars per year at the instant <M d="t"/>, just as speed is miles per hour at an instant. Over a tiny slice of time <M d="dt"/> years you actually receive <M d="f(t)\,dt"/> dollars (rate times time, the same way speed times time gives distance). Each tiny payment is then pulled back to today's value by multiplying by <M d="e^{-rt}"/>, giving <M d="f(t)\,e^{-rt}\,dt"/>. Adding up every tiny slice from now (<M d="t=0"/>) to year <M d="T"/> is an integral:</p>
   <M d="PV=\int_0^T f(t)\,e^{-rt}\,dt" block/>
   <p>Here <M d="r"/> is the annual rate (as a decimal) and <M d="T"/> is the number of years.</p>
@@ -2052,7 +2052,7 @@ answer:()=>(<div>
   <M d="\int_0^T R\,e^{-rt}\,dt=R\cdot\Big[\frac{e^{-rt}}{-r}\Big]_0^T" block/>
   <p>Plug in top minus bottom:</p>
   <M d="=R\left(\frac{e^{-rT}}{-r}-\frac{e^{0}}{-r}\right)=R\cdot\frac{1-e^{-rT}}{r}" block/>
-  <p>That is the formula in the rule above. The <M d="e^{-rt}"/> integrates with the substitution from Lesson 20  -  and you can confirm the antiderivative by differentiating <M d="\tfrac{e^{-rt}}{-r}"/>, which hands back <M d="e^{-rt}"/>.</p>
+  <p>That is the formula in the rule above. The <M d="e^{-rt}"/> integrates with the substitution from <Ref to="substitution"/>  -  and you can confirm the antiderivative by differentiating <M d="\tfrac{e^{-rt}}{-r}"/>, which hands back <M d="e^{-rt}"/>.</p>
 </div>
 )},
 {type:"practice",render:()=>(<span>An investment pays $10,000 per year continuously for 5 years. At a 6% discount rate, what is its present value?</span>),
@@ -2075,7 +2075,7 @@ answer:()=>(<div>
 }
 
 export const QUIZ = {
- "1": [
+ "functions": [
   {
    "q": "The lesson describes a function as a 'machine for numbers.' What does this machine do?",
    "choices": [
@@ -2125,7 +2125,7 @@ export const QUIZ = {
    ]
   }
  ],
- "2": [
+ "lines": [
   {
    "q": "How is slope defined in the lesson?",
    "choices": [
@@ -2175,7 +2175,7 @@ export const QUIZ = {
    ]
   }
  ],
- "3": [
+ "exponentials": [
   {
    "q": "An exponent is repeated multiplication. What is $2^5$?",
    "choices": [
@@ -2225,7 +2225,7 @@ export const QUIZ = {
    ]
   }
  ],
- "4": [
+ "logarithms": [
   {
    "q": "What is the natural log, $\\ln(x)$, according to the lesson?",
    "choices": [
@@ -2275,7 +2275,7 @@ export const QUIZ = {
    ]
   }
  ],
- "5": [
+ "limits": [
   {
    "q": "A limit asks one main question. Which is it?",
    "choices": [
@@ -2325,7 +2325,7 @@ export const QUIZ = {
    ]
   }
  ],
- "6": [
+ "infinite-limits": [
   {
    "q": "For $\\lim_{x\\to\\infty}\\frac{3x^2+1}{5x^2-x}$, the top and bottom have the same degree. What is the limit?",
    "choices": [
@@ -2375,7 +2375,7 @@ export const QUIZ = {
    ]
   }
  ],
- "7": [
+ "continuity": [
   {
    "q": "The three-part continuity test at $x=c$ requires that $f(c)$ is defined and that $\\lim_{x\\to c}f(x)$ exists. What is the third condition?",
    "choices": [
@@ -2425,7 +2425,7 @@ export const QUIZ = {
    ]
   }
  ],
- "8": [
+ "derivative": [
   {
    "q": "On a graph, the derivative of a function at a point tells you the curve's:",
    "choices": [
@@ -2475,7 +2475,7 @@ export const QUIZ = {
    ]
   }
  ],
- "9": [
+ "power-rule": [
   {
    "q": "Using the power rule, what is the derivative of $x^5$?",
    "choices": [
@@ -2525,7 +2525,7 @@ export const QUIZ = {
    ]
   }
  ],
- "10": [
+ "marginal": [
   {
    "q": "If $C(x)$ is the total cost to make $x$ items, what does marginal cost $C'(x)$ tell you?",
    "choices": [
@@ -2575,7 +2575,7 @@ export const QUIZ = {
    ]
   }
  ],
- "11": [
+ "exp-log-derivatives": [
   {
    "q": "What is the derivative of $e^x$?",
    "choices": [
@@ -2625,7 +2625,7 @@ export const QUIZ = {
    ]
   }
  ],
- "12": [
+ "product-quotient": [
   {
    "q": "Using the product rule, what is the derivative of $f(x)=x^2 e^x$?",
    "choices": [
@@ -2675,7 +2675,7 @@ export const QUIZ = {
    ]
   }
  ],
- "13": [
+ "chain-rule": [
   {
    "q": "The chain rule says the derivative of $f(g(x))$ equals:",
    "choices": [
@@ -2725,7 +2725,7 @@ export const QUIZ = {
    ]
   }
  ],
- "14": [
+ "elasticity": [
   {
    "q": "When elasticity $E > 1$ (elastic), what should a business do to increase revenue?",
    "choices": [
@@ -2775,7 +2775,7 @@ export const QUIZ = {
    ]
   }
  ],
- "15": [
+ "first-derivative-test": [
   {
    "q": "What is a critical number of a function $f$?",
    "choices": [
@@ -2825,7 +2825,7 @@ export const QUIZ = {
    ]
   }
  ],
- "16": [
+ "concavity": [
   {
    "q": "If $f''(x)>0$ on an interval, the curve is shaped like a:",
    "choices": [
@@ -2875,7 +2875,7 @@ export const QUIZ = {
    ]
   }
  ],
- "17": [
+ "absolute-extrema": [
   {
    "q": "On a closed interval $[a,b]$, where can the absolute max and min of a smooth curve occur?",
    "choices": [
@@ -2925,7 +2925,7 @@ export const QUIZ = {
    ]
   }
  ],
- "18": [
+ "optimization": [
   {
    "q": "Revenue is $R(p)=600p-20p^2$. Which price maximizes it (solve $R'(p)=0$)?",
    "choices": [
@@ -2975,7 +2975,7 @@ export const QUIZ = {
    ]
   }
  ],
- "19": [
+ "antiderivatives": [
   {
    "q": "Integration is best described as the reverse of which operation?",
    "choices": [
@@ -3025,7 +3025,7 @@ export const QUIZ = {
    ]
   }
  ],
- "20": [
+ "substitution": [
   {
    "q": "Substitution is the reverse of which differentiation rule?",
    "choices": [
@@ -3075,7 +3075,7 @@ export const QUIZ = {
    ]
   }
  ],
- "21": [
+ "definite-integral": [
   {
    "q": "A definite integral $\\int_a^b f(x)\\,dx$ gives back what?",
    "choices": [
@@ -3125,7 +3125,7 @@ export const QUIZ = {
    ]
   }
  ],
- "22": [
+ "ftc": [
   {
    "q": "The Fundamental Theorem of Calculus says $\\int_a^b f(x)\\,dx$ equals what?",
    "choices": [
@@ -3175,7 +3175,7 @@ export const QUIZ = {
    ]
   }
  ],
- "23": [
+ "area-between-curves": [
   {
    "q": "To find the area between two curves on $[a,b]$, what do you integrate?",
    "choices": [
@@ -3225,7 +3225,7 @@ export const QUIZ = {
    ]
   }
  ],
- "24": [
+ "surplus": [
   {
    "q": "On a graph, consumer surplus is the area that is:",
    "choices": [
@@ -3275,7 +3275,7 @@ export const QUIZ = {
    ]
   }
  ],
- "25": [
+ "income-streams": [
   {
    "q": "To find the present value of a dollar arriving later, you multiply it by:",
    "choices": [

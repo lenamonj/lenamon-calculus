@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { QUIZ } from './content.jsx';
+import { LESSONS } from './App.jsx';
 
 // Flatten the per-lesson quiz map into one list of {lessonId, i, q} records so
 // every question can be asserted individually.
@@ -8,8 +9,8 @@ const questions = Object.entries(QUIZ).flatMap(([lessonId, qs]) =>
 );
 
 describe('QUIZ data integrity', () => {
-  it('contains exactly 75 questions', () => {
-    expect(questions.length).toBe(75);
+  it('contains exactly 3 questions per lesson', () => {
+    expect(questions.length).toBe(LESSONS.length * 3);
   });
 
   it.each(questions)(

@@ -209,7 +209,7 @@ function Box({ children, color = "indigo" }) {
 }
 
 // ---------- Interactive lab pieces ----------
-export function Plot({ curves = [], lines = [], points = [], xMin, xMax, yMin, yMax, width = 640, height = 300 }) {
+export function Plot({ curves = [], lines = [], points = [], rects = [], xMin, xMax, yMin, yMax, width = 640, height = 300 }) {
   const pad = 40;
   const { toX, toY } = plotProjection({ xMin, xMax, yMin, yMax, width, height, pad });
   // Plot draws a single polyline that bridges off-range gaps (breakOnGap:false),
@@ -240,6 +240,10 @@ export function Plot({ curves = [], lines = [], points = [], xMin, xMax, yMin, y
       ))}
       <line x1={toX(xMin)} y1={toY(0)} x2={toX(xMax)} y2={toY(0)} stroke="#475569" strokeWidth="1.5" />
       <line x1={toX(0)} y1={toY(yMin)} x2={toX(0)} y2={toY(yMax)} stroke="#475569" strokeWidth="1.5" />
+      {rects.map((r, i) => {
+        const x0 = toX(r.x), x1 = toX(r.x + r.w), yTop = toY(Math.max(r.y, 0)), yBot = toY(Math.min(r.y, 0));
+        return <rect key={`r${i}`} x={x0} y={yTop} width={Math.max(0, x1 - x0)} height={Math.max(0, yBot - yTop)} fill={r.fill || "rgba(230,180,90,0.22)"} stroke={r.stroke || "rgba(230,180,90,0.85)"} strokeWidth="1" />;
+      })}
       {curves.map((cv, i) => {
         const pts = sample(cv.f);
         if (!pts.length) return null;
@@ -257,7 +261,7 @@ export function Plot({ curves = [], lines = [], points = [], xMin, xMax, yMin, y
       ))}
       {points.map((pt, i) => (
         <g key={`p${i}`} style={{ transition: "all 0.05s linear" }}>
-          <circle cx={toX(pt.x)} cy={toY(pt.y)} r={pt.r || 7} fill={pt.color || "#f59e0b"} stroke="#0a0e1a" strokeWidth="2.5" />
+          <circle cx={toX(pt.x)} cy={toY(pt.y)} r={pt.r || 7} fill={pt.open ? "#0a0e1a" : (pt.color || "#f59e0b")} stroke={pt.open ? (pt.color || "#f59e0b") : "#0a0e1a"} strokeWidth="2.5" />
           {pt.label && <text x={toX(pt.x) + (pt.lx != null ? pt.lx : 11)} y={toY(pt.y) + (pt.ly != null ? pt.ly : -13)} fill={pt.color || "#f59e0b"} fontSize="11" fontWeight="700" fontFamily="Inter,system-ui" stroke="#0a0e1a" strokeWidth="3.6" paintOrder="stroke" strokeLinejoin="round" textAnchor={pt.anchor || "start"}>{pt.label}</text>}
         </g>
       ))}
@@ -309,6 +313,28 @@ export function ParamExplorer({ xMin, xMax, yMin, yMax, min, max, step = 0.05, s
       {spec.formula && <div style={{ textAlign: "center", margin: "10px 0 0" }}><M d={spec.formula} block /></div>}
       <Slider value={v} min={min} max={max} step={step} onChange={setV} ariaLabel={`Parameter ${name}`} ariaValueText={`${name} = ${v.toFixed(2)}`} labelLeft={`${name} = ${v.toFixed(2)}`} labelRight={hint || "drag to change it"} />
       {spec.caption && <div aria-live="polite" style={{ marginTop: 6, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>{spec.caption}</div>}
+    </div>
+  );
+}
+
+// Riemann sum lab: left-endpoint rectangles under a curve. The rectangles are
+// the calculus in this picture, so they are the one gold element.
+export function RiemannExplorer({ fn, a, b, exact, xMin, xMax, yMin, yMax, start = 4, maxN = 60, intro }) {
+  const [n, setN] = useState(start);
+  const dx = (b - a) / n;
+  const rects = Array.from({ length: n }, (_, i) => ({ x: a + i * dx, w: dx, y: fn(a + i * dx) }));
+  const sum = rects.reduce((s, r) => s + r.y * dx, 0);
+  const gap = exact - sum;
+  const word = n === 1 ? "rectangle" : "rectangles";
+  const readout = `${n} ${word}: left sum ${sum.toFixed(3)}, exact area ${exact.toFixed(3)}, gap ${gap.toFixed(3)}`;
+  return (
+    <div>
+      {intro && <p style={{ marginBottom: 12 }}>{intro}</p>}
+      <Plot curves={[{ f: fn, color: "#818cf8" }]} rects={rects} xMin={xMin} xMax={xMax} yMin={yMin} yMax={yMax} />
+      <Slider value={n} min={1} max={maxN} step={1} onChange={(v) => setN(Math.round(v))} ariaLabel="Number of rectangles" ariaValueText={readout} labelLeft={`n = ${n}`} labelRight="drag to add rectangles" />
+      <div aria-live="polite" style={{ marginTop: 8, padding: "12px 16px", background: "rgba(8,11,20,0.45)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 12, fontSize: 14.5 }}>
+        With <strong>{n}</strong> left-endpoint {word} the rectangles add up to <strong>{sum.toFixed(3)}</strong>. The exact area is <strong>{exact.toFixed(3)}</strong>, so the gap is <strong>{gap.toFixed(3)}</strong>. {n >= maxN ? "Even this many leaves a sliver. Only the limit closes it completely." : "Add rectangles and watch the gap shrink."}
+      </div>
     </div>
   );
 }
@@ -370,7 +396,15 @@ function Ic({ d, size = 13, sw = 2.2, style }) {
   );
 }
 
-const L = buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer });
+const L = buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer, RiemannExplorer, Ref }).map((l, i) => ({ ...l, id: i + 1 }));
+export const LESSONS = L;
+const LESSON_NO = new Map(L.map((l) => [l.slug, l.id]));
+// Cross-references resolve at render time, so inserting a lesson never breaks a number.
+export function Ref({ to, bare = false }) {
+  const n = LESSON_NO.get(to);
+  if (n == null) throw new Error(`Unknown lesson reference: ${to}`);
+  return bare ? <>{n}</> : <>Lesson {n}</>;
+}
 
 const MODULES=[...new Set(L.map(l=>l.module))];
 const tc={concept:{bg:"rgba(129,140,248,0.09)",border:"#818cf8",icon:ICONS.bulb,label:"Core Concept"},rule:{bg:"rgba(251,191,36,0.09)",border:"#fbbf24",icon:ICONS.sigma,label:"Key Formulas"},example:{bg:"rgba(52,211,153,0.09)",border:"#34d399",icon:ICONS.chart,label:"Worked Example"},interactive:{bg:"rgba(34,211,238,0.09)",border:"#22d3ee",icon:ICONS.sliders,label:"Play with it"},practice:{bg:"rgba(244,114,182,0.09)",border:"#f472b6",icon:ICONS.pencil,label:"Your Turn"}};
@@ -834,7 +868,7 @@ export function Course({session,onSignOut,onBrand}){
   const allDone=done.size>=L.length;
   const certDate=(completedAt?new Date(completedAt):new Date()).toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
   const fullName=session?`${session.firstName||""} ${session.lastName||""}`.trim():"";
-  const lessonQuiz=QUIZ[lesson.id];
+  const lessonQuiz=QUIZ[lesson.slug];
   const hasQuiz=!!(lessonQuiz&&lessonQuiz.length);
   const passed=done.has(idx);
   const toggle=(i)=>setAns(p=>({...p,[`${idx}-${i}`]:!p[`${idx}-${i}`]}));
@@ -1504,7 +1538,7 @@ function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onS
         <Reveal>
           <div className="lp-proof-grid">
             <div style={{background:PANEL_BG,border:HAIR,borderTop:"1px solid rgba(255,255,255,0.09)",borderRadius:16,padding:"28px 30px"}}>
-              <div style={{fontFamily:MONO,fontSize:11,color:"#5b6880",marginBottom:14}}>from Lesson 10, Marginal Analysis</div>
+              <div style={{fontFamily:MONO,fontSize:11,color:"#5b6880",marginBottom:14}}>from Lesson {LESSON_NO.get("marginal")}, Marginal Analysis</div>
               <p className="prose" style={{fontSize:16.5,lineHeight:1.75,color:"#dde4ee",margin:"0 0 18px"}}>
                 A factory's revenue is <M d={"R(q)=120q-4q^2"}/> dollars. What does one more unit earn at <M d={"q=10"}/>?
               </p>
