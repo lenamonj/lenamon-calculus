@@ -2150,22 +2150,32 @@ answer:()=>(
 )},
 ]},
 
-{slug:"first-derivative-test",module:"Applications of Derivatives",title:"First Derivative Test",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"first-derivative-test",module:"Applications of Derivatives",title:"First Derivative Test",time:"11 min",content:[
+{type:"concept",label:"Peaks, Valleys, and Flat Spots",render:()=>(
 <div>
   <p>This is where derivatives start paying off. The derivative <M d="f'(x)"/> is the <strong>slope</strong> at every point, and the slope tells you whether the function is climbing or falling. That lets you find the <strong>peaks and valleys</strong> of any curve.</p>
-  <p>Picture a hike up a hill and back down. While you climb, your path slopes upward (positive slope). At the very top, for one instant, the ground is flat (slope = 0). On the way down, the path slopes downward (negative slope).</p>
+  <p>Picture a hike up a hill and back down. While you climb, your path slopes upward (positive slope). At the very top, for one instant, the ground is flat (slope 0). On the way down, the path slopes downward (negative slope).</p>
   <p>So the top of the hill, the maximum, is exactly where the slope <strong>switches from positive to negative</strong>. A valley bottom (minimum) is where the slope switches from negative to positive.</p>
   <Box>
-    <p><strong>Critical number:</strong> an <M d="x"/>-value in the domain of <M d="f"/> where <M d="f'(x)=0"/> (a flat spot) or where <M d="f'(x)"/> does not exist. These are the only places a peak or valley can hide. (The "in the domain" part matters: <M d="\tfrac{1}{x}"/> has no derivative at <M d="x=0"/>, but <M d="x=0"/> is not in its domain at all, so it is not a critical number, there is simply no point there.)</p>
-    <p>What does "<M d="f'(x)"/> does not exist" mean? It means the curve has no single, clear slope at that <M d="x"/>. The usual cause is a sharp corner. Picture the pointed bottom of a V (the graph of the absolute value <M d="|x|"/>): walk into the point from the left and you are heading downhill, then leave it on the right heading uphill, so right at the tip the curve cannot settle on one slope. Yet the tip is still a genuine valley, which is why corner points join the flat spots on the suspect list.</p>
+    <p><strong>Critical number:</strong> an <M d="x"/>-value in the domain of <M d="f"/> where <M d="f'(x)=0"/> (a flat spot) or where <M d="f'(x)"/> does not exist. These are the only places a peak or valley can hide. (The "in the domain" part matters: <M d="\tfrac{1}{x}"/> has no derivative at <M d="x=0"/>, but <M d="x=0"/> is not in its domain at all, so it is not a critical number; there is simply no point there.)</p>
+    <p>What does "<M d="f'(x)"/> does not exist" mean? It means the curve has no single, clear slope at that <M d="x"/>. The usual cause is a sharp corner, like the pointed bottom of the V in <Ref to="tangent-lines"/>: walk into the point from the left heading downhill, leave it on the right heading uphill, and right at the tip the curve cannot settle on one slope. Yet the tip is still a genuine valley, which is why corner points join the flat spots on the suspect list.</p>
   </Box>
   <Graph fn={(x)=>x*x*x-3*x+2} xMin={-3} xMax={3} yMin={-2} yMax={6}
     highlights={[{x:-1,y:4,label:"flat top, a peak",color:"#ef4444",lo:[-30,-10]},{x:1,y:0,label:"flat bottom, a valley",color:"#10b981",lo:[8,16]}]}
     caption="At the peak and the valley, the curve is momentarily flat (slope = 0)"/>
 </div>
 )},
-{type:"rule",render:()=>(<div><p><M d="f'(x)>0"/> means increasing. <M d="f'(x)<0"/> means decreasing. <M d="f'(x)=0"/> (or <M d="f'(x)"/> undefined) means a critical number, the only kind of spot where a peak or valley can sit.</p><p>A quick word on "local": it means highest or lowest compared with the points right next to it, not necessarily on the whole graph. Walk left to right across each critical number and watch the sign of <M d="f'"/>:</p><p><span style={{color:"#4ade80",fontWeight:700}}>positive</span> then <span style={{color:"#f87171",fontWeight:700}}>negative</span> means a local <strong>MAX</strong> (up then down, a peak).</p><p><span style={{color:"#f87171",fontWeight:700}}>negative</span> then <span style={{color:"#4ade80",fontWeight:700}}>positive</span> means a local <strong>MIN</strong> (down then up, a valley).</p><p>No sign change means it is not a peak or valley, just a flat pause. (You will meet a real flat pause in the next lesson: <M d="x^3"/> has a flat spot at <M d="x=0"/> that is neither a peak nor a valley.)</p></div>)},
+{type:"rule",label:"The First Derivative Test",render:()=>(
+<div>
+  <p><M d="f'(x)>0"/> means <M d="f"/> is increasing. <M d="f'(x)<0"/> means decreasing. <M d="f'(x)=0"/> (or <M d="f'(x)"/> undefined) marks a critical number, the only kind of spot where a peak or valley can sit.</p>
+  <p>A quick word on "local": it means highest or lowest compared with the points right next to it, not necessarily on the whole graph. Walk left to right across each critical number and watch the sign of <M d="f'"/>:</p>
+  <Box>
+    <p><span style={{color:"#4ade80",fontWeight:700}}>positive</span> then <span style={{color:"#f87171",fontWeight:700}}>negative</span> means a local <strong>MAX</strong> (up, then down: a peak).</p>
+    <p><span style={{color:"#f87171",fontWeight:700}}>negative</span> then <span style={{color:"#4ade80",fontWeight:700}}>positive</span> means a local <strong>MIN</strong> (down, then up: a valley).</p>
+    <p>No sign change means it is not a peak or valley, just a flat pause. (You will meet a real flat pause in the second practice problem, and another in <Ref to="concavity"/>.)</p>
+  </Box>
+</div>
+)},
 {type:"example",label:"The 4-Step Recipe",render:()=>(
 <div>
   <p>Find and classify the critical numbers of <M d="f(x)=x^2-6x+5"/>.</p>
@@ -2178,10 +2188,10 @@ answer:()=>(
     <p><M d="x=0"/>: <M d="f'(0)=2(0)-6=-6"/>, which is <span style={{color:"#f87171",fontWeight:700}}>negative</span> (falling)</p>
     <p><M d="x=4"/>: <M d="f'(4)=2(4)-6=2"/>, which is <span style={{color:"#4ade80",fontWeight:700}}>positive</span> (rising)</p>
   </Box>
-  <p>Why does one test point settle the whole stretch? Between two neighboring critical numbers the slope never passes through 0  -  those zero-crossings <em>are</em> the critical numbers, and we already found them all. A slope that never touches 0 cannot flip from positive to negative without crossing it, so its sign stays the same across the entire interval. That is why checking a single convenient point (here <M d="x=0"/>) stands in for every <M d="x"/> in the stretch.</p>
+  <p>Why does one test point settle the whole stretch? Between two neighboring critical numbers the slope never passes through 0; those zero-crossings <em>are</em> the critical numbers, and we already found them all. A slope that never touches 0 cannot flip from positive to negative without crossing it, so its sign stays the same across the entire interval. That is why checking a single convenient point (here <M d="x=0"/>) stands in for every <M d="x"/> in the stretch.</p>
   <SignChart intervals={[{sign:"-"},{sign:"+"}]} criticals={["3"]}/>
   <p><strong>Step 4: Read the switch.</strong> The slope goes negative then positive, so <M d="x=3"/> is a local <strong>MIN</strong>. Its value is <M d="f(3)=9-18+5=-4"/>.</p>
-  <Box color="green"><p>Local minimum of <M d="-4"/> at <M d="x=3"/>. That is the bottom of a parabola, exactly as expected.</p></Box>
+  <Box color="green"><p>Local minimum of <M d="-4"/> at <M d="x=3"/>. That is the bottom of a parabola, exactly as expected, and exactly the vertex <Ref to="quadratics"/> would have given. The first derivative test finds vertices without a vertex formula, and it works on curves that are not parabolas at all.</p></Box>
 </div>
 )},
 {type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>x*x*x-3*x+2} dfn={(x)=>3*x*x-3} xMin={-3} xMax={3} yMin={-2} yMax={6} start={-2.1}
@@ -2191,7 +2201,7 @@ answer:()=>(<div>
   <p><strong>Step 1: Find <M d="f'(x)"/>.</strong></p>
   <Box><p><M d="x^3"/>: bring 3 down, giving <M d="3x^{3-1}=3x^2"/></p><p><M d="-12x"/>: this is <M d="-12x^1"/>, giving <M d="-12(1)x^0=-12"/></p></Box>
   <M d="f'(x)=3x^2-12" block/>
-  <p><strong>Step 2: Set equal to 0.</strong> Factor out the 3, then use difference of squares (any <M d="a^2-b^2"/> factors into <M d="(a-b)(a+b)"/>, so <M d="x^2-4=(x-2)(x+2)"/>):</p>
+  <p><strong>Step 2: Set equal to 0.</strong> Factor out the 3, then use the difference of squares from <Ref to="quadratics"/> (<M d="x^2-4=(x-2)(x+2)"/>):</p>
   <M d="3(x^2-4)=3(x-2)(x+2)=0\;\Rightarrow\;x=2,\;x=-2" block/>
   <p><strong>Step 3: Sign chart.</strong> Test a point to the left, between, and right of the critical numbers:</p>
   <Box><p><M d="x=-3"/>: <M d="3(9)-12=15"/>, positive</p><p><M d="x=0"/>: <M d="0-12=-12"/>, negative</p><p><M d="x=3"/>: <M d="3(9)-12=15"/>, positive</p></Box>
@@ -2201,19 +2211,37 @@ answer:()=>(<div>
   <Graph fn={(x)=>x*x*x-12*x} xMin={-4} xMax={4} yMin={-20} yMax={20} highlights={[{x:-2,y:16,label:"MAX",color:"#ef4444",lo:[8,-10]},{x:2,y:-16,label:"MIN",color:"#10b981",lo:[8,16]}]}/>
   <Box color="green"><p>Local max = 16 at <M d="x=-2"/>. Local min = <M d="-16"/> at <M d="x=2"/>.</p></Box>
 </div>)},
+{type:"practice",render:()=>(<span>Find and classify the critical numbers of <M d="f(x)=x^4-4x^3"/>. One of them is a trap.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Derivative.</strong> <M d="f'(x)=4x^3-12x^2"/>.</p>
+  <p><strong>Step 2: Set to 0.</strong> Pull out the common factor <M d="4x^2"/> (<Ref to="quadratics"/>):</p>
+  <M d="4x^2(x-3)=0\;\Rightarrow\;x=0\;\text{ or }\;x=3" block/>
+  <p>Two critical numbers, 0 and 3.</p>
+  <p><strong>Step 3: Sign chart.</strong> Three stretches, so three test points:</p>
+  <Box>
+    <p><M d="x=-1"/>: <M d="4(-1)^2(-1-3)=4(1)(-4)=-16"/>, negative</p>
+    <p><M d="x=1"/>: <M d="4(1)(1-3)=-8"/>, negative</p>
+    <p><M d="x=4"/>: <M d="4(16)(4-3)=64"/>, positive</p>
+  </Box>
+  <SignChart intervals={[{sign:"-"},{sign:"-"},{sign:"+"}]} criticals={["0","3"]}/>
+  <p><strong>Step 4: Read the switches.</strong> At <M d="x=0"/> the slope is negative on both sides: <strong>no sign change</strong>. The curve flattens for an instant and then keeps falling. That is the trap: <M d="x=0"/> is a critical number but <em>not</em> a peak or a valley, just a flat pause. At <M d="x=3"/> the slope goes negative then positive, so it is a local <strong>MIN</strong>, with <M d="f(3)=81-108=-27"/>.</p>
+  <p>Why did 0 fool us? Look at the factor <M d="4x^2"/>: it is a square, so it is never negative, and it touches zero at <M d="x=0"/> without crossing. Only the factor <M d="(x-3)"/> actually changes sign. A repeated factor in <M d="f'"/> is the usual fingerprint of a flat pause.</p>
+  <Graph fn={(x)=>x*x*x*x-4*x*x*x} xMin={-1.5} xMax={4.5} yMin={-30} yMax={12} highlights={[{x:0,y:0,label:"flat pause, not a peak",color:"#f59e0b",lo:[8,-10]},{x:3,y:-27,label:"MIN",color:"#10b981",lo:[10,4]}]} caption="The curve flattens at x = 0 but keeps descending; the only true extremum is the valley at x = 3."/>
+  <Box color="green"><p>Local min of <M d="-27"/> at <M d="x=3"/>. The critical number <M d="x=0"/> is a flat pause, not an extremum. Setting <M d="f'=0"/> finds the <em>suspects</em>; the sign chart is the trial.</p></Box>
+</div>)},
 ]},
 
-{slug:"concavity",module:"Applications of Derivatives",title:"Second Derivative & Concavity",time:"8 min",content:[
-{type:"concept",render:()=>(
+{slug:"concavity",module:"Applications of Derivatives",title:"Second Derivative & Concavity",time:"11 min",content:[
+{type:"concept",label:"How a Curve Bends",render:()=>(
 <div>
-  <p>The first derivative told you if a curve goes up or down. The <strong>second derivative</strong> <M d="f''(x)"/> (the derivative of the derivative) tells you how the curve <em>bends</em>. This is called <strong>concavity</strong>.</p>
+  <p>The first derivative told you whether a curve goes up or down. The <strong>second derivative</strong> <M d="f''(x)"/> (the derivative of the derivative, read "f double prime") tells you how the curve <em>bends</em>. This is called <strong>concavity</strong>. In the other notation it is written <M d="\tfrac{d^2y}{dx^2}"/>, "dee two y dee x squared," which just means "differentiate twice."</p>
   <p>Here is <em>why</em> the sign of <M d="f''"/> tells you the bend, not just a trick to memorize. <M d="f''"/> is the derivative of <M d="f'"/>, and <Ref to="first-derivative-test"/> taught us that when a derivative is positive, the thing it measures is <em>increasing</em>. So <M d="f''(x)>0"/> means the slope <M d="f'"/> is increasing. Picture walking left to right through the bottom of a bowl: the slope starts steeply negative (falling hard), eases up to 0 at the very bottom, then grows steeply positive (rising hard). The slope climbs the whole way, and that steady rise in the slope is exactly what curls the curve upward into a bowl. <M d="f''(x)<0"/> is the mirror image: the slope is dropping (from positive, through 0, to negative), which arches the curve over into a dome.</p>
   <p>Two quick ways to remember it:</p>
   <Box>
     <p><strong>Concave UP</strong> (<M d="f''(x)>0"/>): the curve holds water like a bowl or a smile. The slope is increasing.</p>
     <p><strong>Concave DOWN</strong> (<M d="f''(x)<0"/>): the curve spills water like a dome or a frown. The slope is decreasing.</p>
   </Box>
-  <p>Why business people care: concavity is the difference between "growing faster and faster" and "growing but slowing down." A profit curve that is concave down is losing momentum even while still rising.</p>
+  <p>Why business people care: concavity is the difference between "growing faster and faster" and "growing but slowing down." A profit curve that is concave down is losing momentum even while still rising. And in <Ref to="tangent-lines"/> you saw that a tangent estimate on the square root curve overshot; that is concavity too. A concave-down curve sits below its tangents, so tangent estimates run high; a concave-up curve sits above them, so estimates run low.</p>
   <p>A point where concavity flips (from bowl to dome or back) is an <strong>inflection point</strong>. To find one, first solve <M d="f''(x)=0"/> (or find where <M d="f''"/> does not exist) to get the <em>candidates</em>, then confirm the bend really does switch sign on the two sides. Getting <M d="f''=0"/> alone is not enough: for <M d="f(x)=x^4"/> we get <M d="f''(0)=0"/>, yet the curve is a bowl on both sides of 0, so that point is not an inflection point.</p>
   <Graph fns={[(x)=>x*x,(x)=>-x*x]} xMin={-3} xMax={3} yMin={-6} yMax={6}
     label={<><span style={{color:"#818cf8"}}>Concave up</span> <span style={{color:"#e2e8f0"}}>vs</span> <span style={{color:"#f472b6"}}>concave down</span></>}
@@ -2229,6 +2257,7 @@ answer:()=>(<div>
     <p>If <M d="f''(c)=0"/> the bend is too flat to tell a peak from a valley from a pause, so this shortcut gives no answer. When that happens, fall back to the first derivative sign chart from <Ref to="first-derivative-test"/>.</p>
   </Box>
   <p>Intuition: at the bottom of a bowl you are at a minimum; at the top of a dome you are at a maximum.</p>
+  <p><strong>Inflection points:</strong> candidates where <M d="f''(x)=0"/> or does not exist; confirmed only if <M d="f''"/> changes sign there.</p>
 </div>
 )},
 {type:"example",label:"The Second Derivative Test in Action",render:()=>(
@@ -2245,16 +2274,39 @@ answer:()=>(<div>
   <p>Where does <M d="f(x)=x^3"/> change concavity?</p>
   <p><strong>Step 1:</strong> First derivative: <M d="f'(x)=3x^2"/>.</p>
   <p><strong>Step 2:</strong> Second derivative: <M d="f''(x)=6x"/>.</p>
-  <p><strong>Step 3:</strong> Set <M d="f''(x)=0"/>: <M d="6x=0\Rightarrow x=0"/>.</p>
+  <p><strong>Step 3:</strong> Set <M d="f''(x)=0"/>: <M d="6x=0"/>, so <M d="x=0"/>.</p>
   <p><strong>Step 4:</strong> Check each side. For <M d="x<0"/>, <M d="f''"/> is negative (dome). For <M d="x>0"/>, <M d="f''"/> is positive (bowl). The bend flips, so <M d="x=0"/> is an inflection point.</p>
+  <p>Notice also that <M d="f'(0)=0"/>, so 0 is a critical number, yet the second derivative test gives <M d="f''(0)=0"/>: no verdict. The sign chart settles it: <M d="f'(x)=3x^2"/> is positive on both sides, so there is no sign change. <M d="x^3"/> has a flat pause at the origin, the same pattern as the trap in <Ref to="first-derivative-test"/>.</p>
   <Box color="green"><p>Inflection point at <M d="(0,0)"/>: the curve switches from concave down to concave up there.</p></Box>
+</div>
+)},
+{type:"concept",label:"Putting It Together: Sketching a Curve",render:()=>(
+<div>
+  <p>With <M d="f'"/> and <M d="f''"/> you can sketch a curve accurately without plotting dozens of points. The first derivative locates the peaks and valleys; the second locates where the bending changes. Take <M d="f(x)=x^3-3x^2"/>.</p>
+  <p><strong>Critical numbers.</strong> <M d="f'(x)=3x^2-6x=3x(x-2)"/>, zero at <M d="x=0"/> and <M d="x=2"/>.</p>
+  <p><strong>Classify them.</strong> <M d="f''(x)=6x-6"/>. At 0: <M d="f''(0)=-6<0"/>, a dome, so a local <strong>max</strong> with <M d="f(0)=0"/>. At 2: <M d="f''(2)=6>0"/>, a bowl, so a local <strong>min</strong> with <M d="f(2)=8-12=-4"/>.</p>
+  <p><strong>Inflection.</strong> <M d="f''(x)=0"/> at <M d="x=1"/>; negative to the left, positive to the right, so the bend flips there, at height <M d="f(1)=1-3=-2"/>.</p>
+  <p>Now assemble the story in a table, reading left to right:</p>
+  <Box>
+    <p><M d="x<0"/>: rising (<M d="f'>0"/>), concave down (<M d="f''<0"/>). Climbing toward a rounded peak.</p>
+    <p><M d="x=0"/>: local max, height 0.</p>
+    <p><M d="0<x<1"/>: falling, concave down. Dropping away from the peak, steepening.</p>
+    <p><M d="x=1"/>: inflection point, height <M d="-2"/>. Steepest descent; the bend flips.</p>
+    <p><M d="1<x<2"/>: falling, concave up. Still dropping, but easing off toward a rounded valley.</p>
+    <p><M d="x=2"/>: local min, height <M d="-4"/>.</p>
+    <p><M d="x>2"/>: rising, concave up. Climbing faster and faster.</p>
+  </Box>
+  <Graph fn={(x)=>x*x*x-3*x*x} xMin={-1.5} xMax={3.5} yMin={-6} yMax={4}
+    highlights={[{x:0,y:0,label:"max (0, 0)",color:"#ef4444",lo:[-60,-10]},{x:1,y:-2,label:"inflection (1, -2)",color:"#f59e0b",lo:[10,4]},{x:2,y:-4,label:"min (2, -4)",color:"#10b981",lo:[10,14]}]}
+    caption="Three numbers from two derivatives pin down the whole shape: a peak at 0, the bend flipping at 1, a valley at 2."/>
+  <p>For a business curve, the inflection point is often the most interesting spot of all: it is where growth stops accelerating and starts decelerating, the moment a product's sales are still rising but the rise has begun to slow.</p>
 </div>
 )},
 {type:"practice",render:()=>(<span><M d="f(x)=2x^3-9x^2+12x"/>. Classify the critical numbers using the Second Derivative Test.</span>),
 answer:()=>(<div>
   <p><strong>Step 1: First derivative, set to 0.</strong></p>
   <M d="f'(x)=6x^2-18x+12" block/>
-  <p>Divide by 6: <M d="x^2-3x+2=(x-1)(x-2)=0"/>, so critical numbers are <M d="x=1"/> and <M d="x=2"/>.</p>
+  <p>Divide by 6: <M d="x^2-3x+2=(x-1)(x-2)=0"/>, so the critical numbers are <M d="x=1"/> and <M d="x=2"/>.</p>
   <p><strong>Step 2: Second derivative.</strong></p>
   <M d="f''(x)=12x-18" block/>
   <p><strong>Step 3: Plug each critical number into <M d="f''"/>.</strong></p>
@@ -2262,10 +2314,24 @@ answer:()=>(<div>
   <Graph fn={(x)=>2*x*x*x-9*x*x+12*x} xMin={-0.5} xMax={3.5} yMin={-1} yMax={7} highlights={[{x:1,y:5,label:"MAX",color:"#ef4444",lo:[-35,-14]},{x:2,y:4,label:"MIN",color:"#10b981",lo:[10,-14]}]}/>
   <Box color="green"><p>Local max = 5 at <M d="x=1"/>. Local min = 4 at <M d="x=2"/>. The test reads the bend directly, no sign chart needed.</p></Box>
 </div>)},
+{type:"practice",render:()=>(<span>For <M d="f(x)=x^3-6x^2+9x+1"/>, find and classify the critical numbers, find the inflection point, and state where the curve is concave up and concave down.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Critical numbers.</strong> <M d="f'(x)=3x^2-12x+9=3(x^2-4x+3)=3(x-1)(x-3)"/>, so <M d="x=1"/> and <M d="x=3"/>.</p>
+  <p><strong>Step 2: Second derivative.</strong> <M d="f''(x)=6x-12"/>.</p>
+  <p><strong>Step 3: Classify.</strong></p>
+  <Box>
+    <p><M d="f''(1)=6-12=-6<0"/>: dome, local <strong>MAX</strong>. Height <M d="f(1)=1-6+9+1=5"/>.</p>
+    <p><M d="f''(3)=18-12=6>0"/>: bowl, local <strong>MIN</strong>. Height <M d="f(3)=27-54+27+1=1"/>.</p>
+  </Box>
+  <p><strong>Step 4: Inflection.</strong> <M d="6x-12=0"/> at <M d="x=2"/>. For <M d="x<2"/>, <M d="f''<0"/> (concave down); for <M d="x>2"/>, <M d="f''>0"/> (concave up). The bend flips, so <M d="(2,\,f(2))=(2,\,3)"/> is the inflection point (<M d="f(2)=8-24+18+1=3"/>).</p>
+  <p>Sanity check: the inflection point sits exactly halfway between the max at <M d="x=1"/> and the min at <M d="x=3"/>, and its height 3 is halfway between 5 and 1. For any cubic, the inflection point is the center of symmetry, so this is no coincidence.</p>
+  <Graph fn={(x)=>x*x*x-6*x*x+9*x+1} xMin={-0.5} xMax={4.5} yMin={-1} yMax={7} highlights={[{x:1,y:5,label:"MAX (1, 5)",color:"#ef4444",lo:[-70,-10]},{x:2,y:3,label:"inflection (2, 3)",color:"#f59e0b",lo:[10,-10]},{x:3,y:1,label:"MIN (3, 1)",color:"#10b981",lo:[10,14]}]}/>
+  <Box color="green"><p>Max 5 at <M d="x=1"/>; min 1 at <M d="x=3"/>; inflection at <M d="(2,3)"/>; concave down for <M d="x<2"/>, concave up for <M d="x>2"/>.</p></Box>
+</div>)},
 ]},
 
-{slug:"absolute-extrema",module:"Applications of Derivatives",title:"Absolute Extrema",time:"7 min",content:[
-{type:"concept",render:()=>(
+{slug:"absolute-extrema",module:"Applications of Derivatives",title:"Absolute Extrema",time:"10 min",content:[
+{type:"concept",label:"The Tallest Hill in the Whole Range",render:()=>(
 <div>
   <p>A <strong>local</strong> max is just the top of one hill. An <strong>absolute</strong> max is the single highest point over an <em>entire</em> interval, the tallest hill in the whole mountain range.</p>
   <Box><p>First, two pieces of notation used below. <M d="[a,b]"/> with square brackets means all the <M d="x"/>-values from <M d="a"/> to <M d="b"/> <strong>including</strong> the two endpoints. <M d="(a,b)"/> with round brackets means the same stretch but <strong>without</strong> the endpoints (strictly between them). Square brackets include the ends, round brackets exclude them.</p></Box>
@@ -2274,14 +2340,31 @@ answer:()=>(<div>
   <p>Why only those spots? Take any point strictly inside the interval that is not a critical number. There the slope is not zero, so the curve is tilted through it: step a little one way and you go higher, step the other way and you go lower. A tilted interior point therefore always has both a taller and a shorter neighbor, so it can never be the absolute highest or lowest. That leaves only the flat-or-cornered spots (the critical numbers) and the two endpoints, where you simply run out of room to step any further.</p></Box>
 </div>
 )},
-{type:"rule",render:()=>(<div><p>To find absolute extrema of <M d="f"/> on <M d="[a,b]"/>:</p><p>1. Find the critical numbers inside <M d="(a,b)"/>.</p><p>2. Make a list: those critical numbers plus the two endpoints <M d="a"/> and <M d="b"/>.</p><p>3. Evaluate <M d="f"/> at every value on the list.</p><p>4. The biggest output is the absolute max; the smallest is the absolute min.</p></div>)},
+{type:"rule",label:"The Closed Interval Method",render:()=>(<div><p>To find the absolute extrema of <M d="f"/> on <M d="[a,b]"/>:</p><p>1. Find the critical numbers inside <M d="(a,b)"/>.</p><p>2. Make a list: those critical numbers plus the two endpoints <M d="a"/> and <M d="b"/>.</p><p>3. Evaluate <M d="f"/> at every value on the list.</p><p>4. The biggest output is the absolute max; the smallest is the absolute min.</p><p>No sign chart and no second derivative are needed: you are comparing actual heights, not classifying shapes.</p></div>)},
 {type:"example",label:"Why Endpoints Matter",render:()=>(
 <div>
   <p>Absolute extrema of <M d="f(x)=x^2"/> on <M d="[1,4]"/>.</p>
-  <p><strong>Step 1:</strong> <M d="f'(x)=2x=0\Rightarrow x=0"/>. But 0 is <em>not</em> inside <M d="[1,4]"/>, so we ignore it. No critical numbers in range.</p>
+  <p><strong>Step 1:</strong> <M d="f'(x)=2x=0"/> gives <M d="x=0"/>. But 0 is <em>not</em> inside <M d="[1,4]"/>, so we ignore it. No critical numbers in range.</p>
   <p><strong>Step 2:</strong> The only suspects are the endpoints, <M d="x=1"/> and <M d="x=4"/>.</p>
   <Box><p><M d="f(1)=1"/></p><p><M d="f(4)=16"/></p></Box>
   <Box color="green"><p>Absolute min = 1 at <M d="x=1"/>. Absolute max = 16 at <M d="x=4"/>. Both happen at endpoints, where the slope is not zero.</p></Box>
+</div>
+)},
+{type:"example",label:"When Capacity Wins",render:()=>(
+<div>
+  <p>A firm's profit is <M d="P(x)=-0.01x^2+40x-7000"/> dollars for <M d="x"/> units, but its factory can make at most 1,500 units. What production level maximizes profit?</p>
+  <p><strong>Step 1: Critical numbers.</strong> <M d="P'(x)=-0.02x+40=0"/> gives <M d="x=2000"/>. That is the unconstrained peak (the one <Ref to="optimization"/> will find), but the factory cannot get there: 2000 is <em>outside</em> the allowed range <M d="[0,1500]"/>. So there are no critical numbers inside the interval.</p>
+  <p><strong>Step 2: The suspects are the endpoints only.</strong></p>
+  <Box>
+    <p><M d="P(0)=-7000"/> (make nothing, pay the fixed costs)</p>
+    <p><M d="P(1500)=-0.01(2{,}250{,}000)+40(1500)-7000=-22500+60000-7000=30{,}500"/></p>
+  </Box>
+  <p><strong>Step 3: Compare.</strong> The absolute max on <M d="[0,1500]"/> is $30,500, at the capacity limit. The firm should run flat out.</p>
+  <Graph fn={(x)=>-0.01*x*x+40*x-7000} xMin={0} xMax={2600} yMin={-8000} yMax={36000}
+    shades={[{top:(x)=>-0.01*x*x+40*x-7000,bottom:-8000,from:1500,to:2600,color:"rgba(148,163,184,0.10)"}]}
+    highlights={[{x:1500,y:30500,label:"capacity: $30,500",color:"#f59e0b",lo:[-100,-12]},{x:2000,y:33000,label:"unreachable peak: $33,000",color:"#64748b",lo:[-60,-14]}]}
+    caption="The profit curve keeps rising past 1,500 units, but the factory stops there. On the allowed range, the endpoint is the maximum."/>
+  <Box color="green"><p>Maximum profit within capacity is $30,500 at 1,500 units. The true vertex ($33,000 at 2,000 units) is out of reach, so the best allowed choice is an endpoint, where the slope is still positive. Whenever a business has a limit (capacity, budget, a regulated price range), check the endpoints.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Absolute extrema of <M d="f(x)=x^3-3x"/> on <M d="[-2,3]"/>.</span>),
@@ -2294,19 +2377,36 @@ answer:()=>(<div>
   <Box><p><M d="f(-2)=-8+6=-2"/></p><p><M d="f(-1)=-1+3=2"/></p><p><M d="f(1)=1-3=-2"/></p><p><M d="f(3)=27-9=18"/></p></Box>
   <Box color="green"><p>Absolute max = 18 at <M d="x=3"/> (an endpoint). Absolute min = <M d="-2"/>, reached twice, at <M d="x=-2"/> and <M d="x=1"/>.</p></Box>
 </div>)},
+{type:"practice",render:()=>(<span>A theater's weekly revenue at ticket price <M d="p"/> is <M d="R(p)=600p-20p^2"/>, but a city rule keeps the price between $5 and $12. What price gives the most revenue, and what price gives the least?</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Critical numbers.</strong> <M d="R'(p)=600-40p=0"/> gives <M d="p=15"/>. That is outside <M d="[5,12]"/>, so it is not allowed. No critical numbers in range.</p>
+  <p><strong>Step 2: Endpoints only.</strong></p>
+  <Box>
+    <p><M d="R(5)=3000-500=2{,}500"/></p>
+    <p><M d="R(12)=7200-2880=4{,}320"/></p>
+  </Box>
+  <p><strong>Step 3: Compare.</strong> The most revenue allowed is $4,320 at $12; the least is $2,500 at $5.</p>
+  <p>Interpretation: revenue keeps rising all the way up to the $15 vertex, so within the permitted range, the higher the price the better. The rule caps the theater at $12, and it should charge exactly that.</p>
+  <Box color="green"><p>Max revenue $4,320 at <M d="p=\$12"/>; min revenue $2,500 at <M d="p=\$5"/>. Both at endpoints.</p></Box>
+</div>)},
 ]},
 
-{slug:"optimization",module:"Applications of Derivatives",title:"Optimization",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"optimization",module:"Applications of Derivatives",title:"Optimization",time:"12 min",content:[
+{type:"concept",label:"The Best Possible Choice",render:()=>(
 <div>
   <p>Optimization is the headline reason business students take calculus. The question is always the same: <strong>"What choice makes profit as big as possible, or cost as small as possible?"</strong></p>
-  <p>The idea is simple. Whatever you want to maximize or minimize, write it as a function of one variable, then find its peak or valley with the derivative. The maximum profit, the cheapest production level, the price that brings in the most revenue: all of them sit where the slope is zero  -  unless the best allowed choice is forced to an endpoint of the range, as in the last lesson. For the open-ended business curves below, the peak or valley is an interior flat spot.</p>
-  <Box><p><strong>The recipe:</strong></p>
-  <p>1. Write the quantity to optimize as a function of one variable.</p>
+  <p>The idea is simple. Whatever you want to maximize or minimize, write it as a function of one variable, then find its peak or valley with the derivative. The maximum profit, the cheapest production level, the price that brings in the most revenue: all of them sit where the slope is zero, unless the best allowed choice is forced to an endpoint of the range, as in <Ref to="absolute-extrema"/>. For the open-ended business curves below, the peak or valley is an interior flat spot.</p>
+  <p>The genuinely hard part is usually not the calculus. It is the first step: turning a paragraph of words into a single function of a single variable. The examples below put most of their effort there.</p>
+</div>
+)},
+{type:"rule",label:"The Optimization Recipe",render:()=>(
+<div>
+  <p>1. Write the quantity to optimize as a function of <strong>one</strong> variable. If it has two, find the constraint that links them and substitute it in.</p>
   <p>2. Take the derivative and set it equal to 0.</p>
   <p>3. Solve for the variable (the candidate).</p>
-  <p>4. Confirm it is really a max or min (second derivative, or common sense).</p>
-  <p>5. Answer the actual question (often the dollar value, not just the <M d="x"/>).</p></Box>
+  <p>4. Confirm it is really a max or min: the second derivative (<Ref to="concavity"/>), a sign chart (<Ref to="first-derivative-test"/>), or common sense.</p>
+  <p>5. Answer the actual question (often the dollar value, or the dimensions, not just the <M d="x"/>).</p>
+  <p><strong>A fact worth knowing:</strong> average cost is minimized exactly where average cost equals marginal cost, <M d="AC(x)=C'(x)"/>. The third example shows why.</p>
 </div>
 )},
 {type:"example",label:"Maximizing Revenue",render:()=>(
@@ -2317,16 +2417,16 @@ answer:()=>(<div>
   <p>Collapsing two variables down to one is exactly what Step 1 asks for; only now can the derivative hunt for the peak.</p>
   <p><strong>Step 2: Differentiate and set to 0.</strong></p>
   <M d="R'(p)=600-40p=0" block/>
-  <p><strong>Step 3: Solve.</strong> <M d="40p=600\Rightarrow p=15"/>.</p>
+  <p><strong>Step 3: Solve.</strong> <M d="40p=600"/>, so <M d="p=15"/>.</p>
   <p><strong>Step 4: Confirm a max.</strong> <M d="R''(p)=-40<0"/> (concave down, a dome), so it is a maximum.</p>
   <p><strong>Step 5: Answer.</strong> At <M d="p=15"/>: <M d="R(15)=600(15)-20(225)=9000-4500=\$4{,}500"/>.</p>
   <Graph fn={(p)=>600*p-20*p*p} xMin={0} xMax={30} yMin={0} yMax={5000} highlights={[{x:15,y:4500,label:"$4,500 at $15",color:"#f59e0b",lo:[-60,18]}]}/>
-  <Box color="green"><p>Charge <M d="\$15"/> per ticket for maximum revenue of <M d="\$4{,}500"/> per week.</p></Box>
+  <Box color="green"><p>Charge <M d="\$15"/> per ticket for maximum revenue of <M d="\$4{,}500"/> per week. (Check: in <Ref to="elasticity"/> the revenue peak is where demand is unit elastic. Here <M d="E(15)=-\tfrac{15(-20)}{300}=1"/>. It agrees.)</p></Box>
 </div>
 )},
 {type:"example",label:"Building the Function From a Constraint",render:()=>(
 <div>
-  <p>The genuinely hard part of optimization is Step 1: turning words into a one-variable function. The last example handed us the relationship <M d="q=600-20p"/>. This time we have to build it ourselves, which is the situation most word problems give you.</p>
+  <p>The last example handed us the relationship <M d="q=600-20p"/>. This time we have to build it ourselves, which is the situation most word problems give you.</p>
   <p><em>"A farmer has 100 meters of fencing to make a rectangular pen against a long barn wall. The wall forms one side, so no fence is needed there. What dimensions enclose the largest area?"</em></p>
   <p><strong>Step 1: Write the quantity to optimize, then force it down to one variable.</strong></p>
   <p>Call the two sides that stick straight out from the wall <M d="x"/> each, and the side running parallel to the wall <M d="y"/>. The thing we want to make as big as possible is the area:</p>
@@ -2337,10 +2437,29 @@ answer:()=>(<div>
   <M d="A(x)=x\,(100-2x)=100x-2x^2" block/>
   <p>Area is finally a function of the single variable <M d="x"/>, and the recipe can take over.</p>
   <p><strong>Step 2: Differentiate and set to 0.</strong> <M d="A'(x)=100-4x=0"/>.</p>
-  <p><strong>Step 3: Solve.</strong> <M d="4x=100\Rightarrow x=25"/>.</p>
+  <p><strong>Step 3: Solve.</strong> <M d="4x=100"/>, so <M d="x=25"/>.</p>
   <p><strong>Step 4: Confirm a max.</strong> <M d="A''(x)=-4<0"/>, concave down (a dome), so it is a maximum.</p>
   <p><strong>Step 5: Answer the real question, the dimensions.</strong> <M d="x=25"/> m, and <M d="y=100-2(25)=50"/> m.</p>
   <Box color="green"><p>The pen is <M d="25"/> m out from the wall and <M d="50"/> m along it, for a maximum area of <M d="25\times 50=1{,}250"/> square meters.</p></Box>
+</div>
+)},
+{type:"example",label:"Minimizing Average Cost",render:()=>(
+<div>
+  <p>A manufacturer's cost is <M d="C(x)=0.5x^2+20x+800"/> dollars for <M d="x"/> units. What production level makes the cost <em>per unit</em> as low as possible?</p>
+  <p><strong>Step 1: The function.</strong> Cost per unit is average cost (<Ref to="business-models"/>): total cost divided by units. Split the fraction term by term and use a negative exponent for the last piece:</p>
+  <M d="AC(x)=\frac{0.5x^2+20x+800}{x}=0.5x+20+\frac{800}{x}=0.5x+20+800x^{-1}" block/>
+  <p>Already one variable, so Step 1 is done.</p>
+  <p><strong>Step 2: Differentiate and set to 0.</strong> The power rule handles <M d="800x^{-1}"/> (<Ref to="power-rule"/>): bring down <M d="-1"/>, exponent becomes <M d="-2"/>:</p>
+  <M d="AC'(x)=0.5-800x^{-2}=0.5-\frac{800}{x^2}=0" block/>
+  <p><strong>Step 3: Solve.</strong> <M d="\tfrac{800}{x^2}=0.5"/>, so <M d="x^2=1600"/>, so <M d="x=40"/> (the negative root is meaningless for a quantity).</p>
+  <p><strong>Step 4: Confirm a min.</strong> <M d="AC''(x)=1600x^{-3}=\tfrac{1600}{x^3}"/>, which is positive for any positive <M d="x"/>: concave up, a bowl, so a minimum.</p>
+  <p><strong>Step 5: Answer.</strong> <M d="AC(40)=0.5(40)+20+\tfrac{800}{40}=20+20+20=\$60"/> per unit.</p>
+  <p><strong>The fact from the rule box.</strong> Marginal cost is <M d="C'(x)=x+20"/>, so <M d="C'(40)=60"/>. At the minimum, average cost and marginal cost are both $60. That is not luck. Think about it in words: if the next unit costs less than the current average, making it pulls the average down; if it costs more, it pushes the average up. The average stops falling and starts rising exactly when the next unit costs the same as the average. In symbols, <M d="AC'(x)=0"/> happens exactly when <M d="C'(x)=AC(x)"/>.</p>
+  <Graph fns={[(x)=>0.5*x+20+800/x,(x)=>x+20]} xMin={5} xMax={100} yMin={0} yMax={160}
+    highlights={[{x:40,y:60,label:"AC = MC = $60 at 40 units",color:"#f59e0b",lo:[10,-14]}]}
+    label={<><span style={{color:"#818cf8"}}>Average cost</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#f472b6"}}>marginal cost</span></>}
+    caption="Marginal cost crosses average cost at the bottom of the average cost curve."/>
+  <Box color="green"><p>Produce 40 units for the lowest average cost, $60 per unit, where marginal cost equals average cost.</p></Box>
 </div>
 )},
 {type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>-0.01*x*x+40*x-7000} dfn={(x)=>-0.02*x+40} xMin={0} xMax={4000} yMin={-10000} yMax={40000} start={400}
@@ -2358,7 +2477,19 @@ answer:()=>(<div>
   <M d="P(2000)=-0.01(2000)^2+40(2000)-7000" block/>
   <M d="=-40000+80000-7000=\$33{,}000" block/>
   <Graph fn={(x)=>-0.01*x*x+40*x-7000} xMin={0} xMax={4000} yMin={-10000} yMax={40000} highlights={[{x:2000,y:33000,label:"$33K",color:"#f59e0b",lo:[-40,-12]}]}/>
-  <Box color="green"><p>Produce 2,000 units for maximum profit of $33,000.</p></Box>
+  <Box color="green"><p>Produce 2,000 units for maximum profit of $33,000. (In <Ref to="absolute-extrema"/> the same firm was capped at 1,500 units and had to settle for $30,500; without the cap, the vertex is reachable.)</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>A store sells <strong>1,200</strong> units of a product each year. Every order it places costs <strong>$50</strong> to process, and holding inventory costs <strong>$3 per unit per year</strong>, charged on the average amount in stock. If it orders <M d="x"/> units at a time, the average stock is <M d="\tfrac{x}{2}"/>. How many units per order minimize the total yearly cost?</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Build the cost function.</strong> Two costs pull in opposite directions. Ordering <M d="x"/> at a time means <M d="\tfrac{1200}{x}"/> orders a year, each costing $50. Holding costs $3 on an average stock of <M d="\tfrac{x}{2}"/>. Total yearly cost:</p>
+  <M d="T(x)=50\cdot\frac{1200}{x}+3\cdot\frac{x}{2}=\frac{60000}{x}+1.5x=60000x^{-1}+1.5x" block/>
+  <p>Big orders mean few orders but a lot of stock sitting around; small orders mean little stock but constant reordering. The derivative finds the balance.</p>
+  <p><strong>Step 2: Differentiate and set to 0.</strong></p>
+  <M d="T'(x)=-\frac{60000}{x^2}+1.5=0" block/>
+  <p><strong>Step 3: Solve.</strong> <M d="\tfrac{60000}{x^2}=1.5"/>, so <M d="x^2=40000"/>, so <M d="x=200"/>.</p>
+  <p><strong>Step 4: Confirm a min.</strong> <M d="T''(x)=\tfrac{120000}{x^3}>0"/> for positive <M d="x"/>: a bowl, so a minimum.</p>
+  <p><strong>Step 5: Answer the real question.</strong> Order 200 units at a time, which is <M d="\tfrac{1200}{200}=6"/> orders a year. The yearly cost is <M d="T(200)=\tfrac{60000}{200}+1.5(200)=300+300=\$600"/>. Notice the two costs are equal at the optimum, $300 each; that balance is typical of this kind of problem.</p>
+  <Box color="green"><p>Order 200 units at a time (6 orders a year) for a minimum total cost of $600. This is the classic "economic order quantity" problem, and every warehouse in the world runs on some version of it.</p></Box>
 </div>)},
 ]},
 
