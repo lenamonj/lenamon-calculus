@@ -24,7 +24,7 @@ A free, interactive web course that teaches **business calculus** to a complete 
 
 <br/>
 
-![Lenamon Calculus landing page](docs/landing.png)
+![Lenamon Calculus landing page: gold-on-ink hero with the live profit curve](docs/landing-hero.png)
 
 </div>
 
@@ -49,6 +49,7 @@ Most courses lose beginners at the exact moment an author assumes something the 
 | --- | --- |
 | **Explain the why, always** | You will learn *why* you cannot divide by zero, *why* `b^0 = 1`, *why* the chain rule multiplies, and *why* an integral measures area, not just the rules themselves. |
 | **No skipped steps** | Worked examples show the algebra in full, including the sign traps and the "obvious" lines that trip people up. |
+| **Prerequisites first** | Every idea gets its own lesson before it is needed: quadratics before break-even, business models before marginal analysis, tangent lines before linear approximation, Riemann sums before the definite integral. Promises like "more on this later" are kept, in a named lesson. |
 | **Notation read aloud** | Every new symbol (`f'(x)`, `dy/dx`, the integral sign, limits) is named and grounded the first time it appears. |
 | **Verified for accuracy** | Every number, derivative, integral, sign chart, and graph has been independently recomputed across multiple adversarial review passes, and the recomputation ships with the repo (`docs/verification/`). |
 
@@ -58,7 +59,7 @@ Most courses lose beginners at the exact moment an author assumes something the 
 
 - **Knowledge-check quizzes.** Every lesson ends with a 3-question quiz drawn straight from its material, a mix of conceptual and compute-it problems. Questions appear one at a time; a wrong answer gives a friendly explanation of why that choice is wrong and lets you try again, and you must pass all three to move on. (96 questions, every answer independently verified.)
 - **Interactive labs.** Drag a point along a curve and watch the tangent line and the live slope readout change. Slide a parameter and reshape a function in real time while the equation updates. Slide toward a hole and watch a limit arrive. Add Riemann rectangles under a parabola and watch the sum close in on the exact area.
-- **Custom graphing engine.** A hand-built SVG renderer that breaks the curve across vertical asymptotes (no false connecting lines), shades regions between curves, draws tangent and reference lines, and keeps labels readable over any background.
+- **Custom graphing engine.** A hand-built SVG renderer that breaks the curve across vertical asymptotes (no false connecting lines), marks holes and jumps with hollow points, shades regions between curves, draws Riemann rectangles, tangent lines, and reference lines, and keeps labels readable over any background.
 - **A real completion certificate.** Finish all 32 lessons to unlock a printable certificate with your name, an engraved masthead, a golden foil seal, a signature, and the date. Print or Save as PDF is built in.
 - **Inspiration on every page.** A card beside each lesson pairs the topic with either a genuine, attributed quote (Newton, Euler, Einstein, Cantor, von Neumann, and more) or a note of encouragement, all aimed at sparking a love of math.
 - **Crisp math typesetting.** All formulas render with KaTeX, with a graceful fallback so a blocked CDN never freezes the page.
@@ -69,7 +70,7 @@ Most courses lose beginners at the exact moment an author assumes something the 
 
 <div align="center">
   <br/>
-  <img src="docs/certificate.png" alt="The completion certificate, unlocked after finishing all 32 lessons" width="560"/>
+  <img src="docs/certificate-preview.png" alt="The completion certificate, unlocked after finishing all 32 lessons" width="560"/>
   <br/>
   <sub>The certificate every learner earns after passing all 32 lesson quizzes.</sub>
 </div>
@@ -89,14 +90,6 @@ Most courses lose beginners at the exact moment an author assumes something the 
 | **5. Integration** | Antiderivatives - Substitution - Area as a Sum: Riemann Sums - The Definite Integral - Fundamental Theorem of Calculus - Integration by Parts |
 | **6. Business Applications** | Area Between Curves - Average Value of a Function - Consumer and Producer Surplus - Income Streams and Present Value |
 
---- | --- |
-| **1. Foundations** | Functions, Domain and Range - Linear Equations and Slope - Exponential Functions and e - Logarithmic Functions |
-| **2. Limits and Continuity** | Introduction to Limits - Infinite Limits and Limits at Infinity - Continuity |
-| **3. Derivatives** | The Derivative (what it means) - Power Rule - Marginal Analysis - Derivatives of e^x and ln(x) - Product and Quotient Rules - The Chain Rule - Elasticity of Demand |
-| **4. Applications of Derivatives** | First Derivative Test - Second Derivative and Concavity - Absolute Extrema - Optimization |
-| **5. Integration** | Antiderivatives - Substitution - The Definite Integral - Fundamental Theorem of Calculus |
-| **6. Business Applications** | Area Between Curves - Consumer and Producer Surplus - Income Streams and Present Value |
-
 ---
 
 ## Accounts and admin
@@ -111,11 +104,11 @@ This is a deliberately lightweight, **client-side** account system: accounts and
 
 | Layer | Choice |
 | --- | --- |
-| **Framework** | React 18 (single-file app, client rendered) |
+| **Framework** | React 18, client rendered; the engine (`App.jsx`) and the lesson corpus (`content.jsx`) are separate modules |
 | **Build tool** | Vite 6 |
 | **Math rendering** | KaTeX (loaded via CDN, with a load-timeout fallback) |
-| **Typography** | Inter for body and UI, Bricolage Grotesque for display |
-| **Styling** | Inline styles, dark theme with a subtle radial-gradient background |
+| **Typography** | Inter for UI, Source Serif 4 for lesson reading, Bricolage Grotesque for display, IBM Plex Mono for data readouts, Playfair Display and Pinyon Script on the certificate |
+| **Styling** | Inline styles on a gold-on-ink token system: ink ground with a graph-paper grid, chalk curves, and one gold accent reserved for the calculus (tangents, extrema, integral areas, progress) |
 | **Dependencies** | Just two runtime packages: `react` and `react-dom` |
 
 ---

@@ -570,5 +570,5 @@ it.each(LESSONS)('$slug: prose has no emoji, arrows, or dash artifacts', (l) => 
 - [ ] `npm test` green; `npm run lint` at or below 12 warnings; `npm run build` clean.
 - [ ] Design pre-flight from `.agents/skills/design-taste-frontend` Section 14 on the RiemannExplorer lab and the new graphs.
 - [ ] Live Chrome pass on `npm run preview`: sign up, open each new lesson (3, 4, 12, 17, 25, 28, 30), drag every new lab, pass one new quiz with a wrong answer first, confirm "Lesson N of 32" and the certificate copy; seed a v1 save in localStorage and confirm progress and certificate migrate.
-- [ ] Regenerate `docs/landing.png` if the landing copy changed visibly.
+- [ ] Regenerate `docs/landing-hero.png` (renamed from landing.png to bust GitHub image caching) if the landing copy changed visibly.
 - [ ] Final commit. Do not push.
