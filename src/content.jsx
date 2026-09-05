@@ -183,7 +183,7 @@ answer:()=>(
   <p style={{marginTop:14}}><strong>Point-slope form: the fastest way to write a line from one point and a slope.</strong></p>
   <p>Suppose you know the slope <M d="m"/> and one point <M d="(x_1,y_1)"/>. Pick any other point <M d="(x,y)"/> on the line. The slope from the known point to it must be <M d="m"/>, so <M d="\tfrac{y-y_1}{x-x_1}=m"/>. Multiply both sides by <M d="x-x_1"/> and you get</p>
   <M d="y-y_1=m(x-x_1)" block/>
-  <p>Example: slope 3 through <M d="(2,5)"/>: <M d="y-5=3(x-2)"/>, and multiplying out and adding 5 gives <M d="y=3x-1"/>. Check: at <M d="x=2"/>, <M d="y=6-1=5"/>. The lesson on tangent lines, later in the course, uses this form on every problem, so it is worth knowing cold.</p>
+  <p>Example: slope 3 through <M d="(2,5)"/>: <M d="y-5=3(x-2)"/>, and multiplying out and adding 5 gives <M d="y=3x-1"/>. Check: at <M d="x=2"/>, <M d="y=6-1=5"/>. <Ref to="tangent-lines"/> uses this form on every problem, so it is worth knowing cold.</p>
 </div>
 )},
 {type:"example",label:"How to Turn a Word Problem Into y = mx + b",render:()=>(
@@ -1085,58 +1085,48 @@ answer:()=>(
 )},
 ]},
 
-{slug:"derivative",module:"Derivatives",title:"The Derivative  -  What It Means",time:"12 min",content:[
+{slug:"derivative",module:"Derivatives",title:"The Derivative: What It Means",time:"13 min",content:[
 {type:"concept",label:"The Big Idea (No Formulas Yet)",render:()=>(
 <div>
-  <p>The derivative is <strong>THE</strong> big idea in calculus. Everything before this was setup. Everything after builds on this. So let's take our time.</p>
-
-  <p><strong>Here's the question the derivative answers:</strong></p>
-  <Box color="amber">
-    <p>"How fast is this function changing, <em>right now</em>, at <em>this exact point</em>?"</p>
-  </Box>
-
-  <p><strong>Everyday example:</strong> Think about driving a car. Your odometer tracks your total distance  -  that's a function of time. Your <strong>speedometer</strong> tells you how fast that distance is changing <em>right now</em>. The speedometer reading IS the derivative.</p>
-
-  <p>At 2:00 PM you might be going 60 mph. At 2:05 PM you might be going 45 mph. The speed (derivative) changes from moment to moment  -  it tells you the <em>rate</em> of change at each instant.</p>
-
-  <p><strong>On a graph, the derivative is the SLOPE of the curve at a specific point.</strong></p>
-  <p>For a straight line, the slope is the same everywhere (<Ref to="lines"/>). But for a <em>curve</em>, the slope keeps changing  -  steeper here, flatter there, maybe even going downhill somewhere else. The derivative captures that changing slope.</p>
+  <p>The derivative is <strong>the</strong> big idea in calculus. Everything before this was setup. Everything after builds on this. So let's take our time.</p>
+  <p><strong>Here is the question the derivative answers:</strong></p>
+  <Box color="amber"><p>"How fast is this function changing, <em>right now</em>, at <em>this exact point</em>?"</p></Box>
+  <p><strong>Everyday example:</strong> think about driving a car. Your odometer tracks your total distance; that is a function of time. Your <strong>speedometer</strong> tells you how fast that distance is changing <em>right now</em>. The speedometer reading IS the derivative.</p>
+  <p>At 2:00 PM you might be going 60 mph. At 2:05 PM you might be going 45 mph. The speed (the derivative) changes from moment to moment; it tells you the <em>rate</em> of change at each instant.</p>
+  <p><strong>On a graph, the derivative is the slope of the curve at a specific point.</strong></p>
+  <p>For a straight line, the slope is the same everywhere (<Ref to="lines"/>). But for a <em>curve</em>, the slope keeps changing: steeper here, flatter there, maybe even going downhill somewhere else. The derivative captures that changing slope.</p>
 </div>
 )},
-{type:"concept",label:"Step 1: Slope Between Two Points (Rise/Run)",render:()=>(
+{type:"concept",label:"Step 1: Average Rate of Change (Rise Over Run)",render:()=>(
 <div>
-  <p>Let's work with <M d="f(x) = x^2"/>  -  a simple parabola. We want to find "how steep is this curve at <M d="x = 1"/>?"</p>
-
-  <p>We don't yet have a tool for curves. But we DO know how to find the slope of a <strong>straight line</strong>  -  rise over run (<Ref to="lines"/>):</p>
+  <p>Let's work with <M d="f(x) = x^2"/>, the simple parabola from <Ref to="quadratics"/>. We want to find "how steep is this curve at <M d="x = 1"/>?"</p>
+  <p>We do not yet have a tool for curves. But we DO know how to find the slope of a <strong>straight line</strong>: rise over run (<Ref to="lines"/>):</p>
   <M d="\text{slope} = \frac{\text{rise}}{\text{run}} = \frac{y_2 - y_1}{x_2 - x_1}" block/>
-
-  <p>So here's the idea: pick two points on the curve and draw a straight line through them. That line's slope gives us an <em>approximation</em> of the curve's steepness.</p>
-
+  <p>So here is the idea: pick two points on the curve and draw a straight line through them. That line's slope gives us an <em>approximation</em> of the curve's steepness.</p>
   <p>Let's pick <M d="x = 1"/> and <M d="x = 3"/>:</p>
   <Box>
     <p>Point 1: <M d="(1,\; f(1)) = (1,\; 1)"/> (since <M d="1^2 = 1"/>)</p>
     <p>Point 2: <M d="(3,\; f(3)) = (3,\; 9)"/> (since <M d="3^2 = 9"/>)</p>
   </Box>
   <M d="\text{slope} = \frac{9 - 1}{3 - 1} = \frac{8}{2} = 4" block/>
-
   <Graph fns={[(x) => x * x, (x) => 4 * x - 3]} xMin={-1} xMax={4.5} yMin={-1} yMax={14}
     highlights={[
       { x: 1, y: 1, label: "(1, 1)", color: "#f59e0b", lo: [8, 12] },
       { x: 3, y: 9, label: "(3, 9)", color: "#f59e0b", lo: [-36, -12] },
     ]}
     label={<span style={{color:"#f472b6"}}>Secant line: slope = 4</span>}
-    caption="The straight line through (1,1) and (3,9) has slope 4  -  but is that the slope of the curve at x=1?"
+    caption="The straight line through (1,1) and (3,9) has slope 4. But is that the slope of the curve at x = 1?"
   />
-
-  <p>This line through two points on a curve is called a <strong>secant line</strong>. Its slope (4) is a rough approximation, but it's not great  -  it averages the curve's steepness over a wide interval. The curve is flatter near <M d="x=1"/> and steeper near <M d="x=3"/>, so the average slope of 4 isn't the true slope at either point.</p>
+  <p>This line through two points on a curve is called a <strong>secant line</strong>, and its slope has a name you will hear constantly in business: the <strong>average rate of change</strong> of <M d="f"/> between <M d="x=1"/> and <M d="x=3"/>. It is "average" because it smooths the curve's changing steepness over the whole stretch into one number. The curve is flatter near <M d="x=1"/> and steeper near <M d="x=3"/>, so the average slope of 4 is not the true slope at either point.</p>
+  <p><strong>A business average rate of change.</strong> A factory's cost function is <M d="C(x)=1000+25x-0.05x^2"/> dollars for <M d="x"/> items. How fast does cost rise, on average, as production goes from 50 to 100 items? Compute both heights: <M d="C(100)=1000+2500-500=3000"/> and <M d="C(50)=1000+1250-125=2125"/>. Then rise over run:</p>
+  <M d="\frac{C(100)-C(50)}{100-50}=\frac{3000-2125}{50}=\frac{875}{50}=17.5\text{ dollars per item}" block/>
+  <p>Across that stretch each extra item added $17.50 on average. That is useful, but a manager deciding whether to make the 51st item wants the rate <em>right at</em> 50, not an average over 50 more. Getting from the average rate to the instantaneous rate is the rest of this lesson.</p>
 </div>
 )},
 {type:"concept",label:"Step 2: Squeeze the Points Closer Together",render:()=>(
 <div>
-  <p>Here's the key insight: <strong>what if we make the second point closer to <M d="x = 1"/>?</strong></p>
-
-  <p>Let's try several second points, each closer to <M d="x = 1"/>, and compute rise/run each time:</p>
-
+  <p>Here is the key insight: <strong>what if we make the second point closer to <M d="x = 1"/>?</strong></p>
+  <p>Let's try several second points, each closer to <M d="x = 1"/>, and compute rise over run each time:</p>
   <Box>
     <p><strong>Second point at <M d="x = 3"/>:</strong> slope = <M d="\dfrac{9 - 1}{3 - 1} = \dfrac{8}{2} = 4.0"/></p>
     <p><strong>Second point at <M d="x = 2"/>:</strong> slope = <M d="\dfrac{4 - 1}{2 - 1} = \dfrac{3}{1} = 3.0"/></p>
@@ -1145,11 +1135,9 @@ answer:()=>(
     <p><strong>Second point at <M d="x = 1.01"/>:</strong> slope = <M d="\dfrac{1.0201 - 1}{1.01 - 1} = \dfrac{0.0201}{0.01} = 2.01"/></p>
     <p><strong>Second point at <M d="x = 1.001"/>:</strong> slope = <M d="\dfrac{1.002001 - 1}{0.001} = 2.001"/></p>
   </Box>
-
   <p>See the pattern? As the second point gets closer and closer to <M d="x = 1"/>:</p>
   <p><M d="4.0 \;\to\; 3.0 \;\to\; 2.5 \;\to\; 2.1 \;\to\; 2.01 \;\to\; 2.001 \;\to\; \ldots"/></p>
-  <p>The slopes are heading toward <strong>exactly 2</strong>!</p>
-
+  <p>The slopes are heading toward <strong>exactly 2</strong>.</p>
   <Graph fns={[
     (x) => x * x,
     (x) => 2 * x - 1,
@@ -1160,113 +1148,103 @@ answer:()=>(
       { x: 1, y: 1, label: "x = 1", color: "#f59e0b", lo: [-48, -10] },
     ]}
     label={<><span style={{color:"#e2e8f0"}}>Secant lines getting closer to the </span><span style={{color:"#f472b6"}}>tangent</span></>}
-    caption="Blue is the curve x². Yellow (slope 4) and green (slope 3) are secant lines. As the second point slides toward x=1 they rotate down toward the pink line (slope 2), which is the tangent. Its slope, 2, is the derivative at x=1."
+    caption="Blue is the curve x squared. Yellow (slope 4) and green (slope 3) are secant lines. As the second point slides toward x = 1 they rotate down toward the pink line (slope 2), which is the tangent. Its slope, 2, is the derivative at x = 1."
   />
-
   <p>As the second point approaches the first, the secant line <em>rotates</em> until it lines up with the curve's direction exactly at <M d="x=1"/>. That final line is called the <strong>tangent line</strong>, and its slope IS the derivative. (For this parabola the tangent also happens to touch at just that one point, but the real defining feature of a tangent is that it matches the curve's slope there.)</p>
 </div>
 )},
 {type:"concept",label:"Step 3: The Notation (Putting It in Math Language)",render:()=>(
 <div>
-  <p>Let's translate what we just did into math notation. We used <Ref to="limits"/>'s big idea  -  <strong>limits</strong>  -  without even realizing it!</p>
-
-  <p>Here's what we did in words: "Start at <M d="x = 1"/>. Pick a second point that's <M d="h"/> units away (at <M d="x = 1 + h"/>). Compute rise/run. Then let <M d="h"/> shrink to 0."</p>
-
+  <p>Let's translate what we just did into math notation. We used the big idea of <Ref to="limits"/> without even naming it.</p>
+  <p>Here is what we did in words: "Start at <M d="x = 1"/>. Pick a second point that is <M d="h"/> units away (at <M d="x = 1 + h"/>). Compute rise over run. Then let <M d="h"/> shrink to 0."</p>
   <p>Let's write that with symbols. For any function <M d="f(x)"/>:</p>
-
   <Box>
     <p><strong>First point:</strong> <M d="(x,\; f(x))"/></p>
-    <p><strong>Second point:</strong> <M d="(x + h,\; f(x + h))"/>  -  a distance <M d="h"/> to the right</p>
+    <p><strong>Second point:</strong> <M d="(x + h,\; f(x + h))"/>, a distance <M d="h"/> to the right</p>
   </Box>
-
   <p><strong>Rise</strong> = how much <M d="y"/> changed = <M d="f(x+h) - f(x)"/></p>
   <p><strong>Run</strong> = how much <M d="x"/> changed = <M d="(x+h) - x = h"/></p>
-
-  <p><strong>Slope of secant line</strong> = rise ÷ run:</p>
+  <p><strong>Slope of the secant line</strong> = rise divided by run:</p>
   <M d="\text{slope} = \frac{f(x+h) - f(x)}{h}" block/>
-
-  <p>Now let the second point slide toward the first  -  let <M d="h \to 0"/>:</p>
+  <p>Now let the second point slide toward the first, letting <M d="h \to 0"/>:</p>
   <M d="f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}" block/>
-
-  <p>This is the <strong>formal definition of the derivative</strong>. But notice  -  it's just rise/run from <Ref to="lines"/>, combined with limits from <Ref to="limits"/>. Nothing new, just combined.</p>
-
+  <p>This is the <strong>formal definition of the derivative</strong>. But notice: it is just rise over run from <Ref to="lines"/>, combined with a limit from <Ref to="limits"/>. Nothing new, just combined. (And computing <M d="f(x+h)"/> is exactly the "plugging in an expression" skill from <Ref to="functions"/>.)</p>
   <Box color="amber">
     <p><strong>Reading the notation:</strong></p>
-    <p><M d="f'(x)"/>  -  read "f prime of x"  -  means "the derivative of <M d="f"/> at <M d="x"/>"</p>
-    <p><M d="\tfrac{dy}{dx}"/>  -  read "dee y dee x"  -  means the same thing, written a second way. It is deliberately built to look like the rise/run fraction we just used: <M d="dy"/> stands for a tiny change in <M d="y"/> (the rise) and <M d="dx"/> for a tiny change in <M d="x"/> (the run), both shrunk toward zero. So <M d="\tfrac{dy}{dx}"/> is literally tiny-rise over tiny-run, which is exactly the slope. It is one symbol for the slope, not <M d="d"/> times <M d="y"/> divided by <M d="d"/> times <M d="x"/>.</p>
-    <p>Both mean: "the slope of the curve at point <M d="x"/>"</p>
+    <p><M d="f'(x)"/>, read "f prime of x," means "the derivative of <M d="f"/> at <M d="x"/>."</p>
+    <p><M d="\tfrac{dy}{dx}"/>, read "dee y dee x," means the same thing, written a second way. It is deliberately built to look like the rise-over-run fraction we just used: <M d="dy"/> stands for a tiny change in <M d="y"/> (the rise) and <M d="dx"/> for a tiny change in <M d="x"/> (the run), both shrunk toward zero. So <M d="\tfrac{dy}{dx}"/> is literally tiny-rise over tiny-run, which is exactly the slope. It is one symbol for the slope, not <M d="d"/> times <M d="y"/> divided by <M d="d"/> times <M d="x"/>.</p>
+    <p>Both mean: "the slope of the curve at the point <M d="x"/>."</p>
   </Box>
+</div>
+)},
+{type:"rule",label:"Average and Instantaneous Rates",render:()=>(
+<div>
+  <p><strong>Average rate of change</strong> of <M d="f"/> from <M d="x=a"/> to <M d="x=b"/> (the slope of the secant line):</p>
+  <M d="\frac{f(b)-f(a)}{b-a}" block/>
+  <p><strong>Instantaneous rate of change</strong> at <M d="x"/>, the derivative (the slope of the tangent line):</p>
+  <M d="f'(x)=\frac{dy}{dx}=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}" block/>
+  <p>The four-step recipe for using the definition: compute <M d="f(x+h)"/>; subtract <M d="f(x)"/> to get the rise; divide by <M d="h"/>; let <M d="h\to 0"/>.</p>
 </div>
 )},
 {type:"example",label:"Using the Definition on f(x) = x²",render:()=>(
 <div>
   <p>Let's prove algebraically what our table showed: the slope of <M d="f(x) = x^2"/> at any point is <M d="2x"/>.</p>
-
   <p><strong>Step 1: Compute <M d="f(x+h)"/>.</strong></p>
   <p>Everywhere you see <M d="x"/> in the function, replace it with <M d="(x+h)"/>:</p>
   <M d="f(x+h) = (x+h)^2" block/>
-  <p>Expand using <M d="(a+b)^2 = a^2 + 2ab + b^2"/>. Here <M d="(x+h)^2"/> means <M d="(x+h)(x+h)"/>, so multiply every piece by every piece:</p>
+  <p>Expand using <M d="(a+b)^2 = a^2 + 2ab + b^2"/>. Here <M d="(x+h)^2"/> means <M d="(x+h)(x+h)"/>, so multiply every piece by every piece (this is the expansion from <Ref to="functions"/>):</p>
   <M d="(x+h)(x+h) = x\cdot x + x\cdot h + h\cdot x + h\cdot h = x^2 + 2xh + h^2" block/>
   <p>The two middle pieces are each <M d="xh"/>, so together they make <M d="2xh"/>:</p>
   <M d="(x+h)^2 = x^2 + 2xh + h^2" block/>
-
   <p><strong>Step 2: Compute the rise: <M d="f(x+h) - f(x)"/>.</strong></p>
   <M d="(x^2 + 2xh + h^2) - x^2 = 2xh + h^2" block/>
-  <p>The <M d="x^2"/> terms cancel  -  they're the same in both points.</p>
-
-  <p><strong>Step 3: Compute rise/run: divide by <M d="h"/>.</strong></p>
+  <p>The <M d="x^2"/> terms cancel; they are the same in both points.</p>
+  <p><strong>Step 3: Compute rise over run: divide by <M d="h"/>.</strong></p>
   <M d="\frac{2xh + h^2}{h}" block/>
   <p>Factor out <M d="h"/> from the top:</p>
   <M d="= \frac{h(2x + h)}{h} = 2x + h" block/>
-  <p>(We can cancel the <M d="h"/>'s because <M d="h"/> is approaching 0 but isn't <em>exactly</em> 0  -  same reasoning as <Ref to="limits"/>'s limit problems.)</p>
-
+  <p>(We can cancel the <M d="h"/>'s because <M d="h"/> is approaching 0 but is not <em>exactly</em> 0, the same reasoning as the limit problems in <Ref to="limits"/>.)</p>
   <p><strong>Step 4: Take the limit as <M d="h \to 0"/>.</strong></p>
   <M d="\lim_{h \to 0}(2x + h) = 2x + 0 = 2x" block/>
-
   <Box color="green">
-    <p>✅ <M d="f'(x) = 2x"/></p>
+    <p><M d="f'(x) = 2x"/></p>
     <p><strong>What this tells us about the curve <M d="x^2"/>:</strong></p>
-    <p>At <M d="x = 1"/>: slope = <M d="2(1) = 2"/> ← matches our table!</p>
-    <p>At <M d="x = 3"/>: slope = <M d="2(3) = 6"/>  -  steeper</p>
-    <p>At <M d="x = 0"/>: slope = <M d="2(0) = 0"/>  -  flat! (the bottom of the parabola)</p>
-    <p>At <M d="x = -2"/>: slope = <M d="2(-2) = -4"/>  -  going downhill</p>
+    <p>At <M d="x = 1"/>: slope = <M d="2(1) = 2"/>, matching our table.</p>
+    <p>At <M d="x = 3"/>: slope = <M d="2(3) = 6"/>, steeper.</p>
+    <p>At <M d="x = 0"/>: slope = <M d="2(0) = 0"/>, flat (the bottom of the parabola).</p>
+    <p>At <M d="x = -2"/>: slope = <M d="2(-2) = -4"/>, going downhill.</p>
   </Box>
-
   <Graph fns={[(x) => x * x, (x) => 2 * x - 1, (x) => 6 * x - 9]} xMin={-3} xMax={4.5} yMin={-3} yMax={16}
     highlights={[
-      { x: 1, y: 1, label: "slope=2", color: "#f472b6", lo: [12, 12] },
-      { x: 3, y: 9, label: "slope=6", color: "#34d399", lo: [12, -16] },
-      { x: 0, y: 0, label: "slope=0", color: "#f59e0b", lo: [12, -14] },
+      { x: 1, y: 1, label: "slope = 2", color: "#f472b6", lo: [12, 12] },
+      { x: 3, y: 9, label: "slope = 6", color: "#34d399", lo: [12, -16] },
+      { x: 0, y: 0, label: "slope = 0", color: "#f59e0b", lo: [12, -14] },
     ]}
     label="f(x) = x² with tangent lines"
-    caption="The slope changes at every point. The derivative f'(x) = 2x captures this  -  it's a formula that gives you the slope anywhere."
+    caption="The slope changes at every point. The derivative f'(x) = 2x captures this: it is a formula that gives you the slope anywhere."
   />
 </div>
 )},
 {type:"concept",label:"The Derivative IS a New Function",render:()=>(
 <div>
   <p>This is a crucial point: <M d="f'(x) = 2x"/> is itself a <strong>function</strong>. You feed in an <M d="x"/>-value, and it tells you the slope of the original curve at that point.</p>
-
-  <p>Let's graph <em>both</em> the original function and its derivative side by side:</p>
-
+  <p>Let's graph <em>both</em> the original function and its derivative:</p>
   <Graph fn={(x) => x * x} xMin={-3} xMax={3} yMin={-2} yMax={9}
     label="Original: f(x) = x²"
-    caption="The parabola  -  steep on the sides, flat at the bottom"
+    caption="The parabola: steep on the sides, flat at the bottom"
   />
   <Graph fn={(x) => 2 * x} xMin={-3} xMax={3} yMin={-6} yMax={6}
     label="Derivative: f'(x) = 2x"
-    caption="The slope function  -  tells you how steep the parabola is at each x"
+    caption="The slope function: it tells you how steep the parabola is at each x"
   />
-
   <p><strong>Read them together:</strong></p>
   <Box>
-    <p>Where <M d="f(x) = x^2"/> is going <strong>downhill</strong> (left side) → <M d="f'(x) = 2x"/> is <strong>negative</strong></p>
-    <p>Where <M d="f(x)"/> is <strong>flat</strong> (bottom, at <M d="x=0"/>) → <M d="f'(x) = 0"/></p>
-    <p>Where <M d="f(x)"/> is going <strong>uphill</strong> (right side) → <M d="f'(x)"/> is <strong>positive</strong></p>
-    <p>Where <M d="f(x)"/> gets <strong>steeper</strong> → <M d="f'(x)"/> gets <strong>bigger in size</strong> (further from zero: more positive going uphill, more negative going downhill)</p>
+    <p>Where <M d="f(x) = x^2"/> is going <strong>downhill</strong> (left side), <M d="f'(x) = 2x"/> is <strong>negative</strong>.</p>
+    <p>Where <M d="f(x)"/> is <strong>flat</strong> (bottom, at <M d="x=0"/>), <M d="f'(x) = 0"/>.</p>
+    <p>Where <M d="f(x)"/> is going <strong>uphill</strong> (right side), <M d="f'(x)"/> is <strong>positive</strong>.</p>
+    <p>Where <M d="f(x)"/> gets <strong>steeper</strong>, <M d="f'(x)"/> gets <strong>bigger in size</strong> (further from zero: more positive going uphill, more negative going downhill).</p>
   </Box>
-
-  <p>This relationship between a function and its derivative is the heart of calculus. In <Ref to="first-derivative-test"/>, we'll use this to find peaks and valleys of any curve.</p>
+  <p>This relationship between a function and its derivative is the heart of calculus. In <Ref to="first-derivative-test"/> we will use it to find the peaks and valleys of any curve.</p>
 </div>
 )},
 {type:"interactive",render:()=>(<SlopeExplorer fn={(x)=>0.25*x*x*x-x} dfn={(x)=>0.75*x*x-1} xMin={-3} xMax={3} yMin={-4} yMax={4} start={-2.2}
@@ -1274,55 +1252,95 @@ answer:()=>(
 {type:"practice",render:()=>(<span>Use the limit definition to find <M d="f'(x)"/> for <M d="f(x) = 3x + 7"/>. Then explain why the answer makes sense.</span>),
 answer:()=>(
 <div>
-  <p><strong>Step 1: Compute <M d="f(x+h)"/>.</strong></p>
-  <p>Replace <M d="x"/> with <M d="(x+h)"/>:</p>
+  <p><strong>Step 1: Compute <M d="f(x+h)"/>.</strong> Replace <M d="x"/> with <M d="(x+h)"/>:</p>
   <M d="f(x+h) = 3(x+h) + 7 = 3x + 3h + 7" block/>
-
   <p><strong>Step 2: Compute the rise: <M d="f(x+h) - f(x)"/>.</strong></p>
   <M d="(3x + 3h + 7) - (3x + 7) = 3h" block/>
   <p>Everything cancels except <M d="3h"/>.</p>
-
-  <p><strong>Step 3: Rise/Run  -  divide by <M d="h"/>.</strong></p>
+  <p><strong>Step 3: Rise over run: divide by <M d="h"/>.</strong></p>
   <M d="\frac{3h}{h} = 3" block/>
-
   <p><strong>Step 4: Take the limit.</strong></p>
   <M d="\lim_{h \to 0} 3 = 3" block/>
-  <p>There's no <M d="h"/> left, so the limit is just 3.</p>
-
+  <p>There is no <M d="h"/> left, so the limit is just 3.</p>
   <Box color="green">
-    <p>✅ <M d="f'(x) = 3"/></p>
-    <p><strong>Why this makes sense:</strong> <M d="f(x) = 3x + 7"/> is a straight line with slope 3 (<Ref to="lines"/>). A line has the <em>same slope everywhere</em>  -  it doesn't curve. So the derivative is just the constant 3, at every point. The derivative of a line IS its slope.</p>
-    <p><strong>Looking ahead:</strong> Computing derivatives using this 4-step limit process works, but it's slow. Imagine doing this for <M d="x^{10}"/>! In <Ref to="power-rule"/>, we'll learn the <strong>Power Rule</strong>  -  a shortcut that lets you differentiate in seconds.</p>
+    <p><M d="f'(x) = 3"/></p>
+    <p><strong>Why this makes sense:</strong> <M d="f(x) = 3x + 7"/> is a straight line with slope 3 (<Ref to="lines"/>). A line has the <em>same slope everywhere</em>; it does not curve. So the derivative is just the constant 3, at every point. The derivative of a line IS its slope.</p>
+    <p><strong>Looking ahead:</strong> computing derivatives with this four-step limit process works, but it is slow. Imagine doing it for <M d="x^{10}"/>. In <Ref to="power-rule"/> we learn the <strong>power rule</strong>, a shortcut that lets you differentiate in seconds.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Use the limit definition to find <M d="f'(x)"/> for <M d="f(x)=x^2+4x"/>. Then find the slope of the curve at <M d="x=1"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Compute <M d="f(x+h)"/>.</strong> Replace every <M d="x"/> with <M d="(x+h)"/>, keeping the parentheses:</p>
+  <M d="f(x+h)=(x+h)^2+4(x+h)=x^2+2xh+h^2+4x+4h" block/>
+  <p><strong>Step 2: The rise.</strong> Subtract <M d="f(x)=x^2+4x"/>:</p>
+  <M d="(x^2+2xh+h^2+4x+4h)-(x^2+4x)=2xh+h^2+4h" block/>
+  <p>The <M d="x^2"/> and the <M d="4x"/> both cancel. Every surviving term has an <M d="h"/> in it, which is the sign you did the algebra right.</p>
+  <p><strong>Step 3: Divide by <M d="h"/>.</strong> Factor <M d="h"/> out of the top first:</p>
+  <M d="\frac{h(2x+h+4)}{h}=2x+h+4" block/>
+  <p><strong>Step 4: Let <M d="h\to 0"/>.</strong></p>
+  <M d="f'(x)=\lim_{h\to 0}(2x+h+4)=2x+4" block/>
+  <p><strong>Slope at <M d="x=1"/>:</strong> <M d="f'(1)=2(1)+4=6"/>.</p>
+  <p>Sanity check with a secant: from <M d="x=1"/> to <M d="x=1.01"/>, <M d="f(1)=5"/> and <M d="f(1.01)=1.0201+4.04=5.0601"/>, so the average rate is <M d="\tfrac{0.0601}{0.01}=6.01"/>, closing in on 6.</p>
+  <Box color="green"><p><M d="f'(x)=2x+4"/>, and the slope at <M d="x=1"/> is 6. Notice the answer is the derivative of <M d="x^2"/> (which is <M d="2x"/>) plus the derivative of <M d="4x"/> (which is 4, a line's slope): derivatives of added pieces simply add, a rule <Ref to="power-rule"/> makes official.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"power-rule",module:"Derivatives",title:"Power Rule & Basic Rules",time:"9 min",content:[
-{type:"concept",render:()=>(
+{slug:"power-rule",module:"Derivatives",title:"Power Rule & Basic Rules",time:"11 min",content:[
+{type:"concept",label:"A Pattern Hiding in the Limit",render:()=>(
 <div>
   <p>In <Ref to="derivative"/> we found derivatives with the limit definition. It works, but it is slow. Doing it for <M d="x^{10}"/> would take most of a page.</p>
   <p>The good news: there is a pattern hiding inside all those limit calculations, and once you see it you never need the slow method again. It is called the <strong>power rule</strong>, and it is the single most-used rule in the course.</p>
   <p>Before trusting any shortcut, let's check it against something we already proved the hard way. In <Ref to="derivative"/> we showed the slope of <M d="f(x)=x^2"/> works out to <M d="2x"/>. The power rule (next section) says: bring the 2 down in front and drop the exponent by 1, which gives <M d="2x^{1}=2x"/>. Exact same answer, in one second instead of a page. That match is why the rule is worth memorizing.</p>
-  <p>One example is a coincidence; two is a pattern. So let's also grind <M d="f(x)=x^3"/> through the slow <Ref to="derivative"/> method and watch the same shortcut appear. We need <M d="(x+h)^3"/>, which multiplies out to <M d="x^3+3x^2h+3xh^2+h^3"/>. The rise is <M d="3x^2h+3xh^2+h^3"/>; divide by the run <M d="h"/> to get <M d="3x^2+3xh+h^2"/>; now let <M d="h\to 0"/> and the slope is <M d="3x^2"/>. Line the two cases up: <M d="x^2"/> gave <M d="2x^1"/>, and <M d="x^3"/> gives <M d="3x^2"/>. Each time the old exponent drops to the front and the new exponent is one smaller  -  exactly the power rule. (Proving it for <em>every</em> power at once needs a tool called the binomial theorem, more than we need here; but you have now watched the pattern appear twice from scratch instead of being handed it.)</p>
+  <p>One example is a coincidence; two is a pattern. So let's also grind <M d="f(x)=x^3"/> through the slow method and watch the same shortcut appear. We need <M d="(x+h)^3"/>, which multiplies out to <M d="x^3+3x^2h+3xh^2+h^3"/>. The rise is <M d="3x^2h+3xh^2+h^3"/>; divide by the run <M d="h"/> to get <M d="3x^2+3xh+h^2"/>; now let <M d="h\to 0"/> and the slope is <M d="3x^2"/>. Line the two cases up: <M d="x^2"/> gave <M d="2x^1"/>, and <M d="x^3"/> gives <M d="3x^2"/>. Each time the old exponent drops to the front and the new exponent is one smaller, exactly the power rule. (Proving it for <em>every</em> power at once needs a tool called the binomial theorem, more than we need here; but you have now watched the pattern appear twice from scratch instead of being handed it.)</p>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"concept",label:"Fractions and Roots Are Powers Too",render:()=>(
 <div>
-  <p><strong>The Power Rule</strong> (most important rule in the course):</p>
+  <p>The power rule is stated for <M d="x^n"/>, and it is tempting to think that means whole-number powers only. It does not. In <Ref to="exponentials"/> you saw that <M d="\tfrac{1}{x}=x^{-1}"/>, <M d="\tfrac{1}{x^2}=x^{-2}"/>, and <M d="\sqrt{x}=x^{1/2}"/>. Rewrite a fraction or a root as a power, and the rule applies unchanged: bring the exponent down, subtract 1 from it.</p>
+  <Box>
+    <p><M d="\dfrac{1}{x}=x^{-1}"/>: bring down <M d="-1"/>, new exponent <M d="-1-1=-2"/>. So <M d="\dfrac{d}{dx}\Big[\dfrac{1}{x}\Big]=-x^{-2}=-\dfrac{1}{x^2}"/>.</p>
+    <p><M d="\dfrac{1}{x^2}=x^{-2}"/>: bring down <M d="-2"/>, new exponent <M d="-3"/>. So <M d="\dfrac{d}{dx}\Big[\dfrac{1}{x^2}\Big]=-2x^{-3}=-\dfrac{2}{x^3}"/>.</p>
+    <p><M d="\sqrt{x}=x^{1/2}"/>: bring down <M d="\tfrac12"/>, new exponent <M d="\tfrac12-1=-\tfrac12"/>. So <M d="\dfrac{d}{dx}\big[\sqrt{x}\big]=\tfrac12 x^{-1/2}=\dfrac{1}{2\sqrt{x}}"/>.</p>
+  </Box>
+  <p>Do the signs make sense? <M d="\tfrac{1}{x}"/> falls as <M d="x"/> grows (for positive <M d="x"/>), so its slope should be negative, and <M d="-\tfrac{1}{x^2}"/> is negative. <M d="\sqrt{x}"/> rises but flattens out, so its slope should be positive and shrinking, and <M d="\tfrac{1}{2\sqrt{x}}"/> is exactly that. The rule and the pictures agree.</p>
+  <p>Two habits that prevent most mistakes: rewrite <em>before</em> differentiating (turn every fraction and root into a power first), and rewrite <em>after</em> (turn negative exponents back into fractions so the answer is readable).</p>
+</div>
+)},
+{type:"rule",label:"The Power Rule and Its Helpers",render:()=>(
+<div>
+  <p><strong>The Power Rule</strong> (the most important rule in the course), valid for any constant exponent <M d="n"/>, whole, negative, or fractional:</p>
   <M d="\frac{d}{dx}\big[x^n\big]=n\cdot x^{n-1}" block/>
   <p>In plain English: <strong>"Bring the exponent down as a multiplier, then subtract 1 from the exponent."</strong></p>
-  <p>Examples to see the pattern:</p>
   <Box>
-    <p><M d="x^5\to 5x^4"/> (bring 5 down, exponent becomes 4)</p>
-    <p><M d="x^3\to 3x^2"/> (bring 3 down, exponent becomes 2)</p>
-    <p><M d="x^1\to 1\cdot x^0=1"/> (bring 1 down, exponent becomes 0, and <M d="x^0=1"/>, since any nonzero number to the power 0 is 1  -  from the exponent rules in <Ref to="exponentials"/>)</p>
-    <p><M d="x^0=1"/>, which is a constant, so its derivative is <M d="0"/> (constants have zero rate of change)</p>
+    <p><M d="x^5"/> becomes <M d="5x^4"/> (bring 5 down, exponent becomes 4)</p>
+    <p><M d="x^3"/> becomes <M d="3x^2"/></p>
+    <p><M d="x^1"/> becomes <M d="1\cdot x^0=1"/> (since <M d="x^0=1"/>, from <Ref to="exponentials"/>)</p>
+    <p><M d="x^{-1}"/> becomes <M d="-x^{-2}"/></p>
+    <p><M d="x^{1/2}"/> becomes <M d="\tfrac12 x^{-1/2}"/></p>
   </Box>
   <p><strong>Other rules:</strong></p>
-  <p><M d="\tfrac{d}{dx}[c]=0"/>  -  constants don't change, so their rate of change is 0.</p>
-  <p><M d="\tfrac{d}{dx}[c\cdot f(x)]=c\cdot f'(x)"/>  -  constant multipliers just "come along for the ride." Why? Multiply a whole function by 3 and every output triples, so every rise triples while the runs stay the same. Slope is rise over run, so every slope triples too: the constant simply multiplies the slope.</p>
-  <p><M d="\tfrac{d}{dx}[f\pm g]=f'\pm g'"/>  -  take each term separately. Why? Over any step, the rise of <M d="f+g"/> is just (rise of <M d="f"/>) plus (rise of <M d="g"/>). Divide by the same run and shrink the step, and the two slopes simply add.</p>
+  <p><M d="\tfrac{d}{dx}[c]=0"/>: constants do not change, so their rate of change is 0.</p>
+  <p><M d="\tfrac{d}{dx}[c\cdot f(x)]=c\cdot f'(x)"/>: constant multipliers just come along for the ride. Why? Multiply a whole function by 3 and every output triples, so every rise triples while the runs stay the same. Slope is rise over run, so every slope triples too: the constant simply multiplies the slope.</p>
+  <p><M d="\tfrac{d}{dx}[f\pm g]=f'\pm g'"/>: take each term separately. Why? Over any step, the rise of <M d="f+g"/> is just (rise of <M d="f"/>) plus (rise of <M d="g"/>). Divide by the same run and shrink the step, and the two slopes simply add. (You watched this happen in the second practice of <Ref to="derivative"/>.)</p>
+</div>
+)},
+{type:"example",label:"Fractions, Roots, and Whole Powers Together",render:()=>(
+<div>
+  <p>Differentiate <M d="f(x)=3\sqrt{x}+\dfrac{5}{x^2}-2x"/>.</p>
+  <p><strong>Step 1: Rewrite everything as powers.</strong></p>
+  <M d="f(x)=3x^{1/2}+5x^{-2}-2x^{1}" block/>
+  <p><strong>Step 2: Power rule on each term.</strong></p>
+  <Box>
+    <p><M d="3x^{1/2}"/>: bring down <M d="\tfrac12"/>: <M d="3\cdot\tfrac12=\tfrac32"/>; new exponent <M d="-\tfrac12"/>. Result <M d="\tfrac32 x^{-1/2}"/>.</p>
+    <p><M d="5x^{-2}"/>: bring down <M d="-2"/>: <M d="5\cdot(-2)=-10"/>; new exponent <M d="-3"/>. Result <M d="-10x^{-3}"/>.</p>
+    <p><M d="-2x^{1}"/>: bring down 1; new exponent 0. Result <M d="-2"/>.</p>
+  </Box>
+  <p><strong>Step 3: Rewrite the answer without negative exponents.</strong></p>
+  <M d="f'(x)=\frac{3}{2\sqrt{x}}-\frac{10}{x^3}-2" block/>
+  <Box color="green"><p><M d="f'(x)=\dfrac{3}{2\sqrt{x}}-\dfrac{10}{x^3}-2"/>. Rewrite, differentiate, rewrite back.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Differentiate <M d="f(x)=4x^5-3x^2+7x-9"/></span>),
@@ -1330,123 +1348,229 @@ answer:()=>(
 <div>
   <p>Apply the power rule to each term, one at a time:</p>
   <Box>
-    <p><strong>Term 1: <M d="4x^5"/></strong></p>
-    <p>The exponent is 5. Bring it down: <M d="5\times 4=20"/>.</p>
-    <p>Subtract 1 from the exponent: <M d="5-1=4"/>.</p>
-    <p>Result: <M d="20x^4"/></p>
-
-    <p><strong>Term 2: <M d="-3x^2"/></strong></p>
-    <p>Exponent is 2. Bring it down: <M d="2\times(-3)=-6"/>.</p>
-    <p>New exponent: <M d="2-1=1"/>.</p>
-    <p>Result: <M d="-6x"/></p>
-
-    <p><strong>Term 3: <M d="7x"/></strong></p>
-    <p>This is <M d="7x^1"/>. Bring the 1 down: <M d="1\times 7=7"/>.</p>
-    <p>New exponent: <M d="1-1=0"/>, and <M d="x^0=1"/>.</p>
-    <p>Result: <M d="7"/></p>
-
-    <p><strong>Term 4: <M d="-9"/></strong></p>
-    <p>This is a constant. Derivative of any constant = 0.</p>
+    <p><strong>Term 1: <M d="4x^5"/></strong>. The exponent is 5. Bring it down: <M d="5\times 4=20"/>. Subtract 1 from the exponent: <M d="5-1=4"/>. Result: <M d="20x^4"/>.</p>
+    <p><strong>Term 2: <M d="-3x^2"/></strong>. Exponent 2. Bring it down: <M d="2\times(-3)=-6"/>. New exponent: 1. Result: <M d="-6x"/>.</p>
+    <p><strong>Term 3: <M d="7x"/></strong>. This is <M d="7x^1"/>. Bring the 1 down: <M d="1\times 7=7"/>. New exponent 0, and <M d="x^0=1"/>. Result: <M d="7"/>.</p>
+    <p><strong>Term 4: <M d="-9"/></strong>. A constant. Its derivative is 0.</p>
   </Box>
-
   <p><strong>Combine all results:</strong></p>
   <M d="\boxed{f'(x)=20x^4-6x+7}" block/>
-
   <Box color="green">
-    <p>✅ <M d="f'(x)=20x^4-6x+7"/></p>
-    <p><strong>The pattern:</strong> multiply coefficient by exponent, reduce exponent by 1. Repeat for each term. Constants vanish.</p>
+    <p><M d="f'(x)=20x^4-6x+7"/></p>
+    <p><strong>The pattern:</strong> multiply coefficient by exponent, reduce the exponent by 1, repeat for each term. Constants vanish.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Differentiate <M d="f(x)=\dfrac{2}{x}+4\sqrt{x}-\dfrac{x^3}{3}"/></span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Rewrite as powers.</strong> <M d="\tfrac{2}{x}=2x^{-1}"/>, <M d="4\sqrt{x}=4x^{1/2}"/>, and <M d="\tfrac{x^3}{3}=\tfrac13 x^3"/> (dividing by 3 is the same as multiplying by <M d="\tfrac13"/>):</p>
+  <M d="f(x)=2x^{-1}+4x^{1/2}-\tfrac13 x^3" block/>
+  <p><strong>Step 2: Power rule on each term.</strong></p>
+  <Box>
+    <p><M d="2x^{-1}"/>: <M d="2\cdot(-1)=-2"/>, exponent <M d="-2"/>. Result <M d="-2x^{-2}"/>.</p>
+    <p><M d="4x^{1/2}"/>: <M d="4\cdot\tfrac12=2"/>, exponent <M d="-\tfrac12"/>. Result <M d="2x^{-1/2}"/>.</p>
+    <p><M d="-\tfrac13 x^3"/>: <M d="-\tfrac13\cdot 3=-1"/>, exponent 2. Result <M d="-x^2"/>.</p>
+  </Box>
+  <p><strong>Step 3: Rewrite back.</strong></p>
+  <M d="f'(x)=-\frac{2}{x^2}+\frac{2}{\sqrt{x}}-x^2" block/>
+  <Box color="green"><p><M d="f'(x)=-\dfrac{2}{x^2}+\dfrac{2}{\sqrt{x}}-x^2"/>. Every fraction and root in this course is a power in disguise.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"marginal",module:"Derivatives",title:"Marginal Analysis",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"tangent-lines",module:"Derivatives",title:"Tangent Lines, Linear Approximation & Differentiability",time:"12 min",content:[
+{type:"concept",label:"The Line That Hugs the Curve",render:()=>(
 <div>
-  <p>In <Ref to="power-rule"/>, we learned the power rule  -  a fast way to find derivatives. But <em>why</em> do businesses care about derivatives? This lesson connects derivatives to real business decisions.</p>
+  <p>In <Ref to="derivative"/> the tangent line appeared as the finish line of a limit: the secant lines rotated until they lined up with the curve. Now that the power rule makes slopes cheap, we can write down the tangent line's <em>equation</em>, and it turns out to be one of the most practical objects in the course.</p>
+  <p>Take <M d="f(x)=x^2"/> at <M d="x=1"/>. Two facts pin the tangent down: it passes through the point <M d="(1,\,f(1))=(1,\,1)"/>, and its slope is <M d="f'(1)=2\cdot 1=2"/>. A point and a slope is exactly what point-slope form from <Ref to="lines"/> needs:</p>
+  <M d="y-1=2(x-1)\;\Rightarrow\;y=2x-1" block/>
+  <p>That is the pink line drawn in <Ref to="derivative"/>. Nothing was guessed; it fell straight out of a point and a derivative.</p>
+  <p>Now the same idea for any function at any point <M d="x=a"/>. The point is <M d="(a,\,f(a))"/> and the slope is <M d="f'(a)"/>, so point-slope gives <M d="y-f(a)=f'(a)(x-a)"/>, or</p>
+  <M d="y=f(a)+f'(a)\,(x-a)" block/>
+  <p>Read it as a recipe: start at the curve's height <M d="f(a)"/>, then move along the tangent's slope <M d="f'(a)"/> for a horizontal distance <M d="x-a"/>. Every tangent line problem is three numbers: <M d="a"/>, <M d="f(a)"/>, and <M d="f'(a)"/>.</p>
+  <Graph fns={[(x)=>x*x,(x)=>2*x-1]} xMin={-1} xMax={3} yMin={-2} yMax={7}
+    highlights={[{x:1,y:1,label:"(1, 1), slope 2",color:"#f59e0b",lo:[12,14]}]}
+    label={<><span style={{color:"#818cf8"}}>y = x²</span> <span style={{color:"#e2e8f0"}}>and its tangent</span> <span style={{color:"#f472b6"}}>y = 2x - 1</span></>}
+    caption="The tangent at x = 1 matches the curve's height and slope there, then continues straight."/>
+</div>
+)},
+{type:"concept",label:"Using the Tangent to Estimate",render:()=>(
+<div>
+  <p>Look closely at the graph above near <M d="x=1"/>. The curve and the tangent are almost on top of each other. Zoom in far enough on any smooth curve and it becomes indistinguishable from its tangent line. That observation has a name, <strong>linear approximation</strong>, and a practical use: a line is easy to compute with, so near <M d="a"/> you can use the tangent's value instead of the curve's.</p>
+  <p>Try it. What is <M d="f(1.1)=1.1^2"/>? The tangent says <M d="y=2(1.1)-1=1.2"/>. The true value is <M d="1.21"/>. The estimate is off by only <M d="0.01"/>. Now a bigger step: <M d="f(1.5)"/>. Tangent: <M d="2(1.5)-1=2"/>. True: <M d="2.25"/>. Off by <M d="0.25"/>. The further you walk from the point of tangency, the more the curve bends away from the line, and the worse the estimate gets. Close to <M d="a"/>, the tangent is excellent.</p>
+  <p>Written with the formula, using <M d="\Delta x"/> ("delta x," the change in <M d="x"/>) for the small step:</p>
+  <M d="f(a+\Delta x)\approx f(a)+f'(a)\,\Delta x" block/>
+  <p>In words: <em>new value is about old value plus rate times step</em>. If you drive at 60 mph for a tenth of an hour, you go about 6 miles; the formula is that same reasoning applied to any function.</p>
+  <p><strong>Where a business meets this idea.</strong> The factory in <Ref to="derivative"/> has cost <M d="C(x)=1000+25x-0.05x^2"/>. At 50 items the cost is <M d="C(50)=2125"/>, and by the power rule <M d="C'(x)=25-0.1x"/>, so <M d="C'(50)=25-5=20"/> dollars per item. What will the 51st item cost? Take one step of <M d="\Delta x=1"/>:</p>
+  <M d="C(51)\approx C(50)+C'(50)\cdot 1=2125+20=2145" block/>
+  <p>The exact value is <M d="C(51)=1000+1275-130.05=2144.95"/>. The tangent estimate missed by five cents. This "cost of one more item" estimate is so useful that <Ref to="marginal"/> gives it its own name.</p>
+</div>
+)},
+{type:"concept",label:"Units: What a Derivative Is Measured In",render:()=>(
+<div>
+  <p>A slope is rise over run, so a derivative's units are the output's units <em>per</em> the input's units. If <M d="C(x)"/> is in dollars and <M d="x"/> counts items, then <M d="C'(x)"/> is in <strong>dollars per item</strong>. If distance is in miles and time in hours, the derivative is in <strong>miles per hour</strong>. If a population is in people and time in years, the derivative is in <strong>people per year</strong>.</p>
+  <p>Always say the units out loud when you interpret a derivative. "<M d="C'(50)=20"/>" is a number; "at 50 items, cost is rising at $20 per item" is an answer a manager can act on.</p>
+</div>
+)},
+{type:"concept",label:"Where a Derivative Fails",render:()=>(
+<div>
+  <p>A derivative is a single slope at a point. Three things can stop a curve from having one.</p>
+  <p><strong>A corner.</strong> Take the absolute value function <M d="f(x)=|x|"/>, which turns any input positive: <M d="|3|=3"/> and <M d="|-3|=3"/>. Its graph is a V with the point at the origin. To the left of 0 the graph is the line <M d="y=-x"/> (slope <M d="-1"/>); to the right it is <M d="y=x"/> (slope <M d="+1"/>). Sneak up on 0 from the left and the secant slopes are all <M d="-1"/>; from the right they are all <M d="+1"/>. The two sides disagree, so the limit that defines <M d="f'(0)"/> does not exist. No single tangent line fits a corner; you could balance infinitely many lines on the point.</p>
+  <Graph fn={(x)=>Math.abs(x)} xMin={-3} xMax={3} yMin={-0.5} yMax={3.5}
+    highlights={[{x:0,y:0,label:"corner: no derivative",color:"#f59e0b",lo:[10,-12]}]}
+    caption="The absolute value function: slope -1 on the left, +1 on the right, no single slope at the corner."/>
+  <p><strong>A vertical tangent.</strong> The cube root <M d="f(x)=x^{1/3}"/> is smooth, but at <M d="x=0"/> its graph turns straight up. By the power rule <M d="f'(x)=\tfrac13 x^{-2/3}=\tfrac{1}{3x^{2/3}}"/>, and at <M d="x=0"/> that is a division by zero. The secant slopes grow without bound as you approach 0. A vertical line has no slope (rise over a run of zero), so there is no derivative there.</p>
+  <Graph fn={(x)=>Math.cbrt(x)} xMin={-3} xMax={3} yMin={-2} yMax={2}
+    highlights={[{x:0,y:0,label:"vertical tangent",color:"#f59e0b",lo:[10,-12]}]}
+    caption="The cube root: the curve stands vertical at the origin, and a vertical line has no slope."/>
+  <p><strong>A break.</strong> Any hole, jump, or asymptote from <Ref to="continuity"/> kills the derivative too, because the secant lines have nothing to converge to. This gives a one-way street worth memorizing: <strong>differentiable implies continuous, but continuous does not imply differentiable.</strong> The absolute value function is continuous at 0 (you can draw through it without lifting your pen) yet it has no derivative there.</p>
+  <p>For the smooth business curves in this course, polynomials, exponentials, and logs on their domains, none of this happens. But you should know the three ways it can, because <Ref to="first-derivative-test"/> will hunt for peaks and valleys at exactly the points where the derivative is zero <em>or does not exist</em>.</p>
+</div>
+)},
+{type:"rule",label:"Tangent Line, Approximation, Differentiability",render:()=>(
+<div>
+  <p><strong>Tangent line at <M d="x=a"/>:</strong></p>
+  <M d="y=f(a)+f'(a)\,(x-a)" block/>
+  <p><strong>Linear approximation for a small step <M d="\Delta x"/> from <M d="a"/>:</strong></p>
+  <M d="f(a+\Delta x)\approx f(a)+f'(a)\,\Delta x" block/>
+  <p><strong>Units:</strong> a derivative is in (output units) per (input unit).</p>
+  <p><strong>A derivative fails to exist at:</strong> a corner (one-sided slopes disagree), a vertical tangent (slope grows without bound), or any break in the function. Differentiable implies continuous; the reverse is false.</p>
+</div>
+)},
+{type:"example",label:"A Tangent Line and an Estimate",render:()=>(
+<div>
+  <p>Find the tangent line to <M d="f(x)=x^3-2x"/> at <M d="x=2"/>, then use it to estimate <M d="f(2.05)"/>.</p>
+  <p><strong>Step 1: The point.</strong> <M d="f(2)=8-4=4"/>, so the point is <M d="(2,4)"/>.</p>
+  <p><strong>Step 2: The slope.</strong> By the power rule, <M d="f'(x)=3x^2-2"/>, so <M d="f'(2)=12-2=10"/>.</p>
+  <p><strong>Step 3: Point-slope.</strong></p>
+  <M d="y=4+10(x-2)=10x-16" block/>
+  <p><strong>Step 4: Estimate.</strong> Put <M d="x=2.05"/> into the tangent, not the curve:</p>
+  <M d="f(2.05)\approx 10(2.05)-16=20.5-16=4.5" block/>
+  <p><strong>Step 5: How good was it?</strong> The exact value is <M d="2.05^3-2(2.05)=8.615125-4.1=4.515125"/>. The estimate was off by about <M d="0.015"/>, less than half a percent, for one line of arithmetic instead of cubing a decimal.</p>
+  <Graph fns={[(x)=>x*x*x-2*x,(x)=>10*x-16]} xMin={0.5} xMax={3} yMin={-2} yMax={12}
+    highlights={[{x:2,y:4,label:"(2, 4), slope 10",color:"#f59e0b",lo:[-90,-10]}]}
+    caption="Near x = 2 the tangent y = 10x - 16 and the cubic are nearly the same line."/>
+  <Box color="green"><p>Tangent line <M d="y=10x-16"/>; <M d="f(2.05)\approx 4.5"/> (exact 4.515).</p></Box>
+</div>
+)},
+{type:"example",label:"Estimating Revenue From a Rate",render:()=>(
+<div>
+  <p>A company's revenue is <M d="R(x)=50x-0.02x^2"/> dollars for <M d="x"/> units. It currently sells 1,000 units. Estimate the revenue from selling 1,010 units without recomputing the whole function.</p>
+  <p><strong>Step 1: Current revenue.</strong> <M d="R(1000)=50000-0.02(1{,}000{,}000)=50000-20000=30{,}000"/>.</p>
+  <p><strong>Step 2: Current rate.</strong> <M d="R'(x)=50-0.04x"/>, so <M d="R'(1000)=50-40=10"/> dollars per unit. At this volume each extra unit adds about $10 (not the $50 sticker price, because selling more requires lowering the price).</p>
+  <p><strong>Step 3: Rate times step.</strong> The step is <M d="\Delta x=10"/> units:</p>
+  <M d="R(1010)\approx 30000+10\times 10=30{,}100" block/>
+  <p><strong>Step 4: Check.</strong> Exact: <M d="R(1010)=50500-0.02(1{,}020{,}100)=50500-20402=30{,}098"/>. The estimate was $2 high on $30,000, a rounding error.</p>
+  <Box color="green"><p>About $30,100 (exact $30,098). Units: revenue in dollars, so <M d="R'"/> is in dollars per unit, and rate times units gives dollars.</p></Box>
+</div>
+)},
+{type:"interactive",render:()=>(<ParamExplorer xMin={-0.5} xMax={2.5} yMin={-1.5} yMax={6.5} min={-1} max={1} step={0.02} start={0.5} name="step" hint="step away from x = 1"
+  intro="The curve is y = x squared and the pink line is its tangent at x = 1. Slide the step size to move away from the point of tangency and watch the gap between the curve's true value and the tangent's estimate open up."
+  build={(d)=>{const xv=1+d,tru=xv*xv,est=1+2*d,err=tru-est;return{curves:[{f:(v)=>v*v,color:"#818cf8"},{f:(v)=>2*v-1,color:"#f472b6"}],points:[{x:1,y:1,color:"#f59e0b"},{x:xv,y:tru,color:"#818cf8",label:`true ${tru.toFixed(3)}`,lx:10,ly:-12},{x:xv,y:est,color:"#f472b6",label:`estimate ${est.toFixed(3)}`,lx:10,ly:16}],lines:Math.abs(d)>0.01?[{x1:xv,y1:est,x2:xv,y2:tru,color:"#fbbf24",width:3}]:[],formula:`f(1+${d.toFixed(2)})\\approx 1+2(${d.toFixed(2)})=${est.toFixed(3)}`,caption:Math.abs(d)<0.01?"At the point of tangency the estimate is exact: the line and the curve share this point.":`A step of ${d.toFixed(2)}: the tangent says ${est.toFixed(3)}, the curve says ${tru.toFixed(3)}, an error of ${err.toFixed(3)}. ${Math.abs(d)<0.25?"Close to the point, the line is an excellent stand-in.":"Further away, the curve bends off the line and the error grows."}`};}}/>)},
+{type:"practice",render:()=>(<span>Find the tangent line to <M d="f(x)=\sqrt{x}"/> at <M d="x=4"/>, then use it to estimate <M d="\sqrt{4.2}"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: The point.</strong> <M d="f(4)=\sqrt{4}=2"/>, so the point is <M d="(4,2)"/>.</p>
+  <p><strong>Step 2: The slope.</strong> Rewrite <M d="\sqrt{x}=x^{1/2}"/> and use the power rule (<Ref to="power-rule"/>): <M d="f'(x)=\tfrac12 x^{-1/2}=\tfrac{1}{2\sqrt{x}}"/>. At <M d="x=4"/>: <M d="f'(4)=\tfrac{1}{2\cdot 2}=\tfrac14"/>.</p>
+  <p><strong>Step 3: Point-slope.</strong></p>
+  <M d="y=2+\tfrac14(x-4)=\tfrac{x}{4}+1" block/>
+  <p><strong>Step 4: Estimate.</strong> <M d="\sqrt{4.2}\approx\tfrac{4.2}{4}+1=1.05+1=2.05"/>.</p>
+  <p><strong>Step 5: Check.</strong> A calculator gives <M d="\sqrt{4.2}\approx 2.04939"/>. The estimate is high by about <M d="0.0006"/>. Notice it is <em>high</em>: the square root curve bends downward (it flattens as it rises), so its tangent sits above it, and any tangent estimate on this curve overshoots. <Ref to="concavity"/> makes that bending precise.</p>
+  <Box color="green"><p>Tangent line <M d="y=\tfrac{x}{4}+1"/>; <M d="\sqrt{4.2}\approx 2.05"/> (exact 2.0494).</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Is <M d="f(x)=|x-3|"/> differentiable at <M d="x=3"/>? Is it continuous there? Then: where is <M d="g(x)=\dfrac{1}{x}"/> not differentiable, and why?</span>),
+answer:()=>(
+<div>
+  <p><strong>Part 1: <M d="|x-3|"/> at <M d="x=3"/>.</strong> This is the V from the lesson, slid 3 units to the right, so its corner sits at <M d="x=3"/>. Check the two sides. For <M d="x<3"/>, <M d="x-3"/> is negative and the absolute value flips it: <M d="f(x)=3-x"/>, slope <M d="-1"/>. For <M d="x>3"/>, <M d="f(x)=x-3"/>, slope <M d="+1"/>. The one-sided slopes disagree, so <strong>no derivative at 3</strong>.</p>
+  <p>Continuity: <M d="f(3)=0"/> is defined, and from both sides the function heads to 0, so the limit exists and equals the value. All three conditions from <Ref to="continuity"/> pass: <strong>continuous</strong>. This is the one-way street in action: continuous, but not differentiable.</p>
+  <p><strong>Part 2: <M d="\tfrac{1}{x}"/>.</strong> By the power rule <M d="g'(x)=-\tfrac{1}{x^2}"/>, which exists for every <M d="x"/> except 0. At <M d="x=0"/> the function itself is undefined (the first jam from <Ref to="functions"/>), and there is a vertical asymptote (<Ref to="infinite-limits"/>). A function cannot have a slope at a point where it has no value. So <M d="g"/> is not differentiable at <M d="x=0"/>, and this is the "break" case, not a corner.</p>
+  <Box color="green"><p><M d="|x-3|"/>: continuous at 3, not differentiable there (a corner). <M d="\tfrac{1}{x}"/>: not differentiable at 0, because it is not even defined there.</p></Box>
+</div>
+)},
+]},
 
-  <p>In business, the derivative gets a special name: the <strong>marginal</strong> function. "Marginal" just means "the next one"  -  what happens when you produce or sell <em>one more</em> unit?</p>
-
+{slug:"marginal",module:"Derivatives",title:"Marginal Analysis",time:"11 min",content:[
+{type:"concept",label:"Marginal Means the Next One",render:()=>(
+<div>
+  <p>In <Ref to="power-rule"/> we learned a fast way to find derivatives. But <em>why</em> do businesses care about derivatives? This lesson connects derivatives to real business decisions, using the cost, revenue, and profit functions from <Ref to="business-models"/>.</p>
+  <p>In business, the derivative gets a special name: the <strong>marginal</strong> function. "Marginal" just means "the next one": what happens when you produce or sell <em>one more</em> unit?</p>
   <Box>
     <p><strong>Cost function</strong> <M d="C(x)"/> = total cost to produce <M d="x"/> items</p>
-    <p><strong>Marginal cost</strong> <M d="C'(x)"/> = approximate cost of producing <strong>one more</strong> item</p>
+    <p><strong>Marginal cost</strong> <M d="C'(x)"/> = approximate cost of producing <strong>one more</strong> item, in dollars per item</p>
   </Box>
   <Box>
     <p><strong>Revenue function</strong> <M d="R(x)"/> = total revenue from selling <M d="x"/> items</p>
-    <p><strong>Marginal revenue</strong> <M d="R'(x)"/> = approximate revenue from selling <strong>one more</strong> item</p>
+    <p><strong>Marginal revenue</strong> <M d="R'(x)"/> = approximate revenue from selling <strong>one more</strong> item, in dollars per item</p>
   </Box>
   <Box>
     <p><strong>Profit function</strong> <M d="P(x) = R(x) - C(x)"/></p>
     <p><strong>Marginal profit</strong> <M d="P'(x) = R'(x) - C'(x)"/></p>
   </Box>
-
-  <p><strong>Why "approximate"?</strong> The derivative gives the <em>instantaneous</em> rate of change  -  the cost per item right at this production level. Multiply that per-item rate by a one-unit step and you get the cost of roughly one more item, which is why <M d="C'(x)"/> estimates <M d="C(x+1)-C(x)"/>. It is only an estimate because producing "one more item" is a change of <M d="\Delta x = 1"/> (read "delta x"; the triangle <M d="\Delta"/> always means "change in"), not an infinitely small step. But it is usually an excellent estimate.</p>
-
-  <p><strong>The golden rule of profit:</strong> Profit is maximized when marginal revenue equals marginal cost:</p>
+  <p><strong>Why "approximate"?</strong> This is the linear approximation from <Ref to="tangent-lines"/> with a step of exactly one unit. The derivative gives the <em>instantaneous</em> rate, dollars per item right at this production level; multiply that rate by a one-unit step and you get the cost of roughly one more item, so <M d="C'(x)"/> estimates <M d="C(x+1)-C(x)"/>. It is only an estimate because "one more item" is a change of <M d="\Delta x=1"/>, not an infinitely small step. But it is usually an excellent estimate, as the first example shows.</p>
+  <p><strong>The golden rule of profit:</strong> profit is maximized when marginal revenue equals marginal cost:</p>
   <M d="R'(x) = C'(x)" block/>
-  <p>Why? If <M d="R'(x) > C'(x)"/>, the next unit brings in more than it costs  -  keep producing! If <M d="R'(x) < C'(x)"/>, the next unit costs more than it earns  -  stop! The sweet spot is where they're exactly equal.</p>
-  <p>One honest fine print: profit can only <em>peak</em> where <M d="R'(x)=C'(x)"/>, but you should still confirm the point is a peak and not a valley. For the profit curves in this course (downward-opening arches), it always is, and <Ref to="concavity"/> gives you the formal test.</p>
+  <p>Why? If <M d="R'(x) > C'(x)"/>, the next unit brings in more than it costs, so keep producing. If <M d="R'(x) < C'(x)"/>, the next unit costs more than it earns, so stop. The sweet spot is where they are exactly equal.</p>
+  <p>One honest fine print: profit can only <em>peak</em> where <M d="R'(x)=C'(x)"/>, but you should still confirm the point is a peak and not a valley. For the profit curves in this course (downward-opening parabolas from <Ref to="quadratics"/>) it always is, and <Ref to="concavity"/> gives you the formal test.</p>
 </div>
 )},
-{type:"example",label:"Full Walkthrough: Marginal Cost vs. Exact Cost",render:()=>(
+{type:"rule",label:"Marginal Functions",render:()=>(
 <div>
-  <p><em>"A factory's cost function is <M d="C(x) = 1000 + 25x - 0.05x^2"/>. Find the marginal cost at <M d="x = 50"/> and compare it to the exact cost of producing item #51."</em></p>
-
+  <M d="\text{marginal cost}=C'(x)\qquad\text{marginal revenue}=R'(x)\qquad\text{marginal profit}=P'(x)=R'(x)-C'(x)" block/>
+  <p>Each estimates the change from one more unit: <M d="C'(x)\approx C(x+1)-C(x)"/>, and likewise for <M d="R"/> and <M d="P"/>. Units are dollars per item.</p>
+  <p><strong>Break-even:</strong> <M d="R(x)=C(x)"/>, the roots of <M d="P(x)"/>.</p>
+  <p><strong>Maximum profit:</strong> where <M d="P'(x)=0"/>, which is the same as <M d="R'(x)=C'(x)"/>.</p>
+</div>
+)},
+{type:"example",label:"Marginal Cost Versus Exact Cost",render:()=>(
+<div>
+  <p><em>"A factory's cost function is <M d="C(x) = 1000 + 25x - 0.05x^2"/>. Find the marginal cost at <M d="x = 50"/> and compare it to the exact cost of producing item number 51."</em></p>
   <p><strong>Part A: Find marginal cost (the derivative way).</strong></p>
   <p>Differentiate <M d="C(x)"/> term by term using the power rule from <Ref to="power-rule"/>:</p>
   <Box>
-    <p><M d="1000"/> → constant → <M d="0"/></p>
-    <p><M d="25x = 25x^1"/> → bring 1 down: <M d="1 \times 25 = 25"/>, new exponent <M d="1-1=0"/>: → <M d="25"/></p>
-    <p><M d="-0.05x^2"/> → bring 2 down: <M d="2 \times (-0.05) = -0.10"/>, new exponent <M d="2-1=1"/>: → <M d="-0.10x"/></p>
+    <p><M d="1000"/> is a constant, so its derivative is <M d="0"/>.</p>
+    <p><M d="25x = 25x^1"/>: bring 1 down, <M d="1 \times 25 = 25"/>, new exponent 0, giving <M d="25"/>.</p>
+    <p><M d="-0.05x^2"/>: bring 2 down, <M d="2 \times (-0.05) = -0.10"/>, new exponent 1, giving <M d="-0.10x"/>.</p>
   </Box>
   <M d="C'(x) = 25 - 0.10x" block/>
   <p>Now plug in <M d="x = 50"/>:</p>
-  <M d="C'(50) = 25 - 0.10(50) = 25 - 5 = \$20" block/>
-  <p><strong>Interpretation:</strong> When you're already making 50 items, the 51st item costs approximately <strong>$20</strong>.</p>
-
+  <M d="C'(50) = 25 - 0.10(50) = 25 - 5 = \$20\text{ per item}" block/>
+  <p><strong>Interpretation:</strong> when you are already making 50 items, the 51st costs approximately <strong>$20</strong>.</p>
   <p><strong>Part B: Find the exact cost (the subtraction way).</strong></p>
-  <p>The exact cost of item #51 is <M d="C(51) - C(50)"/>:</p>
+  <p>The exact cost of item 51 is <M d="C(51) - C(50)"/>:</p>
   <M d="C(50) = 1000 + 25(50) - 0.05(50)^2 = 1000 + 1250 - 125 = \$2{,}125" block/>
   <M d="C(51) = 1000 + 25(51) - 0.05(51)^2 = 1000 + 1275 - 130.05 = \$2{,}144.95" block/>
   <M d="C(51) - C(50) = 2144.95 - 2125 = \$19.95" block/>
-
   <Box color="green">
-    <p>✅ Marginal cost (derivative estimate): <strong>$20.00</strong></p>
-    <p>Exact cost of item #51: <strong>$19.95</strong></p>
-    <p>The derivative was off by only 5 cents! That's the power of marginal analysis - you get a fast, accurate estimate without computing the whole cost function twice.</p>
+    <p>Marginal cost (derivative estimate): <strong>$20.00</strong></p>
+    <p>Exact cost of item 51: <strong>$19.95</strong></p>
+    <p>The derivative was off by only 5 cents. That is the power of marginal analysis: a fast, accurate estimate without computing the whole cost function twice.</p>
   </Box>
 </div>
 )},
 {type:"example",label:"Break-Even and Profit Maximization (Visual)",render:()=>(
 <div>
-  <p>Let's use a simple example to see how Revenue and Cost curves tell you everything about a business. Suppose:</p>
-  <M d="R(x) = 12x - 0.01x^2 \quad\text{(revenue)}" block/>
+  <p>Let's use a simple example to see how revenue and cost curves tell you everything about a business. A company's price-demand equation is <M d="p=12-0.01x"/> (the one from <Ref to="business-models"/>), and its cost is <M d="C(x)=100+2x"/>. Revenue is price times quantity:</p>
+  <M d="R(x) = (12-0.01x)\,x = 12x - 0.01x^2 \quad\text{(revenue)}" block/>
   <M d="C(x) = 100 + 2x \quad\text{(cost)}" block/>
-
-  <p><strong>Break-even</strong> is where Revenue = Cost. On the graph, it's where the two curves <em>cross</em>. Below that point, cost is higher than revenue (you're losing money). Above it, revenue exceeds cost (you're making money).</p>
-
-  <p><strong>Max profit</strong> is where the <em>gap</em> between Revenue and Cost is largest. How do we find it? The gap is <M d="P(x) = R(x) - C(x)"/>. The gap is largest where it stops growing, which is where <M d="P'(x) = 0"/>. (A flat spot where <M d="P'(x)=0"/> could in principle be a peak or a valley; here the profit curve opens downward, so its one flat spot is the peak. <Ref to="first-derivative-test"/> shows how to tell a peak from a valley without graphing.)</p>
-
+  <p><strong>Break-even</strong> is where revenue equals cost. On the graph, it is where the two curves <em>cross</em>. Below that point, cost is higher than revenue (you are losing money). Above it, revenue exceeds cost (you are making money).</p>
+  <p><strong>Max profit</strong> is where the <em>gap</em> between revenue and cost is largest. How do we find it? The gap is <M d="P(x) = R(x) - C(x)"/>. The gap is largest where it stops growing, which is where <M d="P'(x) = 0"/>. (A flat spot where <M d="P'(x)=0"/> could in principle be a peak or a valley; here the profit curve opens downward, so its one flat spot is the peak. <Ref to="first-derivative-test"/> shows how to tell a peak from a valley without graphing.)</p>
   <p>Let's find both:</p>
-
   <p><strong>Profit function:</strong></p>
   <M d="P(x) = (12x - 0.01x^2) - (100 + 2x) = -0.01x^2 + 10x - 100" block/>
-
   <p><strong>Break-even:</strong> set <M d="P(x) = 0"/>:</p>
   <M d="-0.01x^2 + 10x - 100 = 0" block/>
-  <p>Multiply every term by -100 to clear the decimals: <M d="x^2 - 1000x + 10000 = 0"/></p>
-  <p>This is a <strong>quadratic</strong> equation (it contains an <M d="x^2"/>). The <strong>quadratic formula</strong> solves any equation shaped like <M d="ax^2+bx+c=0"/>:</p>
+  <p>Multiply every term by <M d="-100"/> to clear the decimals: <M d="x^2 - 1000x + 10000 = 0"/>. This is a quadratic, so the quadratic formula from <Ref to="quadratics"/> solves it:</p>
   <M d="x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" block/>
-  <p>You may have met this in algebra; it comes from a technique called completing the square. We will take it as a known tool here and focus on using it correctly.</p>
-  <p>Here <M d="a=1"/>, <M d="b=-1000"/>, <M d="c=10000"/>. Watch the two sign traps when <M d="b"/> is negative. The formula opens with <M d="-b"/>, and <M d="b=-1000"/>, so <M d="-b=-(-1000)=+1000"/>. And <M d="b^2"/> means <M d="(-1000)^2"/>, and a negative squared is positive, so <M d="b^2=+1{,}000{,}000"/>. Putting those in:</p>
+  <p>Here <M d="a=1"/>, <M d="b=-1000"/>, <M d="c=10000"/>. Watch the two sign traps when <M d="b"/> is negative: <M d="-b=+1000"/>, and <M d="b^2=(-1000)^2=+1{,}000{,}000"/>. Putting those in:</p>
   <M d="x=\frac{1000\pm\sqrt{1{,}000{,}000-40{,}000}}{2}=\frac{1000\pm\sqrt{960{,}000}}{2}\approx\frac{1000\pm 979.8}{2}" block/>
   <p>The two solutions are <M d="x\approx 10"/> and <M d="x\approx 990"/>.</p>
-  <p>So you break even at about <strong>10 units</strong> and again at <strong>990 units</strong>. Between those, you're profitable.</p>
-
+  <p>So you break even at about <strong>10 units</strong> and again at <strong>990 units</strong>. Between those, you are profitable.</p>
   <p><strong>Max profit:</strong> set <M d="P'(x) = 0"/>:</p>
   <M d="P'(x) = -0.02x + 10 = 0 \;\Rightarrow\; x = 500" block/>
   <M d="P(500) = -0.01(250000) + 10(500) - 100 = -2500 + 5000 - 100 = \$2{,}400" block/>
-
+  <p>(Check against <Ref to="quadratics"/>: the vertex of <M d="P"/> is at <M d="x=-\tfrac{10}{2(-0.01)}=500"/>. The derivative and the vertex formula agree, as they must, because a parabola's flat spot <em>is</em> its vertex.)</p>
   <Graph fns={[(x) => 12*x - 0.01*x*x, (x) => 100 + 2*x]} xMin={0} xMax={1100} yMin={0} yMax={4500}
     highlights={[
       { x: 10.102, y: 120.2, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
@@ -1456,7 +1580,6 @@ answer:()=>(
     label={<><span style={{color:"#818cf8"}}>Revenue</span> <span style={{color:"#e2e8f0"}}>vs</span> <span style={{color:"#f472b6"}}>Cost</span></>}
     caption="The curves cross at the break-even points. The biggest gap between them is max profit."
   />
-
   <Graph fn={(x) => -0.01*x*x + 10*x - 100} xMin={0} xMax={1100} yMin={-500} yMax={2800}
     highlights={[
       { x: 10.102, y: 0, label: "Break-even", color: "#f59e0b", lo: [10, -14] },
@@ -1466,12 +1589,11 @@ answer:()=>(
     label="Profit: P(x) = R(x) - C(x)"
     caption="Profit is zero at the break-even points, and peaks at x = 500 where P'(x) = 0"
   />
-
   <Box color="amber">
     <p><strong>How these two graphs connect:</strong></p>
-    <p>The top graph shows R(x) and C(x) as separate curves. Where they cross = break-even (profit = 0).</p>
-    <p>The bottom graph shows the <em>difference</em> between them. Where it crosses zero = same break-even points. Where it peaks = max profit.</p>
-    <p>The derivative <M d="P'(x) = 0"/> finds that peak. That's the power of marginal analysis.</p>
+    <p>The top graph shows <M d="R(x)"/> and <M d="C(x)"/> as separate curves. Where they cross is break-even (profit = 0).</p>
+    <p>The bottom graph shows the <em>difference</em> between them. Where it crosses zero is the same break-even points. Where it peaks is max profit.</p>
+    <p>The derivative <M d="P'(x) = 0"/> finds that peak. That is the power of marginal analysis.</p>
   </Box>
 </div>
 )},
@@ -1481,93 +1603,90 @@ answer:()=>(
   <p><strong>Step 1: Write the profit function.</strong></p>
   <M d="P(x) = R(x) - C(x) = (50x - 0.02x^2) - (200 + 10x)" block/>
   <M d="P(x) = -0.02x^2 + 40x - 200" block/>
-
   <p><strong>Step 2: Find marginal profit (differentiate).</strong></p>
   <Box>
-    <p><M d="-0.02x^2"/> → bring 2 down: <M d="2(-0.02) = -0.04"/>, exponent <M d="2-1=1"/> → <M d="-0.04x"/></p>
-    <p><M d="40x"/> → <M d="40"/></p>
-    <p><M d="-200"/> → <M d="0"/></p>
+    <p><M d="-0.02x^2"/>: bring 2 down, <M d="2(-0.02) = -0.04"/>, exponent 1, giving <M d="-0.04x"/>.</p>
+    <p><M d="40x"/> gives <M d="40"/>.</p>
+    <p><M d="-200"/> gives <M d="0"/>.</p>
   </Box>
   <M d="P'(x) = -0.04x + 40" block/>
-
-  <p><strong>Step 3: Set marginal profit = 0</strong> (the "golden rule"  -  this is the same as <M d="R'(x) = C'(x)"/>).</p>
-  <M d="-0.04x + 40 = 0" block/>
-  <M d="0.04x = 40" block/>
-  <M d="x = \frac{40}{0.04} = 1{,}000" block/>
-
+  <p><strong>Step 3: Set marginal profit to 0</strong> (the golden rule; this is the same as <M d="R'(x) = C'(x)"/>).</p>
+  <M d="-0.04x + 40 = 0\;\Rightarrow\;0.04x = 40\;\Rightarrow\;x = \frac{40}{0.04} = 1{,}000" block/>
   <p><strong>Step 4: Find the actual profit.</strong></p>
   <M d="P(1000) = -0.02(1{,}000{,}000) + 40(1000) - 200 = -20{,}000 + 40{,}000 - 200 = \$19{,}800" block/>
-
   <Box color="green">
-    <p>✅ Produce <strong>1,000 units</strong> for maximum profit of <strong>$19,800</strong>.</p>
-    <p><strong>Connection to <Ref to="derivative"/>:</strong> The derivative told us the <em>rate</em> profit is changing. When that rate hits zero, profit has peaked - it's not going up anymore.</p>
+    <p>Produce <strong>1,000 units</strong> for maximum profit of <strong>$19,800</strong>.</p>
+    <p><strong>Connection to <Ref to="derivative"/>:</strong> the derivative told us the <em>rate</em> profit is changing. When that rate hits zero, profit has peaked; it is not going up anymore.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Revenue is <M d="R(x)=80x-0.1x^2"/>. Find the marginal revenue at <M d="x=200"/>, state its units, interpret it, and compare it to the exact revenue from the 201st unit.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Marginal revenue.</strong> Differentiate: <M d="80x"/> gives 80, and <M d="-0.1x^2"/> gives <M d="-0.2x"/>:</p>
+  <M d="R'(x)=80-0.2x\qquad R'(200)=80-40=40" block/>
+  <p><strong>Step 2: Units and meaning.</strong> Revenue is in dollars and <M d="x"/> counts units, so <M d="R'"/> is in <strong>dollars per unit</strong>. At 200 units, the next unit sold brings in about <strong>$40</strong>. Notice that is far below the $80 leading coefficient: to sell unit 201 the price on every unit had to come down a little, and that drag is built into the marginal revenue.</p>
+  <p><strong>Step 3: Exact revenue from unit 201.</strong></p>
+  <M d="R(200)=16000-4000=12{,}000\qquad R(201)=16080-4040.1=12{,}039.90" block/>
+  <M d="R(201)-R(200)=39.90" block/>
+  <p>The marginal estimate of $40 is off by ten cents.</p>
+  <Box color="green"><p><M d="R'(200)=40"/> dollars per unit; the exact gain from unit 201 is $39.90.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"exp-log-derivatives",module:"Derivatives",title:"Derivatives of eˣ and ln(x)",time:"9 min",content:[
-{type:"concept",render:()=>(
+{slug:"exp-log-derivatives",module:"Derivatives",title:"Derivatives of eˣ and ln(x)",time:"10 min",content:[
+{type:"concept",label:"Why e Is Special",render:()=>(
 <div>
-  <p>In Lessons <Ref to="exponentials" bare/> and <Ref to="logarithms" bare/>, we learned that <M d="e^x"/> and <M d="\ln(x)"/> are inverses  -  they undo each other. In <Ref to="power-rule"/>, we learned the power rule for derivatives. But the power rule only works on <M d="x^n"/>  -  what about <M d="e^x"/> and <M d="\ln(x)"/>?</p>
-
-  <p>These two functions have their own special derivative rules, and they're beautifully simple.</p>
-
-  <p><strong>Why is <M d="e"/> so special?</strong></p>
-  <p>Remember from <Ref to="exponentials"/>: <M d="e \approx 2.71828"/> is the "continuous compounding" number. Here's what makes it magical for calculus:</p>
-
+  <p>In Lessons <Ref to="exponentials" bare/> and <Ref to="logarithms" bare/> we learned that <M d="e^x"/> and <M d="\ln(x)"/> are inverses; they undo each other. In <Ref to="power-rule"/> we learned the power rule for derivatives. But the power rule only works on <M d="x^n"/>, a variable raised to a fixed power. What about <M d="e^x"/>, where the variable is <em>in</em> the exponent, and <M d="\ln(x)"/>?</p>
+  <p>These two functions have their own special derivative rules, and they are beautifully simple.</p>
+  <p><strong>Why is <M d="e"/> so special?</strong> Remember from <Ref to="exponentials"/>: <M d="e \approx 2.71828"/> is the continuous-compounding number. Here is what makes it magical for calculus:</p>
   <Box color="amber">
     <p><M d="e^x"/> is its <strong>own derivative</strong>: if <M d="f(x) = e^x"/>, then <M d="f'(x) = e^x"/>. The rate at which it grows always equals its current value.</p>
     <p>(Constant multiples like <M d="5e^x"/> share this too, since their derivative is <M d="5e^x"/> again. Among all such curves, <M d="e^x"/> is the basic one, the only one passing through <M d="(0,1)"/>.)</p>
   </Box>
-
-  <p>Think about what that means: at the point where <M d="e^x = 5"/>, the function is growing at rate 5. Where <M d="e^x = 100"/>, it's growing at rate 100. The bigger it gets, the faster it grows  -  and the rate is always <em>exactly</em> equal to the value. No other base does this.</p>
-
+  <p>Think about what that means: at the point where <M d="e^x = 5"/>, the function is growing at rate 5. Where <M d="e^x = 100"/>, it is growing at rate 100. The bigger it gets, the faster it grows, and the rate is always <em>exactly</em> equal to the value. No other base does this.</p>
   <p>Let's verify with the limit definition from <Ref to="derivative"/>. At <M d="x = 0"/>, <M d="e^0 = 1"/>. The derivative should also be 1:</p>
   <M d="f'(0) = \lim_{h\to 0}\frac{e^{0+h}-e^0}{h} = \lim_{h\to 0}\frac{e^h - 1}{h}" block/>
   <Box>
     <p><M d="h = 0.1"/>: <M d="\tfrac{e^{0.1}-1}{0.1} = \tfrac{0.10517}{0.1} = 1.0517"/></p>
     <p><M d="h = 0.01"/>: <M d="\tfrac{e^{0.01}-1}{0.01} = 1.00502"/></p>
-    <p><M d="h = 0.001"/>: <M d="1.0005"/>  -  heading toward exactly <strong>1</strong> ✓</p>
+    <p><M d="h = 0.001"/>: <M d="1.0005"/>, heading toward exactly <strong>1</strong></p>
   </Box>
-
   <p>That checked the slope only at <M d="x=0"/>. Here is why the slope equals the height at <em>every</em> point, using the exponent rule <M d="e^{x+h}=e^x\cdot e^h"/> from <Ref to="exponentials"/>:</p>
   <M d="f'(x)=\lim_{h\to 0}\frac{e^{x+h}-e^x}{h}=\lim_{h\to 0}\frac{e^x e^h-e^x}{h}=\lim_{h\to 0}e^x\cdot\frac{e^h-1}{h}" block/>
   <p>The <M d="e^x"/> has no <M d="h"/> inside it, so it slides outside the limit as a constant:</p>
   <M d="f'(x)=e^x\cdot\lim_{h\to 0}\frac{e^h-1}{h}=e^x\cdot 1=e^x" block/>
   <p>That last limit is the exact number the table was closing in on; it equals 1. So <M d="f'(x)=e^x"/> at every point, not just at <M d="x=0"/>.</p>
-
   <Graph fns={[(x) => Math.exp(x), (x) => x + 1, (x) => Math.E * x]} xMin={-2} xMax={3} yMin={-1} yMax={10}
     highlights={[
       { x: 0, y: 1, label: "slope = 1 = height", color: "#f472b6", lo: [12, 14] },
       { x: 1, y: Math.E, label: "slope = e = height", color: "#34d399", lo: [12, -14] },
     ]}
     label="f(x) = e^x with two tangent lines"
-    caption="The two straight lines are the tangents at x=0 (pink) and x=1 (green). Each tangent's steepness equals the curve's height at that point, 1 and e. That is what makes e^x special."
+    caption="The two straight lines are the tangents at x = 0 (pink) and x = 1 (green). Each tangent's steepness equals the curve's height at that point, 1 and e. That is what makes e^x special."
   />
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"rule",label:"The Two Special Derivatives",render:()=>(
 <div>
   <M d="\frac{d}{dx}[e^x] = e^x" block/>
   <p><M d="e^x"/> is its own derivative. The constant multiplier rule from <Ref to="power-rule"/> still applies:</p>
   <M d="\frac{d}{dx}[5e^x] = 5e^x\qquad\frac{d}{dx}[-3e^x] = -3e^x" block/>
-
   <M d="\frac{d}{dx}[\ln x] = \frac{1}{x}" block/>
-  <p>The derivative of <M d="\ln(x)"/> is <M d="\tfrac{1}{x}"/>. Notice: the output of <M d="\ln"/> is a slow-growing curve, and <M d="\tfrac{1}{x}"/> is a shrinking function  -  the slope gets flatter and flatter as <M d="x"/> grows. This makes sense because <M d="\ln(x)"/> grows more and more slowly.</p>
-  <p>Let's check it the same way we checked <M d="e^x"/>. At <M d="x=1"/> the formula predicts a slope of <M d="\tfrac{1}{1}=1"/>. Using the limit definition with <M d="\ln(1)=0"/>, we compute <M d="\tfrac{\ln(1+h)}{h}"/>: at <M d="h=0.1"/> it is <M d="0.953"/>, at <M d="h=0.01"/> it is <M d="0.995"/>, at <M d="h=0.001"/> it is <M d="0.9995"/>  -  heading toward exactly 1, which matches <M d="\tfrac{1}{x}"/> at <M d="x=1"/>. (The full reason the answer is <em>exactly</em> <M d="\tfrac1x"/> comes from <M d="\ln"/> being the inverse of <M d="e^x"/>: a function and its inverse have reciprocal-related slopes. More on that idea later.)</p>
-
-  <p><strong>Watch out:</strong> <M d="\ln(x)"/> is only defined for <M d="x > 0"/> (<Ref to="logarithms"/>), so <M d="\tfrac{1}{x}"/> as a derivative also only applies for <M d="x > 0"/>.</p>
+  <p>The derivative of <M d="\ln(x)"/> is <M d="\tfrac{1}{x}"/>. Notice: <M d="\ln"/> is a slow-growing curve, and <M d="\tfrac{1}{x}"/> is a shrinking function, so the slope gets flatter and flatter as <M d="x"/> grows. This makes sense because <M d="\ln(x)"/> grows more and more slowly.</p>
+  <p>Let's check it the same way we checked <M d="e^x"/>. At <M d="x=1"/> the formula predicts a slope of <M d="\tfrac{1}{1}=1"/>. Using the limit definition with <M d="\ln(1)=0"/>, we compute <M d="\tfrac{\ln(1+h)}{h}"/>: at <M d="h=0.1"/> it is <M d="0.953"/>, at <M d="h=0.01"/> it is <M d="0.995"/>, at <M d="h=0.001"/> it is <M d="0.9995"/>, heading toward exactly 1, which matches <M d="\tfrac{1}{x}"/> at <M d="x=1"/>. The full reason the answer is <em>exactly</em> <M d="\tfrac1x"/> comes from <M d="\ln"/> being the inverse of <M d="e^x"/>, and <Ref to="implicit-related-rates"/> derives it in three lines once you have the chain rule.</p>
+  <p><strong>Watch out:</strong> <M d="\ln(x)"/> is only defined for <M d="x > 0"/> (<Ref to="logarithms"/>), so <M d="\tfrac{1}{x}"/> as its derivative also only applies for <M d="x > 0"/>.</p>
 </div>
 )},
-{type:"example",label:"Combining Power Rule with eˣ and ln",render:()=>(
+{type:"example",label:"Combining the Power Rule with eˣ and ln",render:()=>(
 <div>
   <p>Differentiate <M d="f(x) = x^3 + 4e^x - 7\ln(x)"/>.</p>
-  <p>Take each term separately (sum rule from <Ref to="power-rule"/>):</p>
+  <p>Take each term separately (the sum rule from <Ref to="power-rule"/>):</p>
   <Box>
-    <p><strong>Term 1: <M d="x^3"/></strong> → power rule: bring 3 down → <M d="3x^2"/></p>
-    <p><strong>Term 2: <M d="4e^x"/></strong> → <M d="e^x"/> is its own derivative, 4 comes along → <M d="4e^x"/></p>
-    <p><strong>Term 3: <M d="-7\ln(x)"/></strong> → derivative of <M d="\ln(x)"/> is <M d="\tfrac{1}{x}"/>, −7 comes along → <M d="-\tfrac{7}{x}"/></p>
+    <p><strong>Term 1: <M d="x^3"/></strong>, by the power rule: bring 3 down, giving <M d="3x^2"/>.</p>
+    <p><strong>Term 2: <M d="4e^x"/></strong>: <M d="e^x"/> is its own derivative and the 4 comes along, giving <M d="4e^x"/>.</p>
+    <p><strong>Term 3: <M d="-7\ln(x)"/></strong>: the derivative of <M d="\ln(x)"/> is <M d="\tfrac{1}{x}"/> and the <M d="-7"/> comes along, giving <M d="-\tfrac{7}{x}"/>.</p>
   </Box>
   <M d="\boxed{f'(x) = 3x^2 + 4e^x - \frac{7}{x}}" block/>
 </div>
@@ -1577,197 +1696,186 @@ answer:()=>(
 <div>
   <p>Take each term one at a time:</p>
   <Box>
-    <p><strong><M d="2e^x"/></strong> → <M d="e^x"/> is its own derivative → <M d="2e^x"/></p>
-    <p><strong><M d="5\ln(x)"/></strong> → <M d="\tfrac{d}{dx}[\ln x] = \tfrac{1}{x}"/> → <M d="\tfrac{5}{x}"/></p>
-    <p><strong><M d="-x^4"/></strong> → power rule: <M d="4 \times (-1) = -4"/>, exponent <M d="4-1=3"/> → <M d="-4x^3"/></p>
-    <p><strong><M d="+10"/></strong> → constant → <M d="0"/></p>
+    <p><strong><M d="2e^x"/></strong>: <M d="e^x"/> is its own derivative, giving <M d="2e^x"/>.</p>
+    <p><strong><M d="5\ln(x)"/></strong>: <M d="\tfrac{d}{dx}[\ln x] = \tfrac{1}{x}"/>, giving <M d="\tfrac{5}{x}"/>.</p>
+    <p><strong><M d="-x^4"/></strong>, by the power rule: <M d="4 \times (-1) = -4"/>, exponent <M d="4-1=3"/>, giving <M d="-4x^3"/>.</p>
+    <p><strong><M d="+10"/></strong>: a constant, giving <M d="0"/>.</p>
   </Box>
   <M d="\boxed{g'(x) = 2e^x + \frac{5}{x} - 4x^3}" block/>
   <Box color="green">
-    <p>✅ <M d="g'(x) = 2e^x + \tfrac{5}{x} - 4x^3"/></p>
-    <p><strong>Toolkit so far:</strong> Power rule handles <M d="x^n"/>. This lesson adds <M d="e^x"/> and <M d="\ln(x)"/>. Next up: what to do when functions are <em>multiplied</em> or <em>divided</em>.</p>
+    <p><M d="g'(x) = 2e^x + \tfrac{5}{x} - 4x^3"/></p>
+    <p><strong>Toolkit so far:</strong> the power rule handles <M d="x^n"/>. This lesson adds <M d="e^x"/> and <M d="\ln(x)"/>. Next up: what to do when functions are <em>multiplied</em> or <em>divided</em>.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Let <M d="f(x)=3e^x-2\ln(x)+x^2"/>. Find <M d="f'(x)"/>, then the slope of the curve at <M d="x=1"/>, as a decimal.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Differentiate term by term.</strong></p>
+  <Box>
+    <p><M d="3e^x"/> gives <M d="3e^x"/>.</p>
+    <p><M d="-2\ln(x)"/> gives <M d="-\tfrac{2}{x}"/>.</p>
+    <p><M d="x^2"/> gives <M d="2x"/>.</p>
+  </Box>
+  <M d="f'(x)=3e^x-\frac{2}{x}+2x" block/>
+  <p><strong>Step 2: Evaluate at <M d="x=1"/>.</strong> Use <M d="e^1=e"/>, <M d="\tfrac{2}{1}=2"/>, and <M d="2(1)=2"/>:</p>
+  <M d="f'(1)=3e-2+2=3e\approx 3(2.71828)\approx 8.155" block/>
+  <p>The <M d="-2"/> and <M d="+2"/> cancel, so the slope at <M d="x=1"/> is simply <M d="3e"/>, a little over 8. The curve is climbing steeply there, and almost all of that steepness comes from the <M d="3e^x"/> term.</p>
+  <Box color="green"><p><M d="f'(x)=3e^x-\tfrac{2}{x}+2x"/>, and <M d="f'(1)=3e\approx 8.155"/>.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"product-quotient",module:"Derivatives",title:"Product & Quotient Rules",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"product-quotient",module:"Derivatives",title:"Product & Quotient Rules",time:"11 min",content:[
+{type:"concept",label:"Why You Cannot Just Multiply Derivatives",render:()=>(
 <div>
-  <p>So far our derivative toolkit handles: individual terms (<M d="x^n"/>, <M d="e^x"/>, <M d="\ln x"/>) added or subtracted. But what about functions that are <strong>multiplied</strong> or <strong>divided</strong>?</p>
-
-  <p><strong>Here's the trap.</strong> It's tempting to think: "derivative of a product = product of the derivatives." Let's test that with <M d="f(x) = x \cdot x = x^2"/>:</p>
+  <p>So far our derivative toolkit handles individual terms (<M d="x^n"/>, <M d="e^x"/>, <M d="\ln x"/>) added or subtracted. But what about functions that are <strong>multiplied</strong> or <strong>divided</strong>?</p>
+  <p><strong>Here is the trap.</strong> It is tempting to think "derivative of a product equals product of the derivatives." Let's test that with <M d="f(x) = x \cdot x = x^2"/>:</p>
   <Box>
     <p>If the "just multiply" rule worked: <M d="\tfrac{d}{dx}[x] \cdot \tfrac{d}{dx}[x] = 1 \cdot 1 = 1"/></p>
     <p>But we <em>know</em> from <Ref to="derivative"/>: <M d="\tfrac{d}{dx}[x^2] = 2x"/></p>
-    <p><strong>1 ≠ 2x.</strong> The "just multiply" approach is <strong>wrong</strong>!</p>
+    <p><strong>1 is not 2x.</strong> The "just multiply" approach is <strong>wrong</strong>.</p>
   </Box>
-  <p><strong>So what IS the right reasoning?</strong> Picture a rectangle whose width is <M d="u"/> and whose height is <M d="v"/>. Its area is <M d="u\cdot v"/>  -  exactly our product. Now nudge <M d="x"/> up a tiny bit. The width grows by a thin sliver (it grows at rate <M d="u'"/>) and the height grows by a thin sliver (rate <M d="v'"/>). The area picks up a strip along one side, a strip along the other, and a tiny corner square:</p>
+  <p><strong>So what IS the right reasoning?</strong> Picture a rectangle whose width is <M d="u"/> and whose height is <M d="v"/>. Its area is <M d="u\cdot v"/>, exactly our product. Now nudge <M d="x"/> up a tiny bit. The width grows by a thin sliver (it grows at rate <M d="u'"/>) and the height grows by a thin sliver (rate <M d="v'"/>). The area picks up a strip along one side, a strip along the other, and a tiny corner square:</p>
   <Box>
     <p>side strip 1: <M d="u'\cdot v"/> (the whole height, times how fast the width grew)</p>
     <p>side strip 2: <M d="u\cdot v'"/> (the whole width, times how fast the height grew)</p>
-    <p>corner: <M d="u'\cdot v'"/>  -  the product of two slivers, so tiny we ignore it</p>
+    <p>corner: <M d="u'\cdot v'"/>, the product of two slivers, so tiny we ignore it</p>
   </Box>
-  <p>So the area grows at rate <M d="u'v + uv'"/>. That is the product rule. And notice: the naive "just multiply the derivatives" guess (<M d="u'v'"/>) is exactly that throwaway corner  -  which is why it gave the wrong answer above.</p>
+  <p>So the area grows at rate <M d="u'v + uv'"/>. That is the product rule. And notice: the naive "just multiply the derivatives" guess (<M d="u'v'"/>) is exactly that throwaway corner, which is why it gave the wrong answer above.</p>
   <p>We need special rules for products and quotients.</p>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"rule",label:"Product Rule and Quotient Rule",render:()=>(
 <div>
-  <p><strong>Product Rule</strong>  -  when two functions are <em>multiplied</em>:</p>
-  <p>If <M d="f(x) = u \cdot v"/>, where <M d="u"/> and <M d="v"/> are both functions of <M d="x"/>:</p>
+  <p><strong>Product Rule</strong>, when two functions are <em>multiplied</em>. If <M d="f(x) = u \cdot v"/>, where <M d="u"/> and <M d="v"/> are both functions of <M d="x"/>:</p>
   <M d="(u \cdot v)' = u' \cdot v \;+\; u \cdot v'" block/>
   <p>In words: <em>"derivative of the first times the second, PLUS the first times derivative of the second."</em></p>
-  <p>Memory trick: think of it as taking turns  -  each function gets a turn being differentiated while the other stays.</p>
-
-  <p><strong>Quotient Rule</strong>  -  when one function is <em>divided</em> by another:</p>
-  <p>If <M d="f(x) = \dfrac{u}{v}"/>:</p>
+  <p>Memory trick: think of it as taking turns. Each function gets a turn being differentiated while the other stays.</p>
+  <p><strong>Quotient Rule</strong>, when one function is <em>divided</em> by another. If <M d="f(x) = \dfrac{u}{v}"/>:</p>
   <M d="\left(\frac{u}{v}\right)' = \frac{u' \cdot v \;-\; u \cdot v'}{v^2}" block/>
-  <p><strong>Why a minus, not a plus?</strong> Unlike the product rule, the bottom function works <em>against</em> the fraction: when the top is positive (think of revenue or cost, our usual tops), making <M d="v"/> bigger makes <M d="\tfrac{u}{v}"/> smaller. So the term that carries <M d="v"/>'s change pulls the value <em>down</em>, which is why it is subtracted. (The "over <M d="v^2"/>" part falls out of the algebra when you rebuild this rule from the product rule later; for now, treat the squared bottom as part of the pattern.)</p>
+  <p><strong>Why a minus, not a plus?</strong> Unlike the product rule, the bottom function works <em>against</em> the fraction: when the top is positive (think of revenue or cost, our usual tops), making <M d="v"/> bigger makes <M d="\tfrac{u}{v}"/> smaller. So the term that carries <M d="v"/>'s change pulls the value <em>down</em>, which is why it is subtracted. The "over <M d="v^2"/>" part falls out of the algebra when you rebuild this rule from the product rule, which <Ref to="chain-rule"/> does at its close; for now, treat the squared bottom as part of the pattern.</p>
   <p>Memory trick: <strong>"Low D-High minus High D-Low, over Low squared."</strong> (Low = bottom = <M d="v"/>, High = top = <M d="u"/>, D = derivative of.)</p>
 </div>
 )},
 {type:"example",label:"Product Rule Walkthrough",render:()=>(
 <div>
   <p>Differentiate <M d="f(x) = x^2 \cdot e^x"/>.</p>
-  <p><strong>Step 1: Identify <M d="u"/> and <M d="v"/>.</strong></p>
-  <p><M d="u = x^2"/> (first function), <M d="v = e^x"/> (second function)</p>
-
-  <p><strong>Step 2: Find their derivatives.</strong></p>
-  <p><M d="u' = 2x"/> (power rule from <Ref to="power-rule"/>)</p>
-  <p><M d="v' = e^x"/> (<Ref to="exp-log-derivatives"/>: <M d="e^x"/> is its own derivative)</p>
-
+  <p><strong>Step 1: Identify <M d="u"/> and <M d="v"/>.</strong> <M d="u = x^2"/> (first function), <M d="v = e^x"/> (second function).</p>
+  <p><strong>Step 2: Find their derivatives.</strong> <M d="u' = 2x"/> (power rule, <Ref to="power-rule"/>) and <M d="v' = e^x"/> (<Ref to="exp-log-derivatives"/>: <M d="e^x"/> is its own derivative).</p>
   <p><strong>Step 3: Apply <M d="u'v + uv'"/>.</strong></p>
   <M d="f'(x) = (2x)(e^x) + (x^2)(e^x)" block/>
-
   <p><strong>Step 4: Simplify.</strong> Both terms have <M d="e^x"/>, so factor it out:</p>
   <M d="f'(x) = e^x(2x + x^2) = e^x(x^2 + 2x)" block/>
-
   <Box color="green">
-    <p>✅ <M d="f'(x) = e^x(x^2 + 2x)"/></p>
-    <p>Compare to the wrong answer: <M d="2x \cdot e^x"/>. The product rule gives us an extra <M d="x^2 e^x"/> term  -  that's the piece you'd miss.</p>
+    <p><M d="f'(x) = e^x(x^2 + 2x)"/></p>
+    <p>Compare to the wrong answer, <M d="2x \cdot e^x"/>. The product rule gives us an extra <M d="x^2 e^x"/> term; that is the piece you would miss.</p>
   </Box>
 </div>
 )},
 {type:"example",label:"Quotient Rule Walkthrough",render:()=>(
 <div>
   <p>Differentiate <M d="f(x) = \dfrac{x^2 + 1}{3x - 5}"/>.</p>
-  <p><strong>Step 1: Identify top and bottom.</strong></p>
-  <p><M d="u = x^2 + 1"/> (top), <M d="v = 3x - 5"/> (bottom)</p>
-
-  <p><strong>Step 2: Find their derivatives.</strong></p>
-  <p><M d="u' = 2x"/>, <M d="v' = 3"/></p>
-
-  <p><strong>Step 3: Apply the formula: <M d="\tfrac{u'v - uv'}{v^2}"/></strong></p>
+  <p><strong>Step 1: Identify top and bottom.</strong> <M d="u = x^2 + 1"/> (top), <M d="v = 3x - 5"/> (bottom).</p>
+  <p><strong>Step 2: Find their derivatives.</strong> <M d="u' = 2x"/>, <M d="v' = 3"/>.</p>
+  <p><strong>Step 3: Apply the formula <M d="\tfrac{u'v - uv'}{v^2}"/>.</strong></p>
   <M d="f'(x) = \frac{(2x)(3x-5) - (x^2+1)(3)}{(3x-5)^2}" block/>
-
   <p><strong>Step 4: Expand the numerator.</strong></p>
-  <p>First piece: <M d="(2x)(3x-5) = 6x^2 - 10x"/></p>
-  <p>Second piece: <M d="(x^2+1)(3) = 3x^2 + 3"/></p>
-  <p>Subtract  -  and watch the sign: the minus flips <strong>both</strong> terms of the second piece, not just the first:</p>
+  <p>First piece: <M d="(2x)(3x-5) = 6x^2 - 10x"/>. Second piece: <M d="(x^2+1)(3) = 3x^2 + 3"/>.</p>
+  <p>Subtract, and watch the sign: the minus flips <strong>both</strong> terms of the second piece, not just the first:</p>
   <M d="(6x^2 - 10x) - (3x^2 + 3) = 6x^2 - 10x - 3x^2 - 3" block/>
   <p>Now combine like terms (<M d="6x^2 - 3x^2 = 3x^2"/>): <M d="3x^2 - 10x - 3"/>.</p>
-
   <M d="\boxed{f'(x) = \frac{3x^2 - 10x - 3}{(3x-5)^2}}" block/>
   <Box color="green">
-    <p>✅ <strong>Tip:</strong> With the quotient rule, don't try to simplify the bottom  -  leave it as <M d="(3x-5)^2"/>. The top is where you do the algebra.</p>
+    <p><strong>Tip:</strong> with the quotient rule, do not try to simplify the bottom; leave it as <M d="(3x-5)^2"/>. The top is where you do the algebra.</p>
   </Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Differentiate <M d="f(x) = x \cdot \ln(x)"/></span>),
 answer:()=>(
 <div>
-  <p><strong>Step 1: Identify <M d="u"/> and <M d="v"/>.</strong></p>
-  <p><M d="u = x"/> (first function), <M d="v = \ln(x)"/> (second function)</p>
-
-  <p><strong>Step 2: Find their derivatives.</strong></p>
-  <p><M d="u' = 1"/> (power rule: <M d="x^1 \to 1"/>)</p>
-  <p><M d="v' = \tfrac{1}{x}"/> (derivative of <M d="\ln x"/> from <Ref to="exp-log-derivatives"/>)</p>
-
-  <p><strong>Step 3: Apply product rule <M d="u'v + uv'"/>.</strong></p>
+  <p><strong>Step 1: Identify <M d="u"/> and <M d="v"/>.</strong> <M d="u = x"/> (first function), <M d="v = \ln(x)"/> (second function).</p>
+  <p><strong>Step 2: Find their derivatives.</strong> <M d="u' = 1"/> (power rule: <M d="x^1"/> gives 1) and <M d="v' = \tfrac{1}{x}"/> (derivative of <M d="\ln x"/> from <Ref to="exp-log-derivatives"/>).</p>
+  <p><strong>Step 3: Apply the product rule <M d="u'v + uv'"/>.</strong></p>
   <M d="f'(x) = (1) \cdot \ln(x) + (x) \cdot \frac{1}{x}" block/>
-
-  <p><strong>Step 4: Simplify.</strong></p>
-  <p>First piece: <M d="1 \cdot \ln(x) = \ln(x)"/></p>
-  <p>Second piece: <M d="x \cdot \tfrac{1}{x} = \tfrac{x}{x} = 1"/></p>
-
+  <p><strong>Step 4: Simplify.</strong> First piece: <M d="1 \cdot \ln(x) = \ln(x)"/>. Second piece: <M d="x \cdot \tfrac{1}{x} = \tfrac{x}{x} = 1"/>.</p>
   <M d="\boxed{f'(x) = \ln(x) + 1}" block/>
   <Box color="green">
-    <p>✅ <M d="f'(x) = \ln(x) + 1"/></p>
-    <p><strong>When to use which rule:</strong> Functions multiplied → product rule. Functions divided → quotient rule. Next lesson: functions <em>nested inside</em> each other → chain rule.</p>
+    <p><M d="f'(x) = \ln(x) + 1"/></p>
+    <p><strong>When to use which rule:</strong> functions multiplied, product rule. Functions divided, quotient rule. Next lesson: functions <em>nested inside</em> each other, the chain rule.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Differentiate <M d="f(x)=\dfrac{e^x}{x}"/> and find where its slope is zero.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Identify top and bottom.</strong> <M d="u=e^x"/>, <M d="v=x"/>.</p>
+  <p><strong>Step 2: Derivatives.</strong> <M d="u'=e^x"/>, <M d="v'=1"/>.</p>
+  <p><strong>Step 3: Quotient rule.</strong></p>
+  <M d="f'(x)=\frac{u'v-uv'}{v^2}=\frac{e^x\cdot x-e^x\cdot 1}{x^2}" block/>
+  <p><strong>Step 4: Simplify.</strong> Both terms on top contain <M d="e^x"/>, so factor it out:</p>
+  <M d="f'(x)=\frac{e^x(x-1)}{x^2}" block/>
+  <p><strong>Step 5: Where is the slope zero?</strong> A fraction is zero only when its top is zero. <M d="e^x"/> is never zero (it is always positive, from <Ref to="logarithms"/>), so we need <M d="x-1=0"/>, that is <M d="x=1"/>. For <M d="x"/> just below 1 the top is negative (falling) and just above 1 it is positive (rising), so <M d="x=1"/> is the bottom of a valley: the lowest point of <M d="\tfrac{e^x}{x}"/> for positive <M d="x"/>, with value <M d="\tfrac{e}{1}=e"/>.</p>
+  <Box color="green"><p><M d="f'(x)=\dfrac{e^x(x-1)}{x^2}"/>; the slope is zero at <M d="x=1"/>, where the curve bottoms out at height <M d="e"/>. Finding flat spots like this is the whole job of <Ref to="first-derivative-test"/>.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"chain-rule",module:"Derivatives",title:"The Chain Rule",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"chain-rule",module:"Derivatives",title:"The Chain Rule",time:"12 min",content:[
+{type:"concept",label:"Functions Inside Functions",render:()=>(
 <div>
-  <p>Our derivative toolkit now handles: single terms (power rule), <M d="e^x"/> and <M d="\ln(x)"/> (<Ref to="exp-log-derivatives"/>), products (product rule), and quotients (quotient rule). But there's one more situation we haven't covered.</p>
-
+  <p>Our derivative toolkit now handles single terms (power rule), <M d="e^x"/> and <M d="\ln(x)"/> (<Ref to="exp-log-derivatives"/>), products (product rule), and quotients (quotient rule). But there is one more situation we have not covered.</p>
   <p>What about <M d="(3x^2 + 1)^4"/>? Or <M d="e^{5x}"/>? Or <M d="\ln(x^2 + 1)"/>?</p>
-
-  <p>These are <strong>functions inside other functions</strong>  -  also called <strong>compositions</strong>. The power rule says "bring the exponent down," but <M d="(3x^2+1)^4"/> isn't just <M d="x^4"/>  -  there's a whole expression stuffed inside the power.</p>
-
-  <p><strong>The analogy:</strong> Think of a wrapped gift. The outside wrapping is one function (raising to the 4th power). The gift inside is another function (<M d="3x^2 + 1"/>). To "unwrap" the derivative, you need to handle both layers.</p>
-
-  <p><strong>But why <em>multiply</em> the two pieces?</strong> Think about speeds. Suppose a car drives twice as fast as a bicycle, and the bicycle moves three times as fast as someone walking. How fast is the car compared to the walker? You multiply: <M d="2\times 3 = 6"/> times walking speed. A derivative is exactly a "how many times as fast" number. The outside function changes <M d="f'(g(x))"/> times as fast as its inside moves, and the inside moves <M d="g'(x)"/> times as fast as <M d="x"/>. Chain those two rates together and they multiply  -  that is the chain rule. (This is also why you "leave the inside alone" in the outside step: <M d="f'(g(x))"/> means the outside's rate measured at the inside's current value.)</p>
-
+  <p>These are <strong>functions inside other functions</strong>, also called <strong>compositions</strong>. The power rule says "bring the exponent down," but <M d="(3x^2+1)^4"/> is not just <M d="x^4"/>; there is a whole expression stuffed inside the power.</p>
+  <p><strong>The analogy:</strong> think of a wrapped gift. The outside wrapping is one function (raising to the 4th power). The gift inside is another function (<M d="3x^2 + 1"/>). To "unwrap" the derivative, you need to handle both layers.</p>
+  <p><strong>But why <em>multiply</em> the two pieces?</strong> Think about speeds. Suppose a car drives twice as fast as a bicycle, and the bicycle moves three times as fast as someone walking. How fast is the car compared to the walker? You multiply: <M d="2\times 3 = 6"/> times walking speed. A derivative is exactly a "how many times as fast" number. The outside function changes <M d="f'(g(x))"/> times as fast as its inside moves, and the inside moves <M d="g'(x)"/> times as fast as <M d="x"/>. Chain those two rates together and they multiply; that is the chain rule. (This is also why you "leave the inside alone" in the outside step: <M d="f'(g(x))"/> means the outside's rate measured at the inside's current value.)</p>
   <Box color="amber">
-    <p><strong>The Chain Rule:</strong> "Derivative of the OUTSIDE (leave the inside alone) × derivative of the INSIDE."</p>
+    <p><strong>The Chain Rule:</strong> "Derivative of the OUTSIDE (leave the inside alone) times derivative of the INSIDE."</p>
     <M d="\frac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)" block/>
   </Box>
-
-  <p><strong>How to spot when you need it:</strong> If you see a function "plugged into" another function  -  something raised to a power, <M d="e^{\text{something}}"/>, <M d="\ln(\text{something})"/>  -  where that "something" is more complicated than just <M d="x"/>, you need the chain rule.</p>
+  <p><strong>How to spot when you need it:</strong> if you see a function "plugged into" another function, something raised to a power, <M d="e^{\text{something}}"/>, <M d="\ln(\text{something})"/>, where that "something" is more complicated than just <M d="x"/>, you need the chain rule.</p>
 </div>
 )},
-{type:"rule",label:"Chain Rule Patterns You'll See Most",render:()=>(
+{type:"rule",label:"Chain Rule Patterns You Will See Most",render:()=>(
 <div>
   <p>Here are the three most common chain rule patterns, all following the same logic:</p>
   <Box>
     <p><strong>Power of a function:</strong></p>
     <M d="\frac{d}{dx}[u^n] = n \cdot u^{n-1} \cdot u'" block/>
-    <p>"Bring exponent down, reduce exponent, multiply by derivative of the inside."</p>
+    <p>"Bring the exponent down, reduce the exponent, multiply by the derivative of the inside."</p>
   </Box>
   <Box>
     <p><strong><M d="e"/> raised to a function:</strong></p>
     <M d="\frac{d}{dx}[e^u] = e^u \cdot u'" block/>
-    <p>"<M d="e^u"/> stays (it's its own derivative), multiply by derivative of the inside."</p>
+    <p>"<M d="e^u"/> stays (it is its own derivative), multiply by the derivative of the inside."</p>
   </Box>
   <Box>
     <p><strong>ln of a function:</strong></p>
     <M d="\frac{d}{dx}[\ln(u)] = \frac{u'}{u} = \frac{1}{u} \cdot u'" block/>
-    <p>"1 over the inside, times derivative of the inside."</p>
+    <p>"1 over the inside, times the derivative of the inside."</p>
   </Box>
   <p>In every case, the pattern is: <strong>do the outside rule, then multiply by <M d="u'"/></strong>.</p>
+  <p><strong>Bonus, other bases:</strong> since <M d="2=e^{\ln 2}"/>, we can write <M d="2^x=e^{(\ln 2)x}"/>, and the <M d="e^u"/> pattern gives <M d="\tfrac{d}{dx}[2^x]=2^x\ln 2\approx 0.693\cdot 2^x"/>. Every exponential is <M d="e"/> in disguise, which is why the course only ever needs <M d="e"/>.</p>
 </div>
 )},
 {type:"example",label:"Chain Rule with a Power",render:()=>(
 <div>
   <p>Differentiate <M d="f(x) = (3x^2 + 1)^4"/>.</p>
-  <p><strong>Step 1: Identify outside and inside.</strong></p>
-  <p>Outside function: <M d="(\;\cdot\;)^4"/> (raising to the 4th power)</p>
-  <p>Inside function: <M d="u = 3x^2 + 1"/></p>
-
-  <p><strong>Step 2: Differentiate the OUTSIDE, leaving the inside alone.</strong></p>
-  <p>Power rule on the outside: bring the 4 down, reduce exponent:</p>
+  <p><strong>Step 1: Identify outside and inside.</strong> Outside function: <M d="(\;\cdot\;)^4"/> (raising to the 4th power). Inside function: <M d="u = 3x^2 + 1"/>.</p>
+  <p><strong>Step 2: Differentiate the OUTSIDE, leaving the inside alone.</strong> Power rule on the outside: bring the 4 down, reduce the exponent:</p>
   <M d="4(3x^2 + 1)^3" block/>
-  <p>Notice: the inside <M d="(3x^2+1)"/> is untouched  -  we just applied the power rule to the outer shell.</p>
-
-  <p><strong>Step 3: Multiply by the derivative of the INSIDE.</strong></p>
-  <p>Inside is <M d="u = 3x^2 + 1"/>. Differentiate it:</p>
+  <p>Notice: the inside <M d="(3x^2+1)"/> is untouched; we just applied the power rule to the outer shell.</p>
+  <p><strong>Step 3: Multiply by the derivative of the INSIDE.</strong> Inside is <M d="u = 3x^2 + 1"/>. Differentiate it:</p>
   <Box>
     <p><M d="\tfrac{d}{dx}[3x^2] = 6x"/> (bring 2 down: <M d="2 \times 3 = 6"/>)</p>
     <p><M d="\tfrac{d}{dx}[1] = 0"/></p>
     <p>So <M d="u' = 6x"/></p>
   </Box>
-
   <p><strong>Step 4: Multiply everything together.</strong></p>
   <M d="f'(x) = 4(3x^2+1)^3 \cdot 6x = 24x(3x^2+1)^3" block/>
-
   <Box color="green">
-    <p>✅ <M d="f'(x) = 24x(3x^2+1)^3"/></p>
-    <p>⚠️ The #1 chain rule mistake: <strong>forgetting the <M d="\cdot 6x"/></strong>. Always ask yourself after finishing: "Did I multiply by the derivative of the inside?"</p>
+    <p><M d="f'(x) = 24x(3x^2+1)^3"/></p>
+    <p>The number one chain rule mistake: <strong>forgetting the <M d="\cdot 6x"/></strong>. Always ask yourself after finishing: "Did I multiply by the derivative of the inside?"</p>
   </Box>
 </div>
 )},
@@ -1775,130 +1883,269 @@ answer:()=>(
 <div>
   <p>Differentiate <M d="f(x) = e^{5x}"/>.</p>
   <p><strong>Step 1:</strong> Outside: <M d="e^{(\cdot)}"/>. Inside: <M d="u = 5x"/>.</p>
-  <p><strong>Step 2:</strong> Derivative of outside (leave inside alone): <M d="e^{5x}"/> (since <M d="e^u"/> is its own derivative).</p>
-  <p><strong>Step 3:</strong> Multiply by derivative of inside: <M d="u' = 5"/>.</p>
+  <p><strong>Step 2:</strong> Derivative of the outside (leave the inside alone): <M d="e^{5x}"/> (since <M d="e^u"/> is its own derivative).</p>
+  <p><strong>Step 3:</strong> Multiply by the derivative of the inside: <M d="u' = 5"/>.</p>
   <M d="f'(x) = e^{5x} \cdot 5 = 5e^{5x}" block/>
   <p><strong>Shortcut to remember:</strong> <M d="\tfrac{d}{dx}[e^{kx}] = k \cdot e^{kx}"/>. The constant in the exponent comes down as a multiplier.</p>
-  <p>This comes up constantly in continuous compounding from <Ref to="exponentials"/>. If <M d="A = Pe^{rt}"/>, then <M d="\tfrac{dA}{dt} = Pr \cdot e^{rt}"/>. Here <M d="P"/> and <M d="r"/> are constants: <M d="P"/> is a constant multiplier, so it rides along untouched, and the inside is <M d="rt"/>, whose derivative with respect to <M d="t"/> is <M d="r"/>. That <M d="r"/> is the "derivative of the inside," so it comes out front.</p>
+  <p>This comes up constantly in continuous compounding from <Ref to="exponentials"/>. If <M d="A = Pe^{rt}"/>, then <M d="\tfrac{dA}{dt} = Pr \cdot e^{rt}"/>. Here <M d="P"/> and <M d="r"/> are constants: <M d="P"/> is a constant multiplier, so it rides along untouched, and the inside is <M d="rt"/>, whose derivative with respect to <M d="t"/> is <M d="r"/>. That <M d="r"/> is the "derivative of the inside," so it comes out front. Read it as a business fact: money growing continuously at rate <M d="r"/> grows, at every instant, at <M d="r"/> times its current size.</p>
+</div>
+)},
+{type:"concept",label:"Closing a Loop: Where the Quotient Rule Comes From",render:()=>(
+<div>
+  <p>In <Ref to="product-quotient"/> we promised to explain the "over <M d="v^2"/>" in the quotient rule. With the chain rule in hand it takes four lines. The trick is to stop thinking of <M d="\tfrac{u}{v}"/> as a division and see it as a product: <M d="\tfrac{u}{v}=u\cdot v^{-1}"/> (negative exponents from <Ref to="exponentials"/>).</p>
+  <p><strong>Line 1: product rule</strong> on <M d="u\cdot v^{-1}"/>:</p>
+  <M d="(u\cdot v^{-1})'=u'\cdot v^{-1}+u\cdot(v^{-1})'" block/>
+  <p><strong>Line 2: chain rule</strong> on <M d="v^{-1}"/> (a power of a function): bring down <M d="-1"/>, reduce the exponent to <M d="-2"/>, multiply by the inside's derivative <M d="v'"/>:</p>
+  <M d="(v^{-1})'=-1\cdot v^{-2}\cdot v'=-\frac{v'}{v^2}" block/>
+  <p><strong>Line 3: substitute</strong> and write the negative exponent as a fraction:</p>
+  <M d="\frac{u'}{v}-\frac{u\,v'}{v^2}" block/>
+  <p><strong>Line 4: common denominator.</strong> Multiply the first fraction's top and bottom by <M d="v"/>:</p>
+  <M d="\frac{u'v}{v^2}-\frac{uv'}{v^2}=\frac{u'v-uv'}{v^2}" block/>
+  <p>That is the quotient rule, minus sign and squared denominator included. Nothing about it needed to be memorized as a separate fact; it is the product rule and the chain rule working together. Whenever a formula in this course looks arbitrary, there is usually a derivation like this behind it.</p>
 </div>
 )},
 {type:"practice",render:()=>(<span>Differentiate <M d="f(x) = \ln(x^2 + 5)"/></span>),
 answer:()=>(
 <div>
-  <p><strong>Step 1: Identify outside and inside.</strong></p>
-  <p>Outside: <M d="\ln(\;\cdot\;)"/>. Inside: <M d="u = x^2 + 5"/>.</p>
-
-  <p><strong>Step 2: Derivative of outside (leave inside alone).</strong></p>
-  <p>Outside derivative, with the inside left alone: <M d="\tfrac{1}{u} = \tfrac{1}{x^2 + 5}"/></p>
-
-  <p><strong>Step 3: Multiply by derivative of inside.</strong></p>
-  <p><M d="u' = 2x"/> (power rule on <M d="x^2"/>; the 5 vanishes)</p>
-
+  <p><strong>Step 1: Identify outside and inside.</strong> Outside: <M d="\ln(\;\cdot\;)"/>. Inside: <M d="u = x^2 + 5"/>.</p>
+  <p><strong>Step 2: Derivative of the outside (leave the inside alone).</strong> The outside derivative, with the inside left alone: <M d="\tfrac{1}{u} = \tfrac{1}{x^2 + 5}"/>.</p>
+  <p><strong>Step 3: Multiply by the derivative of the inside.</strong> <M d="u' = 2x"/> (power rule on <M d="x^2"/>; the 5 vanishes).</p>
   <p><strong>Step 4: Multiply together.</strong></p>
   <M d="f'(x) = \frac{1}{x^2+5} \cdot 2x = \frac{2x}{x^2+5}" block/>
-
   <Box color="green">
-    <p>✅ <M d="f'(x) = \dfrac{2x}{x^2+5}"/></p>
-    <p><strong>Full toolkit recap:</strong> Power rule (<Ref to="power-rule"/>) → <M d="e^x"/>, <M d="\ln x"/> (<Ref to="exp-log-derivatives"/>) → product/quotient (<Ref to="product-quotient"/>) → chain rule (<Ref to="chain-rule"/>). You now have every differentiation tool you need for this course!</p>
+    <p><M d="f'(x) = \dfrac{2x}{x^2+5}"/></p>
+    <p><strong>Full toolkit recap:</strong> the power rule (<Ref to="power-rule"/>), then <M d="e^x"/> and <M d="\ln x"/> (<Ref to="exp-log-derivatives"/>), then product and quotient (<Ref to="product-quotient"/>), and now the chain rule. You have every differentiation tool this course needs.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Differentiate <M d="f(x)=\sqrt{x^2+9}"/>, then find the slope at <M d="x=4"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Rewrite the root as a power.</strong> <M d="f(x)=(x^2+9)^{1/2}"/>. Outside: <M d="(\;\cdot\;)^{1/2}"/>. Inside: <M d="u=x^2+9"/>.</p>
+  <p><strong>Step 2: Derivative of the outside, inside left alone.</strong> Power rule with exponent <M d="\tfrac12"/>: bring it down, reduce to <M d="-\tfrac12"/>:</p>
+  <M d="\tfrac12(x^2+9)^{-1/2}" block/>
+  <p><strong>Step 3: Derivative of the inside.</strong> <M d="u'=2x"/>.</p>
+  <p><strong>Step 4: Multiply and tidy.</strong> The <M d="\tfrac12"/> and the <M d="2"/> cancel, and the negative exponent becomes a square root in the denominator:</p>
+  <M d="f'(x)=\tfrac12(x^2+9)^{-1/2}\cdot 2x=\frac{x}{\sqrt{x^2+9}}" block/>
+  <p><strong>Step 5: Slope at <M d="x=4"/>.</strong> <M d="\sqrt{16+9}=\sqrt{25}=5"/>, so <M d="f'(4)=\tfrac{4}{5}=0.8"/>.</p>
+  <Box color="green"><p><M d="f'(x)=\dfrac{x}{\sqrt{x^2+9}}"/>, and <M d="f'(4)=0.8"/>. Roots are powers, so the chain rule's power pattern handles them.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"elasticity",module:"Derivatives",title:"Elasticity of Demand",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"implicit-related-rates",module:"Derivatives",title:"Implicit Differentiation & Related Rates",time:"11 min",content:[
+{type:"concept",label:"When y Is Not Alone",render:()=>(
+<div>
+  <p>Every function so far came neatly solved for <M d="y"/>: <M d="y=x^2"/>, <M d="y=e^{5x}"/>. But many relationships arrive tangled up, with <M d="x"/> and <M d="y"/> on the same side. A circle of radius 5 is the classic case:</p>
+  <M d="x^2+y^2=25" block/>
+  <p>You <em>could</em> solve for <M d="y"/> (the top half is <M d="y=\sqrt{25-x^2}"/>), but for messier equations that is painful or impossible. <strong>Implicit differentiation</strong> finds the slope <M d="\tfrac{dy}{dx}"/> without ever solving for <M d="y"/>.</p>
+  <p>The one idea: treat <M d="y"/> as a function of <M d="x"/> that you happen not to have written out, and differentiate both sides of the equation with respect to <M d="x"/>. Whenever you hit a <M d="y"/>, the chain rule from <Ref to="chain-rule"/> kicks in, because <M d="y"/> is an "inside" function. So <M d="y^2"/> is a power of a function: its derivative is <M d="2y"/> (the outside) times <M d="y'"/> (the derivative of the inside).</p>
+  <p>Do it for the circle:</p>
+  <Box>
+    <p><M d="\tfrac{d}{dx}[x^2]=2x"/></p>
+    <p><M d="\tfrac{d}{dx}[y^2]=2y\cdot y'"/> (chain rule: <M d="y"/> is the inside)</p>
+    <p><M d="\tfrac{d}{dx}[25]=0"/></p>
+  </Box>
+  <M d="2x+2y\,y'=0\;\Rightarrow\;y'=-\frac{x}{y}" block/>
+  <p>At the point <M d="(3,4)"/> (check: <M d="9+16=25"/>, so it is on the circle), the slope is <M d="y'=-\tfrac{3}{4}"/>.</p>
+  <p><strong>Does the slow way agree?</strong> Solve for the top half, <M d="y=(25-x^2)^{1/2}"/>, and differentiate with the chain rule: <M d="y'=\tfrac12(25-x^2)^{-1/2}\cdot(-2x)=\tfrac{-x}{\sqrt{25-x^2}}"/>. At <M d="x=3"/>: <M d="\tfrac{-3}{\sqrt{16}}=-\tfrac34"/>. Same answer, with more work. And notice the implicit answer <M d="-\tfrac{x}{y}"/> also covers the bottom half of the circle for free, where the explicit formula would need a separate minus sign.</p>
+  <Graph fns={[(x)=>Math.sqrt(25-x*x),(x)=>-Math.sqrt(25-x*x),(x)=>4-0.75*(x-3)]} xMin={-6} xMax={6} yMin={-6} yMax={6}
+    highlights={[{x:3,y:4,label:"(3, 4), slope -3/4",color:"#f59e0b",lo:[10,-12]}]}
+    caption="The circle x squared plus y squared equals 25 with its tangent at (3, 4). Implicit differentiation found the slope without solving for y."/>
+</div>
+)},
+{type:"concept",label:"A Promise Kept: the Derivative of ln x",render:()=>(
+<div>
+  <p>In <Ref to="exp-log-derivatives"/> we checked numerically that <M d="\tfrac{d}{dx}[\ln x]=\tfrac1x"/> and promised the real reason later. Here it is, in three lines, because implicit differentiation is exactly the tool for undoing an inverse.</p>
+  <p>Let <M d="y=\ln x"/>. By the definition of the logarithm (<Ref to="logarithms"/>), that means</p>
+  <M d="e^y=x" block/>
+  <p>Differentiate both sides with respect to <M d="x"/>. On the left, <M d="e^y"/> is <M d="e"/> to an inside function, so the chain rule gives <M d="e^y\cdot y'"/>. On the right, the derivative of <M d="x"/> is 1:</p>
+  <M d="e^y\,y'=1\;\Rightarrow\;y'=\frac{1}{e^y}" block/>
+  <p>But <M d="e^y"/> is just <M d="x"/> (that was the equation we started from). So</p>
+  <M d="y'=\frac{1}{x}" block/>
+  <p>The slope of <M d="\ln x"/> is <M d="\tfrac1x"/> exactly, not approximately. Every inverse function's derivative can be found this way: write the inverse relationship, differentiate implicitly, substitute back.</p>
+</div>
+)},
+{type:"concept",label:"Everything Changes Over Time",render:()=>(
+<div>
+  <p>In a real business nothing holds still. Price moves, so demand moves, so revenue moves, all at once. <strong>Related rates</strong> is the same implicit idea with one twist: the hidden variable is <em>time</em>. Every quantity is secretly a function of <M d="t"/>, and differentiating an equation that ties the quantities together produces an equation that ties their <em>rates</em> together.</p>
+  <p>Take revenue, <M d="R=p\cdot q"/>. If price and quantity both change over time, then differentiating with respect to <M d="t"/> uses the product rule, and the chain rule on each factor adds a <M d="\tfrac{dp}{dt}"/> or <M d="\tfrac{dq}{dt}"/>:</p>
+  <M d="\frac{dR}{dt}=\frac{dp}{dt}\,q+p\,\frac{dq}{dt}" block/>
+  <p>Read it in words: revenue rises because the price is rising (first term, times how many you sell) and changes because the quantity is changing (second term, times the price). Given any two of the three rates and the current values, you can find the third.</p>
+  <Box>
+    <p><strong>The related rates recipe:</strong></p>
+    <p>1. Write the equation relating the quantities (before any numbers go in).</p>
+    <p>2. Differentiate both sides with respect to <M d="t"/>, attaching a rate to every quantity that changes.</p>
+    <p>3. Only now substitute the current values and the known rates.</p>
+    <p>4. Solve for the unknown rate and state its units.</p>
+  </Box>
+  <p>The most common mistake is substituting numbers in step 1. If you replace <M d="p"/> with 30 before differentiating, its rate of change becomes 0 and the term vanishes. Numbers go in last.</p>
+</div>
+)},
+{type:"rule",label:"Implicit Differentiation and Related Rates",render:()=>(
+<div>
+  <p><strong>Implicit differentiation:</strong> differentiate both sides with respect to <M d="x"/>, using the chain rule on every <M d="y"/>:</p>
+  <M d="\frac{d}{dx}[y^n]=n\,y^{n-1}\,y'\qquad\frac{d}{dx}[e^y]=e^y\,y'\qquad\frac{d}{dx}[xy]=y+x\,y'" block/>
+  <p>Then gather the <M d="y'"/> terms and solve for <M d="y'"/>.</p>
+  <p><strong>Related rates:</strong> relate the quantities, differentiate with respect to <M d="t"/>, substitute values last, solve for the missing rate. For revenue:</p>
+  <M d="\frac{dR}{dt}=\frac{dp}{dt}\,q+p\,\frac{dq}{dt}" block/>
+</div>
+)},
+{type:"example",label:"Raising the Price While Revenue Falls",render:()=>(
+<div>
+  <p>A company sells a product for $30 and plans to raise the price by $1 per month. Its demand is <M d="q=1000-20p"/> units. How fast is revenue changing right now?</p>
+  <p><strong>Step 1: The relationship.</strong> <M d="R=p\cdot q"/>, with both <M d="p"/> and <M d="q"/> changing over time.</p>
+  <p><strong>Step 2: Differentiate with respect to <M d="t"/>.</strong> Product rule:</p>
+  <M d="\frac{dR}{dt}=\frac{dp}{dt}\,q+p\,\frac{dq}{dt}" block/>
+  <p>We know <M d="\tfrac{dp}{dt}=1"/> dollar per month, but we need <M d="\tfrac{dq}{dt}"/>. Get it from the demand equation, differentiated with respect to <M d="t"/> (chain rule on <M d="p"/>):</p>
+  <M d="q=1000-20p\;\Rightarrow\;\frac{dq}{dt}=-20\,\frac{dp}{dt}=-20(1)=-20\text{ units per month}" block/>
+  <p>Each $1 of price rise costs 20 customers a month.</p>
+  <p><strong>Step 3: Substitute the current values.</strong> Right now <M d="p=30"/> and <M d="q=1000-20(30)=400"/>:</p>
+  <M d="\frac{dR}{dt}=(1)(400)+(30)(-20)=400-600=-200\text{ dollars per month}" block/>
+  <p><strong>Step 4: Interpret.</strong> Revenue is <em>falling</em> by $200 a month even though the price is going up. The extra dollar on each of 400 sales adds $400, but losing 20 sales at $30 each costs $600. The price increase is a mistake at this point on the demand curve, and <Ref to="elasticity"/> will show how to see that instantly, without the calculation.</p>
+  <Box color="green"><p><M d="\tfrac{dR}{dt}=-200"/> dollars per month. The two terms of the product rule are the two competing effects, and the second wins.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Find <M d="y'"/> for the curve <M d="x^2+xy+y^2=7"/> at the point <M d="(1,2)"/>. First confirm the point is on the curve.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 0: Is <M d="(1,2)"/> on the curve?</strong> <M d="1+2+4=7"/>. Yes.</p>
+  <p><strong>Step 1: Differentiate each term with respect to <M d="x"/>.</strong></p>
+  <Box>
+    <p><M d="x^2"/> gives <M d="2x"/>.</p>
+    <p><M d="xy"/> is a product of <M d="x"/> and <M d="y"/>, so use the product rule: <M d="(1)(y)+(x)(y')=y+xy'"/>.</p>
+    <p><M d="y^2"/> gives <M d="2y\,y'"/> by the chain rule.</p>
+    <p><M d="7"/> gives <M d="0"/>.</p>
+  </Box>
+  <M d="2x+y+xy'+2yy'=0" block/>
+  <p><strong>Step 2: Gather the <M d="y'"/> terms and solve.</strong> Move the terms without <M d="y'"/> to the right, then factor <M d="y'"/> out:</p>
+  <M d="y'(x+2y)=-2x-y\;\Rightarrow\;y'=-\frac{2x+y}{x+2y}" block/>
+  <p><strong>Step 3: Substitute the point.</strong></p>
+  <M d="y'=-\frac{2(1)+2}{1+2(2)}=-\frac{4}{5}" block/>
+  <Box color="green"><p>The slope at <M d="(1,2)"/> is <M d="-\tfrac45"/>. Notice the answer needed both coordinates; that is normal for implicit curves, where the slope depends on <em>where</em> you are, not just on <M d="x"/>.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>The factory from <Ref to="marginal"/> has cost <M d="C(x)=1000+25x-0.05x^2"/>. It is producing 50 items and increasing production at 4 items per day. How fast is its cost rising, in dollars per day?</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: The relationship.</strong> <M d="C"/> depends on <M d="x"/>, and <M d="x"/> depends on time. So <M d="C"/> depends on time through <M d="x"/>: a chain.</p>
+  <p><strong>Step 2: Differentiate with respect to <M d="t"/>.</strong> Chain rule: the outside rate is <M d="C'(x)"/> (dollars per item) and the inside rate is <M d="\tfrac{dx}{dt}"/> (items per day):</p>
+  <M d="\frac{dC}{dt}=C'(x)\cdot\frac{dx}{dt}" block/>
+  <p>Check the units: dollars per item times items per day gives dollars per day. The items cancel, exactly as they should.</p>
+  <p><strong>Step 3: Substitute.</strong> From <Ref to="marginal"/>, <M d="C'(x)=25-0.1x"/>, so <M d="C'(50)=20"/> dollars per item. And <M d="\tfrac{dx}{dt}=4"/> items per day:</p>
+  <M d="\frac{dC}{dt}=20\times 4=80\text{ dollars per day}" block/>
+  <Box color="green"><p>Cost is rising at $80 per day. Marginal cost (per item) times production speed (items per day) is cost speed (dollars per day). Related rates is the chain rule with time on the inside.</p></Box>
+</div>
+)},
+]},
+
+{slug:"elasticity",module:"Derivatives",title:"Elasticity of Demand",time:"11 min",content:[
+{type:"concept",label:"The Pricing Question",render:()=>(
 <div>
   <p>This lesson ties together everything from the Derivatives module into a powerful business concept.</p>
-
-  <p><strong>The business question:</strong> "If I raise my price by 1%, how much will my sales drop?" This is called <strong>elasticity of demand</strong>  -  it measures how <em>sensitive</em> customers are to price changes.</p>
-
-  <p><strong>Why it matters:</strong> Suppose you sell widgets at $30 each and move 400 units. You're thinking about raising the price to $31. Will you make more money or less? It depends on how many customers you lose.</p>
-
-  <p>If customers barely notice the price hike (say, demand drops from 400 to 395), the extra revenue per unit more than compensates  -  <strong>raise the price!</strong></p>
-  <p>If customers flee (demand drops from 400 to 350), you lose too many sales  -  <strong>lower the price!</strong></p>
-
-  <p>Elasticity puts a number on this tradeoff.</p>
+  <p><strong>The business question:</strong> "If I raise my price by 1%, how much will my sales drop?" This is called <strong>elasticity of demand</strong>: it measures how <em>sensitive</em> customers are to price changes.</p>
+  <p><strong>Why it matters:</strong> suppose you sell widgets at $30 each and move 400 units. You are thinking about raising the price to $31. Will you make more money or less? It depends on how many customers you lose.</p>
+  <p>If customers barely notice the price hike (say demand drops from 400 to 395), the extra revenue per unit more than compensates: <strong>raise the price</strong>.</p>
+  <p>If customers flee (demand drops from 400 to 350), you lose too many sales: <strong>lower the price</strong>.</p>
+  <p>Elasticity puts a number on this trade-off. (In <Ref to="implicit-related-rates"/> we watched exactly this company lose $200 a month of revenue by raising its price; by the end of this lesson you will be able to predict that from a single number.)</p>
 </div>
 )},
 {type:"rule",label:"The Elasticity Formula",render:()=>(
 <div>
   <p>If demand as a function of price is <M d="q = f(p)"/>, then elasticity at price <M d="p"/> is:</p>
   <M d="E(p) = -\frac{p \cdot f'(p)}{f(p)}" block/>
-  <p><strong>Where does this come from?</strong> Elasticity is just the question from the last screen written as a fraction: percent change in demand divided by percent change in price. A percent change in demand is <M d="\tfrac{\Delta q}{q}"/>, and a percent change in price is <M d="\tfrac{\Delta p}{p}"/>. Divide one by the other and rearrange:</p>
+  <p><strong>Where does this come from?</strong> Elasticity is just the question from the last section written as a fraction: percent change in demand divided by percent change in price. A percent change in demand is <M d="\tfrac{\Delta q}{q}"/>, and a percent change in price is <M d="\tfrac{\Delta p}{p}"/>. Divide one by the other and rearrange:</p>
   <M d="\frac{\Delta q / q}{\Delta p / p} = \frac{p}{q}\cdot\frac{\Delta q}{\Delta p}" block/>
-  <p>The piece <M d="\tfrac{\Delta q}{\Delta p}"/> is just how fast demand changes as price changes  -  that is <M d="f'(p)"/>. And <M d="q"/> is <M d="f(p)"/>. So the ratio becomes <M d="\tfrac{p\,f'(p)}{f(p)}"/>. The minus sign out front is added for one reason only, explained in the next bullet.</p>
-  <p>Let's break this apart:</p>
+  <p>The piece <M d="\tfrac{\Delta q}{\Delta p}"/> is just how fast demand changes as price changes, which for a tiny price change is <M d="f'(p)"/>. And <M d="q"/> is <M d="f(p)"/>. So the ratio becomes <M d="\tfrac{p\,f'(p)}{f(p)}"/>. The minus sign out front is added for one reason only, explained below.</p>
   <Box>
     <p><M d="f(p)"/> = the current demand (how many units you sell at price <M d="p"/>)</p>
-    <p><M d="f'(p)"/> = the derivative of demand  -  how fast demand is changing with respect to price (this is where your derivative skills from Lessons <Ref to="power-rule" bare/> to <Ref to="chain-rule" bare/> come in!)</p>
+    <p><M d="f'(p)"/> = the derivative of demand: how fast demand is changing with respect to price (this is where your derivative skills from Lessons <Ref to="power-rule" bare/> to <Ref to="chain-rule" bare/> come in)</p>
     <p><M d="p"/> = the current price</p>
-    <p>The negative sign makes <M d="E"/> positive (since <M d="f'(p)"/> is typically negative  -  higher price means less demand).</p>
+    <p>The negative sign makes <M d="E"/> positive, since <M d="f'(p)"/> is typically negative (higher price means less demand).</p>
   </Box>
-
   <p><strong>How to interpret <M d="E"/>:</strong></p>
   <Box>
-    <p><M d="E > 1"/> → <strong>Elastic</strong>: Customers are price-sensitive. A 1% price increase causes more than 1% drop in demand. <strong>Lower your price</strong> to increase revenue. Why lower it? Revenue is price times quantity. If a 1% price rise throws away <em>more</em> than 1% of your customers, the shrinking quantity outweighs the bigger tag, so revenue falls; cutting the price 1% instead wins back more than 1% in sales, so revenue rises.</p>
+    <p><M d="E > 1"/>, <strong>elastic</strong>: customers are price-sensitive. A 1% price increase causes more than a 1% drop in demand. <strong>Lower your price</strong> to increase revenue. Why lower it? Revenue is price times quantity. If a 1% price rise throws away <em>more</em> than 1% of your customers, the shrinking quantity outweighs the bigger tag, so revenue falls; cutting the price 1% instead wins back more than 1% in sales, so revenue rises.</p>
   </Box>
   <Box>
-    <p><M d="E < 1"/> → <strong>Inelastic</strong>: Customers aren't very sensitive. A 1% price increase causes less than 1% drop in demand. <strong>Raise your price</strong> to increase revenue. Why raise it? A 1% price rise costs you <em>less</em> than 1% of customers, so the higher tag outweighs the few lost sales and revenue climbs.</p>
+    <p><M d="E < 1"/>, <strong>inelastic</strong>: customers are not very sensitive. A 1% price increase causes less than a 1% drop in demand. <strong>Raise your price</strong> to increase revenue. Why raise it? A 1% price rise costs you <em>less</em> than 1% of customers, so the higher tag outweighs the few lost sales and revenue climbs.</p>
   </Box>
   <Box>
-    <p><M d="E = 1"/> → <strong>Unit elastic</strong>: You're at the sweet spot. <strong>Revenue is maximized</strong> right here. Why the peak? At <M d="E=1"/> a 1% price change is exactly cancelled by a 1% quantity change, so revenue does not move in either direction. And for a typical demand curve, revenue climbs while <M d="E<1"/> and falls once <M d="E>1"/>, so the flat spot at <M d="E=1"/> really is the very top of the revenue hill.</p>
+    <p><M d="E = 1"/>, <strong>unit elastic</strong>: you are at the sweet spot. <strong>Revenue is maximized</strong> right here. Why the peak? At <M d="E=1"/> a 1% price change is exactly cancelled by a 1% quantity change, so revenue does not move in either direction. The next section proves it.</p>
   </Box>
+</div>
+)},
+{type:"concept",label:"Why E = 1 Is the Top of the Revenue Hill",render:()=>(
+<div>
+  <p>The interpretations above can be proved in three lines with the product rule. Revenue as a function of price is <M d="R(p)=p\cdot f(p)"/>: price times the quantity sold at that price. Differentiate with respect to <M d="p"/> (<Ref to="product-quotient"/>):</p>
+  <M d="R'(p)=1\cdot f(p)+p\cdot f'(p)=f(p)+p\,f'(p)" block/>
+  <p>Now factor <M d="f(p)"/> out of both terms:</p>
+  <M d="R'(p)=f(p)\left(1+\frac{p\,f'(p)}{f(p)}\right)=f(p)\,(1-E)" block/>
+  <p>(The fraction inside the bracket is <M d="-E"/> by the definition of elasticity, so <M d="1+(-E)=1-E"/>.) Since demand <M d="f(p)"/> is positive, the sign of <M d="R'(p)"/> is the sign of <M d="1-E"/>:</p>
+  <Box>
+    <p><M d="E<1"/>: <M d="1-E>0"/>, so <M d="R'(p)>0"/>. Revenue rises as price rises. Raise it.</p>
+    <p><M d="E>1"/>: <M d="1-E<0"/>, so <M d="R'(p)<0"/>. Revenue falls as price rises. Lower it.</p>
+    <p><M d="E=1"/>: <M d="R'(p)=0"/>. Revenue is flat, at its peak.</p>
+  </Box>
+  <p>Check it against <Ref to="implicit-related-rates"/>, where at <M d="p=30"/> we had <M d="f(30)=400"/> and (as the next example shows) <M d="E=1.5"/>: the formula gives <M d="R'(30)=400(1-1.5)=-200"/> dollars per dollar of price. Raising the price $1 per month therefore drains revenue at $200 per month, exactly the related-rates answer. Two lessons, two methods, one number.</p>
 </div>
 )},
 {type:"example",label:"Full Walkthrough",render:()=>(
 <div>
   <p><em>"Demand for a product is <M d="q = 1000 - 20p"/>. Find the elasticity at <M d="p = 30"/> and decide: should the company raise or lower prices?"</em></p>
-
-  <p><strong>Step 1: Find <M d="f'(p)"/>.</strong></p>
-  <p><M d="f(p) = 1000 - 20p"/>. Differentiate with respect to <M d="p"/>:</p>
+  <p><strong>Step 1: Find <M d="f'(p)"/>.</strong> <M d="f(p) = 1000 - 20p"/>. Differentiate with respect to <M d="p"/>:</p>
   <Box>
-    <p><M d="1000"/> → constant → 0</p>
-    <p><M d="-20p = -20p^1"/> → bring 1 down: <M d="-20"/> → <M d="-20"/></p>
+    <p><M d="1000"/> is a constant, giving 0.</p>
+    <p><M d="-20p = -20p^1"/>: bring 1 down, giving <M d="-20"/>.</p>
   </Box>
   <M d="f'(p) = -20" block/>
-  <p>(The derivative is constant here  -  demand drops by exactly 20 units for every $1 price increase, regardless of price level.)</p>
-
-  <p><strong>Step 2: Find <M d="f(30)"/>  -  the current demand.</strong></p>
+  <p>(The derivative is constant here: demand drops by exactly 20 units for every $1 price increase, regardless of price level.)</p>
+  <p><strong>Step 2: Find <M d="f(30)"/>, the current demand.</strong></p>
   <M d="f(30) = 1000 - 20(30) = 1000 - 600 = 400\text{ units}" block/>
-
   <p><strong>Step 3: Plug into the elasticity formula.</strong></p>
   <M d="E(30) = -\frac{(30)(-20)}{400} = -\frac{-600}{400} = \frac{600}{400} = 1.5" block/>
-
   <p><strong>Step 4: Interpret.</strong></p>
   <Box color="green">
-    <p>✅ <M d="E = 1.5 > 1"/> → <strong>Elastic</strong></p>
+    <p><M d="E = 1.5 > 1"/>: <strong>elastic</strong>.</p>
     <p>A 1% price increase causes a <strong>1.5% drop</strong> in demand. The lost sales hurt more than the higher price helps.</p>
-    <p><strong>Recommendation: Lower the price</strong> to increase total revenue.</p>
+    <p><strong>Recommendation: lower the price</strong> to increase total revenue.</p>
   </Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Demand is <M d="q = 500 - 0.5p^2"/>. Find <M d="E(20)"/> and interpret. Should prices go up or down?</span>),
 answer:()=>(
 <div>
-  <p><strong>Step 1: Find <M d="f'(p)"/>.</strong></p>
-  <p><M d="f(p) = 500 - 0.5p^2"/>. Differentiate:</p>
+  <p><strong>Step 1: Find <M d="f'(p)"/>.</strong> <M d="f(p) = 500 - 0.5p^2"/>. Differentiate:</p>
   <Box>
-    <p><M d="500"/> → 0</p>
-    <p><M d="-0.5p^2"/> → bring 2 down: <M d="2 \times (-0.5) = -1"/>, exponent <M d="2-1=1"/> → <M d="-p"/></p>
+    <p><M d="500"/> gives 0.</p>
+    <p><M d="-0.5p^2"/>: bring 2 down, <M d="2 \times (-0.5) = -1"/>, exponent <M d="2-1=1"/>, giving <M d="-p"/>.</p>
   </Box>
   <M d="f'(p) = -p" block/>
-
   <p><strong>Step 2: Find <M d="f(20)"/>.</strong></p>
   <M d="f(20) = 500 - 0.5(20^2) = 500 - 0.5(400) = 500 - 200 = 300\text{ units}" block/>
-
-  <p>Because <M d="f'(p) = -p"/> now depends on price, first evaluate it at <M d="p = 20"/>: <M d="f'(20) = -(20) = -20"/>. (In the linear example <M d="f'"/> was a constant, so this step was hidden; here it matters.)</p>
-
+  <p>Because <M d="f'(p) = -p"/> now depends on price, first evaluate it at <M d="p = 20"/>: <M d="f'(20) = -20"/>. (In the linear example <M d="f'"/> was a constant, so this step was hidden; here it matters.)</p>
   <p><strong>Step 3: Plug in.</strong></p>
   <M d="E(20) = -\frac{(20)(-20)}{300} = -\frac{-400}{300} = \frac{400}{300} \approx 1.33" block/>
-
   <p><strong>Step 4: Interpret.</strong></p>
   <Box color="green">
-    <p>✅ <M d="E \approx 1.33 > 1"/> → <strong>Elastic</strong>. A 1% price hike loses about 1.33% of demand.</p>
+    <p><M d="E \approx 1.33 > 1"/>: <strong>elastic</strong>. A 1% price hike loses about 1.33% of demand.</p>
     <p><strong>Lower the price</strong> to boost revenue.</p>
-    <p><strong>Notice:</strong> The derivative <M d="f'(p) = -p"/> depends on <M d="p"/> here (unlike the linear example where it was constant). This means elasticity changes as price changes  -  a product can be elastic at high prices and inelastic at low prices.</p>
+    <p><strong>Notice:</strong> the derivative <M d="f'(p) = -p"/> depends on <M d="p"/> here (unlike the linear example, where it was constant). This means elasticity changes as price changes: a product can be elastic at high prices and inelastic at low prices.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>For the demand <M d="q=1000-20p"/> from the worked example, find the price at which demand is unit elastic (<M d="E=1"/>), and the revenue there. Then confirm it is the revenue peak using <Ref to="quadratics"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Write <M d="E"/> as a function of <M d="p"/>.</strong> With <M d="f(p)=1000-20p"/> and <M d="f'(p)=-20"/>:</p>
+  <M d="E(p)=-\frac{p(-20)}{1000-20p}=\frac{20p}{1000-20p}" block/>
+  <p><strong>Step 2: Set <M d="E=1"/> and solve.</strong></p>
+  <M d="\frac{20p}{1000-20p}=1\;\Rightarrow\;20p=1000-20p\;\Rightarrow\;40p=1000\;\Rightarrow\;p=25" block/>
+  <p><strong>Step 3: Revenue at that price.</strong> Demand is <M d="f(25)=1000-500=500"/> units, so</p>
+  <M d="R(25)=25\times 500=\$12{,}500" block/>
+  <p><strong>Step 4: Confirm it is the peak.</strong> Revenue as a function of price is <M d="R(p)=p(1000-20p)=1000p-20p^2"/>, a downward parabola. Its vertex (<Ref to="quadratics"/>) is at <M d="p=-\tfrac{1000}{2(-20)}=25"/>. Same price. Unit elasticity and the vertex of the revenue parabola are the same point, seen two ways.</p>
+  <p>Consistency check with the worked example: at <M d="p=30"/> we found <M d="E=1.5>1"/> and advised lowering the price. Lowering it from 30 toward 25 is exactly the move toward the revenue peak.</p>
+  <Box color="green"><p>Unit elastic at <M d="p=\$25"/>, where revenue peaks at $12,500.</p></Box>
 </div>
 )},
 ]},
@@ -2958,19 +3205,69 @@ export const QUIZ = {
    ]
   },
   {
-   "q": "What is the derivative of the constant function $f(x) = 7$?",
+   "q": "Rewrite $\\dfrac{1}{x}$ as a power and differentiate. What is $\\dfrac{d}{dx}\\Big[\\dfrac{1}{x}\\Big]$?",
    "choices": [
-    "$7$",
-    "$7x$",
-    "$1$",
-    "$0$"
+    "$\\dfrac{1}{x^2}$",
+    "$\\ln x$",
+    "$-\\dfrac{1}{x^2}$",
+    "$-\\dfrac{1}{x}$"
    ],
-   "answer": 3,
+   "answer": 2,
    "why": [
-    "A constant never changes, so its rate of change cannot be 7.",
-    "$7x$ would be an antiderivative idea; the derivative of a constant is not a line.",
-    "The slope of a flat constant is not 1; a flat line has zero slope.",
-    "Correct! A constant has zero rate of change, so its derivative is 0."
+    "Not quite - the sign is missing: bringing down the exponent $-1$ makes the result negative.",
+    "Not quite - $\\ln x$ is an antiderivative of $\\dfrac{1}{x}$, the reverse direction.",
+    "Correct - $\\dfrac{1}{x}=x^{-1}$, so the power rule gives $-1\\cdot x^{-2}=-\\dfrac{1}{x^2}$.",
+    "Not quite - the exponent must drop from $-1$ to $-2$, so the answer has $x^2$ underneath."
+   ]
+  }
+ ],
+ "tangent-lines": [
+  {
+   "q": "What is the equation of the tangent line to $y=x^2$ at $x=3$?",
+   "choices": [
+    "$y=6x-9$",
+    "$y=6x+9$",
+    "$y=2x-9$",
+    "$y=9x-6$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - the point is $(3,9)$ and the slope is $f'(3)=6$, so $y=9+6(x-3)=6x-9$.",
+    "Not quite - check the point: at $x=3$ this line gives $27$, but the curve is at height $9$.",
+    "Not quite - the slope of $x^2$ at $x=3$ is $2\\cdot 3=6$, not 2.",
+    "Not quite - the slope is $f'(3)=6$ and the intercept comes from the point $(3,9)$."
+   ]
+  },
+  {
+   "q": "At a sharp corner, such as the point of $|x|$ at $x=0$, why does the derivative not exist?",
+   "choices": [
+    "The function is undefined there",
+    "The left and right slopes disagree, so no single tangent line fits",
+    "The function is negative there",
+    "Corners always have slope zero"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - $|0|=0$ is perfectly defined; the trouble is with the slope, not the value.",
+    "Correct - from the left the slope is $-1$ and from the right it is $+1$, and a derivative needs both sides to agree.",
+    "Not quite - the absolute value is never negative, and sign has nothing to do with it anyway.",
+    "Not quite - a corner has no single slope at all, not a slope of zero."
+   ]
+  },
+  {
+   "q": "If $f(2)=5$ and $f'(2)=3$, what does the tangent line estimate for $f(2.1)$?",
+   "choices": [
+    "$5.03$",
+    "$8$",
+    "$5.3$",
+    "$5.6$"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - the step is $0.1$, and $3\\times 0.1=0.3$, not $0.03$.",
+    "Not quite - that adds the whole slope; multiply the slope by the step of $0.1$ first.",
+    "Correct - $f(2.1)\\approx f(2)+f'(2)\\cdot 0.1=5+0.3=5.3$.",
+    "Not quite - $0.6$ would be a step of $0.2$; here the step is $0.1$, giving $0.3$."
    ]
   }
  ],
@@ -3171,6 +3468,56 @@ export const QUIZ = {
     "The derivative of the inside $5x$ is just 5, not $5x$.",
     "Correct: $e^{5x}$ stays, then multiply by the inside's derivative, 5.",
     "The exponent doesn't disappear; $e^{5x}$ stays and gets multiplied by 5."
+   ]
+  }
+ ],
+ "implicit-related-rates": [
+  {
+   "q": "If $y$ depends on $x$, what is $\\dfrac{d}{dx}[y^2]$?",
+   "choices": [
+    "$2y$",
+    "$2x$",
+    "$2y\\,y'$",
+    "$y^2\\,y'$"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - $y$ is an inside function, so the chain rule also multiplies by $y'$.",
+    "Not quite - the variable being squared is $y$, not $x$.",
+    "Correct - power rule on the outside gives $2y$, then multiply by the derivative of the inside, $y'$.",
+    "Not quite - the exponent must come down and drop by one, giving $2y$, before multiplying by $y'$."
+   ]
+  },
+  {
+   "q": "In a related rates problem, when should you substitute the known numbers?",
+   "choices": [
+    "Before differentiating, to simplify the equation",
+    "After differentiating with respect to time",
+    "Never; the answer stays symbolic",
+    "Only into the left side of the equation"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - a number substituted early has a rate of zero, so its whole term vanishes and the answer is wrong.",
+    "Correct - relate the quantities, differentiate with respect to $t$, and only then put in the current values and rates.",
+    "Not quite - the point is to get a number for the unknown rate, so substitution is required, just not first.",
+    "Not quite - values go into every term once the differentiation is done."
+   ]
+  },
+  {
+   "q": "On the circle $x^2+y^2=25$, what is the slope at the point $(3,4)$?",
+   "choices": [
+    "$\\dfrac{3}{4}$",
+    "$-\\dfrac{4}{3}$",
+    "$0$",
+    "$-\\dfrac{3}{4}$"
+   ],
+   "answer": 3,
+   "why": [
+    "Not quite - the sign is wrong; implicit differentiation gives $y'=-x/y$, which is negative here.",
+    "Not quite - that is $-x/y$ upside down; the slope is $-3/4$, not $-4/3$.",
+    "Not quite - the slope is zero only at the very top and bottom of the circle, not at $(3,4)$.",
+    "Correct - $2x+2yy'=0$ gives $y'=-x/y=-3/4$."
    ]
   }
  ],
