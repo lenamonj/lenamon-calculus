@@ -18,8 +18,8 @@ A free, interactive web course that teaches **business calculus** to a complete 
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-6366f1?style=flat-square)](#contributing)
 [![No build config](https://img.shields.io/badge/setup-2%20commands-f59e0b?style=flat-square)](#getting-started)
-![Lessons](https://img.shields.io/badge/lessons-25-818cf8?style=flat-square)
-![Quiz questions](https://img.shields.io/badge/quiz%20questions-75-f472b6?style=flat-square)
+![Lessons](https://img.shields.io/badge/lessons-32-818cf8?style=flat-square)
+![Quiz questions](https://img.shields.io/badge/quiz%20questions-96-f472b6?style=flat-square)
 ![Self hosted math](https://img.shields.io/badge/dependencies-2-34d399?style=flat-square)
 
 <br/>
@@ -56,32 +56,40 @@ Most courses lose beginners at the exact moment an author assumes something the 
 
 ## Features
 
-- **Knowledge-check quizzes.** Every lesson ends with a 3-question quiz drawn straight from its material, a mix of conceptual and compute-it problems. Questions appear one at a time; a wrong answer gives a friendly explanation of why that choice is wrong and lets you try again, and you must pass all three to move on. (75 questions, every answer independently verified.)
-- **Interactive labs.** Drag a point along a curve and watch the tangent line and the live slope readout change. Slide a parameter and reshape a function in real time while the equation updates.
+- **Knowledge-check quizzes.** Every lesson ends with a 3-question quiz drawn straight from its material, a mix of conceptual and compute-it problems. Questions appear one at a time; a wrong answer gives a friendly explanation of why that choice is wrong and lets you try again, and you must pass all three to move on. (96 questions, every answer independently verified.)
+- **Interactive labs.** Drag a point along a curve and watch the tangent line and the live slope readout change. Slide a parameter and reshape a function in real time while the equation updates. Slide toward a hole and watch a limit arrive. Add Riemann rectangles under a parabola and watch the sum close in on the exact area.
 - **Custom graphing engine.** A hand-built SVG renderer that breaks the curve across vertical asymptotes (no false connecting lines), shades regions between curves, draws tangent and reference lines, and keeps labels readable over any background.
-- **A real completion certificate.** Finish all 25 lessons to unlock a printable certificate with your name, an engraved masthead, a golden foil seal, a signature, and the date. Print or Save as PDF is built in.
+- **A real completion certificate.** Finish all 32 lessons to unlock a printable certificate with your name, an engraved masthead, a golden foil seal, a signature, and the date. Print or Save as PDF is built in.
 - **Inspiration on every page.** A card beside each lesson pairs the topic with either a genuine, attributed quote (Newton, Euler, Einstein, Cantor, von Neumann, and more) or a note of encouragement, all aimed at sparking a love of math.
 - **Crisp math typesetting.** All formulas render with KaTeX, with a graceful fallback so a blocked CDN never freezes the page.
 - **Gamified progress.** Earn XP and level up in the header, enjoy a confetti burst when you pass a lesson, and pick up exactly where you left off.
-- **Accounts and saved progress.** Create a free account (first name, last name, email) and your progress is saved per learner. A lightweight admin view lists registered learners.
+- **Accounts and saved progress.** Create a free account (first name, last name, email) and your progress is saved per learner, keyed by lesson so it survives new lessons being added. A certificate, once earned, stays earned. A lightweight admin view lists registered learners.
 - **Designed to be read.** A clean three-column layout with module navigation, a focused reading column, and a sticky rail. Fully responsive down to mobile.
 - **Accessible by default.** Keyboard-operable navigation, visible focus outlines, ARIA labels on icon buttons, and respect for reduced-motion preferences.
 
 <div align="center">
   <br/>
-  <img src="docs/certificate.png" alt="The completion certificate, unlocked after finishing all 25 lessons" width="560"/>
+  <img src="docs/certificate.png" alt="The completion certificate, unlocked after finishing all 32 lessons" width="560"/>
   <br/>
-  <sub>The certificate every learner earns after passing all 25 lesson quizzes.</sub>
+  <sub>The certificate every learner earns after passing all 32 lesson quizzes.</sub>
 </div>
 
 ---
 
 ## Curriculum
 
-**25 lessons across 6 modules.** Each lesson is built from typed blocks: a plain-English concept, the key formulas, a fully worked example, an optional interactive lab, a your-turn practice problem with a complete step-by-step solution, and a 3-question quiz you must pass before moving on.
+**32 lessons across 6 modules.** Each lesson is built from typed blocks: plain-English concept sections, a Key Formulas plate, fully worked examples, an optional interactive lab, two your-turn practice problems with complete step-by-step solutions, and a 3-question quiz you must pass before moving on. Every prerequisite idea gets its own lesson before it is needed: quadratics before break-even, business models before marginal analysis, tangent lines before linear approximation, Riemann sums before the definite integral.
 
 | Module | Lessons |
 | --- | --- |
+| **1. Foundations** | Functions, Domain and Range - Linear Equations and Slope - Quadratics, Polynomials and Solving Equations - Business Models: Cost, Revenue, Profit and Demand - Exponential Functions and e - Logarithmic Functions |
+| **2. Limits and Continuity** | Introduction to Limits - Infinite Limits and Limits at Infinity - Continuity |
+| **3. Derivatives** | The Derivative (what it means) - Power Rule and Basic Rules - Tangent Lines, Linear Approximation and Differentiability - Marginal Analysis - Derivatives of e^x and ln(x) - Product and Quotient Rules - The Chain Rule - Implicit Differentiation and Related Rates - Elasticity of Demand |
+| **4. Applications of Derivatives** | First Derivative Test - Second Derivative and Concavity - Absolute Extrema - Optimization |
+| **5. Integration** | Antiderivatives - Substitution - Area as a Sum: Riemann Sums - The Definite Integral - Fundamental Theorem of Calculus - Integration by Parts |
+| **6. Business Applications** | Area Between Curves - Average Value of a Function - Consumer and Producer Surplus - Income Streams and Present Value |
+
+--- | --- |
 | **1. Foundations** | Functions, Domain and Range - Linear Equations and Slope - Exponential Functions and e - Logarithmic Functions |
 | **2. Limits and Continuity** | Introduction to Limits - Infinite Limits and Limits at Infinity - Continuity |
 | **3. Derivatives** | The Derivative (what it means) - Power Rule - Marginal Analysis - Derivatives of e^x and ln(x) - Product and Quotient Rules - The Chain Rule - Elasticity of Demand |
@@ -141,6 +149,8 @@ Then open the printed local URL (defaults to `http://localhost:5173`).
 | `npm run dev` | Start the Vite dev server with hot reload |
 | `npm run build` | Produce an optimized production build in `dist/` |
 | `npm run preview` | Serve the production build locally to verify it |
+| `npm test` | Run the Vitest suite (engine, accessibility, and the lesson content contract) |
+| `npm run lint` | Run ESLint |
 
 ---
 
@@ -151,15 +161,19 @@ lenamon-calculus/
 ├── index.html          # App shell, KaTeX + font loading
 ├── src/
 │   ├── main.jsx        # React entry point
-│   └── App.jsx         # The whole app: lessons, quizzes, graphs, labs,
-│                       #   accounts, admin, and the completion certificate
-├── docs/specs/         # Design notes
+│   ├── App.jsx         # The engine: graphs, labs, lesson surface, quizzes,
+│   │                   #   accounts, admin, and the completion certificate
+│   ├── content.jsx     # The 32 lessons and the 96-question quiz bank
+│   ├── progress.js     # Saved-progress format and the v1 migration
+│   └── *.test.jsx      # Vitest suites, including the content contract
+├── docs/specs/         # Design notes and the curriculum spec
+├── docs/plans/         # Implementation plans
 ├── public/             # Static assets
 ├── package.json
 └── vite.config.js
 ```
 
-Everything lives in `src/App.jsx` as structured data (lessons, the per-lesson quizzes, and inspiration cards) alongside the custom graphing, interactive-lab, layout, auth, and certificate components.
+Lessons are structured data in `src/content.jsx`: each lesson has a stable slug and a list of typed blocks, and cross-references between lessons resolve by slug at render time, so inserting a lesson never breaks a number. The engine in `src/App.jsx` holds the custom graphing, interactive-lab, layout, auth, and certificate components. A content-contract test enforces that every lesson has a formulas plate, a worked example, two practices, a 3-question quiz, and artifact-free prose.
 
 ---
 

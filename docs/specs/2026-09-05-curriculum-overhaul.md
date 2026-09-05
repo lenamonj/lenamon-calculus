@@ -1,7 +1,7 @@
 # Curriculum Overhaul - "Nothing Assumed, Nothing Skipped"
 
 Date: 2026-09-05
-Status: Approved design, implementation in progress
+Status: Implemented and verified (2026-09-05)
 Follows: 2026-07-11-lesson-experience.md (lesson surface). This spec covers the
 course content itself: what is taught, in what order, and how deeply.
 
