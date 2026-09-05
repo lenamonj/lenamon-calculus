@@ -1,7 +1,7 @@
 // Lesson corpus and quiz bank, split out of App.jsx so content edits no longer
 // churn the app engine. buildLessons receives the presentational components as
 // arguments, so this module imports nothing from App.jsx (no circular import).
-export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer, Ref }) {
+export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer, RiemannExplorer, Ref }) {
   return [
 {slug:"functions",module:"Foundations",title:"Functions, Domain & Range",time:"10 min",content:[
 {type:"concept",label:"A Function Is a Machine",render:()=>(
@@ -2493,30 +2493,31 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{slug:"antiderivatives",module:"Integration",title:"Antiderivatives",time:"8 min",content:[
-{type:"concept",render:()=>(
+{slug:"antiderivatives",module:"Integration",title:"Antiderivatives",time:"10 min",content:[
+{type:"concept",label:"Running the Derivative Backwards",render:()=>(
 <div>
-  <p>Every operation in math has a reverse. Addition undoes subtraction. Squaring undoes square-rooting. <strong>Integration is the reverse of differentiation.</strong></p>
+  <p>Every operation in math has a reverse. Subtraction undoes addition. Square-rooting undoes squaring. <strong>Integration is the reverse of differentiation.</strong></p>
   <p>Differentiation asks: "I have a position, what is the speed?" Integration asks the opposite: "I know the speed at every moment, what was the position?" In business terms: if you know the <em>rate</em> money flows in (marginal revenue), integration recovers the <em>total</em> (total revenue).</p>
   <p>An <strong>antiderivative</strong> of <M d="f(x)"/> is any function whose derivative is <M d="f(x)"/>. We write it with the integral sign:</p>
   <M d="\int f(x)\,dx = F(x)+C" block/>
-  <p>Read it as "the integral of <M d="f(x)"/>." That stretched-S shape <M d="\int"/> is literally an old-style letter "S," chosen because an integral is really a <strong>S</strong>um. You cannot see the sum yet, but in <Ref to="definite-integral"/> the integral becomes a sum of areas and the symbol pays off. The <M d="dx"/> tells you which variable you are integrating with respect to (here, <M d="x"/>); it is also a leftover reminder of <em>width</em>  -  a tiny step along the <M d="x"/>-axis  -  which is the picture that matters for area in <Ref to="definite-integral"/> and for the bit of algebra in the next lesson.</p>
+  <p>Read it as "the integral of <M d="f(x)"/>." That stretched-S shape <M d="\int"/> is literally an old-style letter S, chosen because an integral is really a <strong>S</strong>um. You cannot see the sum yet, but in <Ref to="riemann-sums"/> the integral becomes a sum of areas and the symbol pays off. The <M d="dx"/> tells you which variable you are integrating with respect to (here, <M d="x"/>); it is also a leftover reminder of <em>width</em>, a tiny step along the <M d="x"/>-axis, which is the picture that matters for area in <Ref to="riemann-sums"/> and for the bit of algebra in <Ref to="substitution"/>.</p>
   <Box>
-    <p><strong>Why the mysterious <M d="+C"/>?</strong> The derivative of <M d="x^2"/> is <M d="2x"/>. But so is the derivative of <M d="x^2+7"/>, and <M d="x^2-100"/>. A constant always differentiates to 0, so when you reverse the process you cannot know which constant was there. We cover all of them at once by writing <M d="+C"/>.</p>
+    <p><strong>Why the mysterious <M d="+C"/>?</strong> The derivative of <M d="x^2"/> is <M d="2x"/>. But so is the derivative of <M d="x^2+7"/>, and of <M d="x^2-100"/>. A constant always differentiates to 0, so when you reverse the process you cannot know which constant was there. We cover all of them at once by writing <M d="+C"/>. The second example shows how a single extra fact pins <M d="C"/> down.</p>
   </Box>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"rule",label:"The Basic Integration Rules",render:()=>(
 <div>
   <p><strong>The Power Rule for integrals</strong> (the reverse of the derivative power rule): add 1 to the exponent, then divide by the new exponent.</p>
   <M d="\int x^n\,dx=\frac{x^{n+1}}{n+1}+C\qquad(n\neq -1)" block/>
-  <p>Why add 1 and divide? The derivative power rule does two things: it multiplies by the exponent, then lowers the exponent by 1. To undo it, reverse both steps  -  raise the exponent by 1, then divide by that new exponent to cancel the multiply. Quick check: differentiate <M d="\tfrac{x^{n+1}}{n+1}"/>; the <M d="n+1"/> comes down front and cancels the division, and the power drops back to <M d="n"/>, leaving <M d="x^n"/>. It reverses exactly as claimed.</p>
+  <p>Why add 1 and divide? The derivative power rule does two things: it multiplies by the exponent, then lowers the exponent by 1. To undo it, reverse both steps: raise the exponent by 1, then divide by that new exponent to cancel the multiply. Quick check: differentiate <M d="\tfrac{x^{n+1}}{n+1}"/>; the <M d="n+1"/> comes down front and cancels the division, and the power drops back to <M d="n"/>, leaving <M d="x^n"/>. It reverses exactly as claimed.</p>
   <p><strong>Two special functions reverse to themselves or to a log:</strong></p>
   <M d="\int e^x\,dx=e^x+C\qquad\int\frac{1}{x}\,dx=\ln|x|+C" block/>
   <p>That <M d="\tfrac{1}{x}"/> case is exactly the <M d="n=-1"/> the power rule forbids (you cannot divide by <M d="n+1=0"/>), which is why it gets its own rule.</p>
   <p>Why the bars in <M d="\ln|x|"/>? The function <M d="\tfrac{1}{x}"/> works for negative <M d="x"/> too, but a plain <M d="\ln"/> only accepts positive inputs (<Ref to="logarithms"/>). The absolute value <M d="|x|"/> strips off any minus sign so the log is always fed a positive number, letting the answer cover both sides.</p>
   <p><strong>Helpers:</strong> constants slide out front, and you can integrate term by term:</p>
   <M d="\int k\,f(x)\,dx=k\int f(x)\,dx\qquad\int[f+g]\,dx=\int f\,dx+\int g\,dx" block/>
+  <p><strong>Always check by differentiating your answer.</strong> If you get back the function you started with, the integral is right.</p>
 </div>
 )},
 {type:"example",label:"One Term at a Time",render:()=>(
@@ -2529,7 +2530,21 @@ answer:()=>(<div>
     <p><M d="-5"/>: think of it as <M d="-5x^0"/>, so <M d="\tfrac{-5x^1}{1}=-5x"/></p>
   </Box>
   <M d="\int(6x^2+4x-5)\,dx=2x^3+2x^2-5x+C" block/>
-  <p><strong>Always check by differentiating your answer.</strong> The derivative of <M d="2x^3+2x^2-5x+C"/> is <M d="6x^2+4x-5"/>. That matches what we started with.</p>
+  <p><strong>Check by differentiating.</strong> The derivative of <M d="2x^3+2x^2-5x+C"/> is <M d="6x^2+4x-5"/>. That matches what we started with.</p>
+</div>
+)},
+{type:"example",label:"Pinning Down C: Cost From Marginal Cost",render:()=>(
+<div>
+  <p>A factory's marginal cost is <M d="C'(x)=25-0.1x"/> dollars per item, and its fixed costs are $1,000. Find the cost function.</p>
+  <p><strong>Step 1: Integrate the marginal cost.</strong> Marginal cost is the derivative of cost (<Ref to="marginal"/>), so cost is an antiderivative of marginal cost:</p>
+  <M d="C(x)=\int(25-0.1x)\,dx=25x-0.05x^2+K" block/>
+  <p>(<M d="25"/> integrates to <M d="25x"/>; <M d="-0.1x"/> integrates to <M d="-0.1\cdot\tfrac{x^2}{2}=-0.05x^2"/>. We call the constant <M d="K"/> here only because <M d="C"/> is already taken for cost.)</p>
+  <p><strong>Step 2: Use the extra fact.</strong> Fixed costs are what you pay when you make nothing, so <M d="C(0)=1000"/>. Plug in <M d="x=0"/>:</p>
+  <M d="C(0)=0-0+K=1000\;\Rightarrow\;K=1000" block/>
+  <p><strong>Step 3: Write the cost function.</strong></p>
+  <M d="C(x)=1000+25x-0.05x^2" block/>
+  <p>That is exactly the factory from <Ref to="marginal"/>, rebuilt from its marginal cost and one starting value. This is how <M d="+C"/> works in practice: the integral gives a whole family of curves, all with the same slope everywhere, and one known point (called an <strong>initial condition</strong>) picks out the right member of the family.</p>
+  <Box color="green"><p><M d="C(x)=1000+25x-0.05x^2"/>. The marginal function tells you the shape; the fixed cost tells you the height.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Find <M d="\int\left(4x^3-\dfrac{2}{x}+5e^x\right)dx"/></span>),
@@ -2537,29 +2552,48 @@ answer:()=>(<div>
   <p>Integrate term by term. Watch for the <M d="\tfrac{1}{x}"/> special case.</p>
   <Box>
     <p><M d="4x^3"/>: exponent <M d="3+1=4"/>, so <M d="\tfrac{4x^4}{4}=x^4"/></p>
-    <p><M d="-\tfrac{2}{x}=-2\cdot\tfrac{1}{x}"/>: special case, gives <M d="-2\ln|x|"/></p>
+    <p><M d="-\tfrac{2}{x}=-2\cdot\tfrac{1}{x}"/>: the special case, giving <M d="-2\ln|x|"/></p>
     <p><M d="5e^x"/>: <M d="e^x"/> integrates to itself, so <M d="5e^x"/></p>
   </Box>
   <M d="\int\left(4x^3-\tfrac{2}{x}+5e^x\right)dx=x^4-2\ln|x|+5e^x+C" block/>
   <Box color="green"><p>Answer: <M d="x^4-2\ln|x|+5e^x+C"/>. Check: differentiate it and you get back <M d="4x^3-\tfrac{2}{x}+5e^x"/>.</p></Box>
 </div>)},
+{type:"practice",render:()=>(<span>A company's marginal revenue is <M d="R'(x)=80-0.2x"/> dollars per unit, and of course <M d="R(0)=0"/> (no sales, no revenue). Find <M d="R(x)"/>, then recover the price-demand equation <M d="p"/> the company must be using.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Integrate.</strong></p>
+  <M d="R(x)=\int(80-0.2x)\,dx=80x-0.1x^2+K" block/>
+  <p><strong>Step 2: Initial condition.</strong> <M d="R(0)=0"/> gives <M d="0-0+K=0"/>, so <M d="K=0"/>:</p>
+  <M d="R(x)=80x-0.1x^2" block/>
+  <p>This is the revenue function from the second practice in <Ref to="marginal"/>, recovered from its derivative.</p>
+  <p><strong>Step 3: The price-demand equation.</strong> Revenue is price times quantity (<Ref to="business-models"/>), so price is revenue divided by quantity:</p>
+  <M d="p=\frac{R(x)}{x}=\frac{80x-0.1x^2}{x}=80-0.1x" block/>
+  <Box color="green"><p><M d="R(x)=80x-0.1x^2"/> and <M d="p=80-0.1x"/>. Three lessons connect here: marginal revenue (a derivative) integrates back to revenue, and revenue divided by quantity gives the price-demand line that produced it.</p></Box>
+</div>)},
 ]},
 
-{slug:"substitution",module:"Integration",title:"Substitution",time:"9 min",content:[
-{type:"concept",render:()=>(
+{slug:"substitution",module:"Integration",title:"Substitution",time:"11 min",content:[
+{type:"concept",label:"The Chain Rule in Reverse",render:()=>(
 <div>
   <p>The power rule and the <M d="e^x"/> rule only handle simple, "bare" expressions. But what about <M d="\int e^{5x}\,dx"/> or <M d="\int 2x(x^2+1)^3\,dx"/>, where one function is buried <em>inside</em> another?</p>
-  <p><strong>Substitution</strong> is the reverse of the chain rule. The chain rule created those nested functions when differentiating; substitution unwinds them when integrating.</p>
+  <p><strong>Substitution</strong> is the reverse of the chain rule. The chain rule (<Ref to="chain-rule"/>) created those nested functions when differentiating; substitution unwinds them when integrating.</p>
   <p>The trick: rename the messy inner part as a single letter, <M d="u"/>. If you also account for its derivative, the whole integral collapses into a simple one you already know.</p>
   <p>Here is <em>why</em> you must account for the derivative. When the chain rule differentiates <M d="F(\text{inside})"/>, it always leaves an extra factor behind: the derivative of the inside. So any integral that came from a chain-rule derivative must secretly contain that factor. Finding it (or arranging for it) is exactly what lets the integral collapse back into the simple <M d="F(u)"/> form.</p>
+  <p><strong>Why are we allowed to "solve for <M d="dx"/>"?</strong> The symbol <M d="\tfrac{du}{dx}"/> means "the derivative of <M d="u"/>." For substitution you are allowed to treat it like an ordinary fraction and multiply both sides by <M d="dx"/>, which gives <M d="du=u'\,dx"/>. This is just bookkeeping: it records exactly how a tiny step in <M d="x"/> corresponds to a tiny step in <M d="u"/>, so every <M d="dx"/> in the integral can be traded for the matching amount of <M d="du"/>.</p>
+</div>
+)},
+{type:"rule",label:"The Substitution Method",render:()=>(
+<div>
   <Box>
     <p><strong>The 4 steps:</strong></p>
-    <p>1. Let <M d="u"/> = the inner function.</p>
+    <p>1. Let <M d="u"/> = the inner function (the thing inside the power, the exponent, or the log).</p>
     <p>2. Compute <M d="du=u'\,dx"/> and solve for <M d="dx"/>.</p>
     <p>3. Rewrite the integral entirely in terms of <M d="u"/> (no <M d="x"/> left), then integrate.</p>
     <p>4. Substitute the original expression back in for <M d="u"/>.</p>
   </Box>
-  <p><strong>Why are we allowed to "solve for <M d="dx"/>" in step 2?</strong> The symbol <M d="\tfrac{du}{dx}"/> means "the derivative of <M d="u"/>." For substitution you are allowed to treat it like an ordinary fraction and multiply both sides by <M d="dx"/>, which gives <M d="du=u'\,dx"/>. This is just bookkeeping: it records exactly how a tiny step in <M d="x"/> corresponds to a tiny step in <M d="u"/>, so every <M d="dx"/> in the integral can be traded for the matching amount of <M d="du"/>.</p>
+  <p><strong>Two shortcuts that fall out of the method</strong> (both for <M d="k\neq 0"/>):</p>
+  <M d="\int e^{kx}\,dx=\frac{e^{kx}}{k}+C\qquad\int\frac{u'}{u}\,dx=\ln|u|+C" block/>
+  <p>The first says: integrating <M d="e^{kx}"/> <em>divides</em> by <M d="k"/>, the reverse of the chain rule multiplying by it. The second says: whenever the top of a fraction is the derivative of the bottom, the integral is a log.</p>
+  <p><strong>If a constant is missing,</strong> multiply and divide by it. You may only adjust by constants, never by anything containing <M d="x"/>.</p>
 </div>
 )},
 {type:"example",label:"Spotting the Inner Function",render:()=>(
@@ -2571,8 +2605,21 @@ answer:()=>(<div>
   <M d="\int (x^2+1)^3\,(2x\,dx)=\int u^3\,du=\frac{u^4}{4}+C" block/>
   <p><strong>Step 4: Substitute back</strong> <M d="u=x^2+1"/>:</p>
   <M d="\frac{(x^2+1)^4}{4}+C" block/>
-  <p><strong>Check it the <Ref to="antiderivatives"/> way, by differentiating.</strong> The derivative of <M d="\tfrac{(x^2+1)^4}{4}"/> is, by the chain rule, <M d="\tfrac{4(x^2+1)^3}{4}"/> times the derivative of the inside <M d="2x"/>, which is <M d="(x^2+1)^3\cdot 2x"/>  -  exactly the integrand we started with. Watching the chain rule hand back that <M d="2x"/> is watching <em>why</em> substitution works.</p>
+  <p><strong>Check it the <Ref to="antiderivatives"/> way, by differentiating.</strong> The derivative of <M d="\tfrac{(x^2+1)^4}{4}"/> is, by the chain rule, <M d="\tfrac{4(x^2+1)^3}{4}"/> times the derivative of the inside <M d="2x"/>, which is <M d="(x^2+1)^3\cdot 2x"/>, exactly the integrand we started with. Watching the chain rule hand back that <M d="2x"/> is watching <em>why</em> substitution works.</p>
   <Box color="green"><p>Answer: <M d="\tfrac{(x^2+1)^4}{4}+C"/>. The hard nested integral became a simple power-rule problem once we renamed the inside.</p></Box>
+</div>
+)},
+{type:"example",label:"Adjusting a Missing Constant",render:()=>(
+<div>
+  <p>Find <M d="\int x\,e^{x^2}\,dx"/>.</p>
+  <p><strong>Step 1: Pick <M d="u"/>.</strong> The inner function is the exponent: <M d="u=x^2"/>.</p>
+  <p><strong>Step 2: Find <M d="du"/>.</strong> <M d="du=2x\,dx"/>. But the integral only has <M d="x\,dx"/>, not <M d="2x\,dx"/>. We are short by a factor of 2.</p>
+  <p><strong>Step 3: Fix the constant, then rewrite.</strong> Since <M d="du=2x\,dx"/>, dividing both sides by 2 gives <M d="x\,dx=\tfrac{du}{2}"/>. That is allowed because 2 is a constant. Substitute:</p>
+  <M d="\int e^{u}\cdot\frac{du}{2}=\frac12\int e^{u}\,du=\frac12 e^{u}+C" block/>
+  <p><strong>Step 4: Substitute back.</strong></p>
+  <M d="\int x\,e^{x^2}\,dx=\frac{e^{x^2}}{2}+C" block/>
+  <p><strong>Check.</strong> Differentiate <M d="\tfrac12 e^{x^2}"/>: the chain rule gives <M d="\tfrac12 e^{x^2}\cdot 2x=x\,e^{x^2}"/>. Correct. The <M d="\tfrac12"/> we introduced is exactly what cancels the 2 the chain rule produces.</p>
+  <Box color="green"><p>Answer: <M d="\tfrac{e^{x^2}}{2}+C"/>. A missing constant is fixed by dividing; a missing <M d="x"/> could not be, and would mean substitution is the wrong tool.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Find <M d="\int e^{5x}\,dx"/></span>),
@@ -2583,34 +2630,163 @@ answer:()=>(<div>
   <M d="\int e^{u}\cdot\frac{du}{5}=\frac{1}{5}\int e^{u}\,du=\frac{1}{5}e^{u}+C" block/>
   <p><strong>Step 4:</strong> Put <M d="u=5x"/> back:</p>
   <M d="\frac{e^{5x}}{5}+C" block/>
-  <Box color="green"><p>Answer: <M d="\tfrac{e^{5x}}{5}+C"/>. Handy shortcut to remember: <M d="\int e^{kx}\,dx=\tfrac{e^{kx}}{k}+C"/> (for <M d="k\neq 0"/>; with <M d="k=0"/> you would be integrating the constant 1, which gives <M d="x+C"/>).</p></Box>
+  <Box color="green"><p>Answer: <M d="\tfrac{e^{5x}}{5}+C"/>. This is the shortcut <M d="\int e^{kx}\,dx=\tfrac{e^{kx}}{k}+C"/> from the rule box, derived by hand. (With <M d="k=0"/> you would be integrating the constant 1, which gives <M d="x+C"/>.)</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>Find <M d="\displaystyle\int\frac{x}{x^2+1}\,dx"/></span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Pick <M d="u"/>.</strong> The bottom is the messy part: <M d="u=x^2+1"/>.</p>
+  <p><strong>Step 2: Find <M d="du"/>.</strong> <M d="du=2x\,dx"/>, so <M d="x\,dx=\tfrac{du}{2}"/> (dividing by the constant 2, as in the second example).</p>
+  <p><strong>Step 3: Rewrite and integrate.</strong> The top <M d="x\,dx"/> becomes <M d="\tfrac{du}{2}"/> and the bottom becomes <M d="u"/>:</p>
+  <M d="\int\frac{1}{u}\cdot\frac{du}{2}=\frac12\int\frac{du}{u}=\frac12\ln|u|+C" block/>
+  <p>(The <M d="\tfrac1u"/> integral is the special log case from <Ref to="antiderivatives"/>.)</p>
+  <p><strong>Step 4: Substitute back.</strong></p>
+  <M d="\int\frac{x}{x^2+1}\,dx=\frac12\ln(x^2+1)+C" block/>
+  <p>The absolute value bars can be dropped here because <M d="x^2+1"/> is always positive.</p>
+  <p><strong>Check.</strong> Differentiate <M d="\tfrac12\ln(x^2+1)"/>: by the chain rule, <M d="\tfrac12\cdot\tfrac{1}{x^2+1}\cdot 2x=\tfrac{x}{x^2+1}"/>. Correct.</p>
+  <Box color="green"><p>Answer: <M d="\tfrac12\ln(x^2+1)+C"/>. Top is (almost) the derivative of the bottom, so the answer is a log, with a <M d="\tfrac12"/> to fix the missing constant.</p></Box>
 </div>)},
 ]},
 
-{slug:"definite-integral",module:"Integration",title:"The Definite Integral",time:"7 min",content:[
-{type:"concept",render:()=>(
+{slug:"riemann-sums",module:"Integration",title:"Area as a Sum: Riemann Sums",time:"12 min",content:[
+{type:"concept",label:"Area Out of Rectangles",render:()=>(
 <div>
-  <p>So far our integrals gave back a <em>function</em> (plus <M d="C"/>). A <strong>definite integral</strong> has two numbers attached and gives back a single <em>number</em>: the <strong>area</strong> under the curve between those two points.</p>
-  <p><strong>Wait  -  why would an integral measure <em>area</em>, when in <Ref to="antiderivatives"/> the same <M d="\int"/> symbol meant "find the antiderivative"?</strong> Start with the simplest case. If money flows in at a steady $50 per day for 4 days, the total collected is <M d="50\times 4=\$200"/>  -  which is exactly the area of a rectangle 4 wide and 50 tall, sitting under the flat line <M d="y=50"/>. Total = height times width = area. When the rate is a curve instead of a flat line, picture many skinny rectangles doing the same job, so the total collected is the area under the rate curve. (The next lesson reveals why the antiderivative from <Ref to="antiderivatives"/> and this area are the same thing  -  that is the big payoff.)</p>
-  <M d="\int_a^b f(x)\,dx = \text{signed area from }x=a\text{ to }x=b" block/>
-  <p>The bottom number <M d="a"/> is where you start, the top number <M d="b"/> is where you stop.</p>
-  <p><strong>Why "signed" area?</strong> Area above the x-axis counts as positive; area below counts as negative. So an integral can come out negative, which makes sense in business: area under a profit-rate curve that has dipped below zero represents losses.</p>
-  <p>Real meaning: if <M d="f(t)"/> is the rate money flows in per day, the area from day <M d="a"/> to day <M d="b"/> is the <em>total</em> money collected over that stretch.</p>
+  <p>In <Ref to="antiderivatives"/> the integral sign was introduced as a stretched S for "sum," with a promise that the sum would show up. This is the lesson where it does. The question sounds nothing like antiderivatives: <strong>what is the area under a curve?</strong> By the end of the next two lessons the two ideas will turn out to be one.</p>
+  <p>Take the parabola <M d="f(x)=x^2"/> between <M d="x=0"/> and <M d="x=2"/>. The region under it is curved on top, and there is no formula for the area of a curved shape the way there is for a rectangle. So we cheat: we cover the region with rectangles, whose areas we <em>can</em> compute, and add them up.</p>
+  <p><strong>Four rectangles, left corners on the curve.</strong> Cut <M d="[0,2]"/> into 4 equal strips. Each has width <M d="\Delta x=\tfrac{2-0}{4}=0.5"/>. Make each rectangle's height the curve's value at the strip's <em>left</em> edge:</p>
+  <Box>
+    <p>Strip 1, from 0 to 0.5: height <M d="f(0)=0"/>, area <M d="0\times 0.5=0"/></p>
+    <p>Strip 2, from 0.5 to 1: height <M d="f(0.5)=0.25"/>, area <M d="0.25\times 0.5=0.125"/></p>
+    <p>Strip 3, from 1 to 1.5: height <M d="f(1)=1"/>, area <M d="1\times 0.5=0.5"/></p>
+    <p>Strip 4, from 1.5 to 2: height <M d="f(1.5)=2.25"/>, area <M d="2.25\times 0.5=1.125"/></p>
+  </Box>
+  <M d="\text{left sum}=0+0.125+0.5+1.125=1.75" block/>
+  <p>Look at the picture: every rectangle sits <em>below</em> the rising curve, so 1.75 is an <strong>underestimate</strong>.</p>
+  <p><strong>Now use the right corners.</strong> Same strips, but each height is the curve's value at the strip's <em>right</em> edge: <M d="f(0.5)=0.25"/>, <M d="f(1)=1"/>, <M d="f(1.5)=2.25"/>, <M d="f(2)=4"/>.</p>
+  <M d="\text{right sum}=(0.25+1+2.25+4)\times 0.5=7.5\times 0.5=3.75" block/>
+  <p>Now every rectangle pokes <em>above</em> the curve, so 3.75 is an <strong>overestimate</strong>. The true area is trapped between 1.75 and 3.75. That is already useful, and we have not done anything but multiply and add.</p>
+  <Graph fn={(x)=>x*x} xMin={-0.2} xMax={2.3} yMin={-0.3} yMax={4.4}
+    shades={[{top:0.25,bottom:0,from:0.5,to:1,color:"rgba(230,180,90,0.3)"},{top:1,bottom:0,from:1,to:1.5,color:"rgba(230,180,90,0.3)"},{top:2.25,bottom:0,from:1.5,to:2,color:"rgba(230,180,90,0.3)"}]}
+    caption="Four left-corner rectangles under y = x squared on [0, 2] (the first has height zero). They add up to 1.75, less than the true area because each one sits below the rising curve."/>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"concept",label:"More Rectangles, Less Gap",render:()=>(
+<div>
+  <p>The rectangles miss because the curve bends and they do not. The cure is obvious: use thinner rectangles, so each one has less curve to miss. Here is what happens as the number of strips <M d="n"/> grows (every number computed the same way as above, just with more strips):</p>
+  <Box>
+    <p><M d="n=4"/>: left 1.75, right 3.75</p>
+    <p><M d="n=8"/>: left 2.1875, right 3.1875</p>
+    <p><M d="n=16"/>: left 2.4219, right 2.9219</p>
+    <p><M d="n=100"/>: left 2.6268, right 2.7068</p>
+    <p><M d="n=1000"/>: left 2.6627, right 2.6707</p>
+  </Box>
+  <p>Both columns are squeezing toward the same number, about <strong>2.6667</strong>, which is <M d="\tfrac{8}{3}"/>. The left sums climb up to it and the right sums drop down to it; at <M d="n=1000"/> they agree to two decimal places. Keep going and they agree to as many decimals as you like. The exact area is the one number both sequences are heading toward, and "the number a sequence is heading toward" is a <strong>limit</strong>, from <Ref to="limits"/>.</p>
+  <p>Where does <M d="\tfrac83"/> come from? For now, from the pattern. In <Ref to="ftc"/> you will compute it in one line and understand why.</p>
+</div>
+)},
+{type:"concept",label:"Writing the Sum",render:()=>(
+<div>
+  <p>Writing out a thousand rectangles is impossible, so mathematicians use a shorthand. The capital Greek letter sigma, <M d="\Sigma"/>, means "add these up":</p>
+  <M d="\sum_{i=1}^{n} f(x_i)\,\Delta x" block/>
+  <p>Read it as: for each strip number <M d="i"/> from 1 up to <M d="n"/>, take the height <M d="f(x_i)"/> at that strip's chosen point, multiply by the width <M d="\Delta x"/>, and add all the results. It is exactly the arithmetic we did for <M d="n=4"/>, written once for any <M d="n"/>. A sum like this is called a <strong>Riemann sum</strong>, after the mathematician who made the idea precise.</p>
+  <p>The exact area is the limit of these sums as the rectangles become infinitely thin, and it gets the integral sign:</p>
+  <M d="\int_a^b f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^{n} f(x_i)\,\Delta x" block/>
+  <p>Now the notation from <Ref to="antiderivatives"/> finally makes sense. The <M d="\int"/> is the <M d="\Sigma"/> stretched into an S because the sum has gone continuous. The <M d="f(x)"/> is the height of a rectangle. The <M d="dx"/> is what <M d="\Delta x"/> becomes when the width shrinks toward zero: an infinitely thin width. Height times width, added up: the integral is a sum of infinitely many infinitely thin rectangles, and the numbers <M d="a"/> and <M d="b"/> say where the first and last ones stand.</p>
+  <p><strong>The business picture.</strong> Suppose the curve is a marginal cost function, <M d="C'(x)"/> in dollars per item. A rectangle of width 1 at position <M d="x"/> has area <M d="C'(x)\times 1"/>: roughly the cost of one more item (<Ref to="marginal"/>). Add up those rectangles from item 1 to item 100 and you have, roughly, the total cost of producing 100 items. Thin the rectangles and "roughly" becomes "exactly." The area under a marginal cost curve <em>is</em> total cost. That is the bridge between rates and totals that <Ref to="ftc"/> will make official.</p>
+</div>
+)},
+{type:"rule",label:"Riemann Sums and the Definite Integral",render:()=>(
+<div>
+  <p>Cut <M d="[a,b]"/> into <M d="n"/> strips of width</p>
+  <M d="\Delta x=\frac{b-a}{n}" block/>
+  <p><strong>Left sum:</strong> heights at the left edge of each strip, <M d="x_i=a+(i-1)\Delta x"/>. <strong>Right sum:</strong> heights at the right edge, <M d="x_i=a+i\,\Delta x"/>.</p>
+  <M d="\text{sum}=\sum_{i=1}^{n} f(x_i)\,\Delta x" block/>
+  <p>For an increasing function, left sums underestimate and right sums overestimate; for a decreasing function it is the reverse. Either way:</p>
+  <M d="\int_a^b f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^{n} f(x_i)\,\Delta x" block/>
+</div>
+)},
+{type:"example",label:"A Line, Where We Can Check the Answer",render:()=>(
+<div>
+  <p>Estimate the area under <M d="f(x)=2x+1"/> from 0 to 3 with three rectangles, then find the exact area by geometry.</p>
+  <p><strong>Step 1: Set up.</strong> <M d="\Delta x=\tfrac{3-0}{3}=1"/>. The strips are <M d="[0,1]"/>, <M d="[1,2]"/>, <M d="[2,3]"/>.</p>
+  <p><strong>Step 2: Left sum.</strong> Heights at 0, 1, 2: <M d="f(0)=1"/>, <M d="f(1)=3"/>, <M d="f(2)=5"/>.</p>
+  <M d="\text{left}=(1+3+5)\times 1=9" block/>
+  <p><strong>Step 3: Right sum.</strong> Heights at 1, 2, 3: <M d="3"/>, <M d="5"/>, <M d="f(3)=7"/>.</p>
+  <M d="\text{right}=(3+5+7)\times 1=15" block/>
+  <p><strong>Step 4: The exact area, by geometry.</strong> Under a straight line the region is a rectangle with a triangle on top. The rectangle is 3 wide and 1 tall (area 3). The triangle is 3 wide and rises from height 1 to height 7, so it is 6 tall (area <M d="\tfrac12\times 3\times 6=9"/>). Total: 12.</p>
+  <p>Sure enough, 12 sits between the left sum 9 and the right sum 15. In fact it is exactly their average, <M d="\tfrac{9+15}{2}=12"/>; for a straight line, averaging the two sums always gives the exact answer, because the under- and over-shoots are identical triangles.</p>
+  <Graph fn={(x)=>2*x+1} xMin={-0.3} xMax={3.4} yMin={-0.5} yMax={8}
+    shades={[{top:1,bottom:0,from:0,to:1,color:"rgba(230,180,90,0.3)"},{top:3,bottom:0,from:1,to:2,color:"rgba(230,180,90,0.3)"},{top:5,bottom:0,from:2,to:3,color:"rgba(230,180,90,0.3)"}]}
+    caption="Three left rectangles under y = 2x + 1 total 9; the true area, rectangle plus triangle, is 12."/>
+  <Box color="green"><p>Left sum 9, right sum 15, exact area 12.</p></Box>
+</div>
+)},
+{type:"interactive",render:()=>(<RiemannExplorer fn={(x)=>x*x} a={0} b={2} exact={8/3} xMin={-0.2} xMax={2.3} yMin={-0.3} yMax={4.4} start={4}
+  intro="This is the parabola from the start of the lesson, with left-corner rectangles under it. Drag the slider to add rectangles and watch the sum creep toward the exact area, 8/3. The gap never quite closes at any finite n; the limit is what closes it."/>)},
+{type:"practice",render:()=>(<span>Compute the right sum for <M d="f(x)=x^2"/> on <M d="[0,2]"/> with <M d="n=4"/> rectangles, and explain, without computing anything else, why it must be larger than the true area.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Width.</strong> <M d="\Delta x=\tfrac{2}{4}=0.5"/>. Strips: <M d="[0,0.5]"/>, <M d="[0.5,1]"/>, <M d="[1,1.5]"/>, <M d="[1.5,2]"/>.</p>
+  <p><strong>Step 2: Right-edge heights.</strong> <M d="f(0.5)=0.25"/>, <M d="f(1)=1"/>, <M d="f(1.5)=2.25"/>, <M d="f(2)=4"/>.</p>
+  <p><strong>Step 3: Add and multiply by the width.</strong></p>
+  <M d="(0.25+1+2.25+4)\times 0.5=7.5\times 0.5=3.75" block/>
+  <p><strong>Why an overestimate?</strong> <M d="x^2"/> is increasing on <M d="[0,2]"/>, so within each strip the curve is highest at the right edge. A rectangle built to that height covers the whole strip at the strip's <em>maximum</em> height, so it contains the region under the curve and then some. Every rectangle overshoots, so the sum overshoots.</p>
+  <Box color="green"><p>Right sum = 3.75, above the true area of <M d="\tfrac83\approx 2.667"/>, because right-edge rectangles on a rising curve always overshoot.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>A factory's marginal cost is <M d="C'(x)=20-0.2x"/> dollars per item. Estimate the total cost of the first 10 items using 5 left rectangles of width 2. Then say whether the estimate is high or low, and why.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Set up.</strong> Interval <M d="[0,10]"/>, <M d="n=5"/>, so <M d="\Delta x=2"/>. Left edges at 0, 2, 4, 6, 8.</p>
+  <p><strong>Step 2: Heights (marginal cost at each left edge).</strong></p>
+  <Box>
+    <p><M d="C'(0)=20"/>, <M d="C'(2)=19.6"/>, <M d="C'(4)=19.2"/>, <M d="C'(6)=18.8"/>, <M d="C'(8)=18.4"/></p>
+  </Box>
+  <p><strong>Step 3: Sum times width.</strong></p>
+  <M d="(20+19.6+19.2+18.8+18.4)\times 2=96\times 2=192\text{ dollars}" block/>
+  <p>Each rectangle is "cost per item, times two items," so the sum is an estimate of the total cost of items 1 through 10.</p>
+  <p><strong>High or low?</strong> This marginal cost <em>falls</em> as <M d="x"/> grows (each item is a little cheaper than the last). On a falling curve the left edge is the highest point of each strip, so left rectangles overshoot. The estimate of $192 is <strong>high</strong>. (The exact total, which <Ref to="ftc"/> will let you compute, is $190.)</p>
+  <Box color="green"><p>About $192, an overestimate because the marginal cost curve is decreasing. Area under marginal cost is total cost.</p></Box>
+</div>)},
+]},
+
+{slug:"definite-integral",module:"Integration",title:"The Definite Integral",time:"9 min",content:[
+{type:"concept",label:"A Number, Not a Function",render:()=>(
+<div>
+  <p>So far the integrals in <Ref to="antiderivatives"/> gave back a <em>function</em> (plus <M d="C"/>). A <strong>definite integral</strong> has two numbers attached and gives back a single <em>number</em>: the area under the curve between those two points, defined in <Ref to="riemann-sums"/> as the limit of rectangle sums.</p>
+  <M d="\int_a^b f(x)\,dx = \text{signed area from }x=a\text{ to }x=b" block/>
+  <p>The bottom number <M d="a"/> is where you start, the top number <M d="b"/> is where you stop. They are called the <strong>limits of integration</strong> (a different use of the word "limit").</p>
+  <p><strong>Why "signed" area?</strong> A rectangle's area is height times width, and if the curve is below the axis its height is negative, so the rectangle contributes a negative amount. Area above the <M d="x"/>-axis counts as positive; area below counts as negative. So an integral can come out negative, which makes sense in business: area under a profit-rate curve that has dipped below zero represents losses.</p>
+  <p><strong>The business meaning, once more.</strong> Start with the simplest case. If money flows in at a steady $50 per day for 4 days, the total collected is <M d="50\times 4=\$200"/>, which is exactly the area of a rectangle 4 wide and 50 tall under the flat line <M d="y=50"/>. Total equals height times width equals area. When the rate is a curve instead of a flat line, the Riemann rectangles do the same job, so the total collected is the area under the rate curve. If <M d="f(t)"/> is the rate money flows in per day, then <M d="\int_a^b f(t)\,dt"/> is the total money collected from day <M d="a"/> to day <M d="b"/>.</p>
+  <p>How do you compute one? For now, geometry, when the region is a shape you know. <Ref to="ftc"/> reveals the general method, and it is far faster than any rectangle sum.</p>
+</div>
+)},
+{type:"rule",label:"Properties of the Definite Integral",render:()=>(
 <div>
   <p>The same linearity rules from antiderivatives still apply, and now they let you combine known integrals without recomputing anything:</p>
   <M d="\int_a^b[f(x)+g(x)]\,dx=\int_a^b f\,dx+\int_a^b g\,dx" block/>
   <M d="\int_a^b k\,f(x)\,dx=k\int_a^b f(x)\,dx" block/>
-  <p>A useful fact: flipping the limits flips the sign, and a zero-width interval has zero area:</p>
+  <p>Two more facts: flipping the limits flips the sign, and a zero-width interval has zero area:</p>
   <M d="\int_b^a f\,dx=-\int_a^b f\,dx\qquad\int_a^a f\,dx=0" block/>
-  <p>Why does flipping the limits flip the sign? Going from <M d="a"/> to <M d="b"/> sweeps left to right; going from <M d="b"/> to <M d="a"/> sweeps the opposite way, so each tiny width is counted as negative and the whole total flips sign. (After the next lesson you can also see it directly: swapping the limits turns <M d="F(b)-F(a)"/> into <M d="F(a)-F(b)"/>, the same number negated.)</p>
+  <p>Why does flipping the limits flip the sign? Going from <M d="a"/> to <M d="b"/> sweeps left to right with positive widths; going from <M d="b"/> to <M d="a"/> sweeps the opposite way, so every <M d="\Delta x"/> is negative and the whole total flips sign. (After <Ref to="ftc"/> you can also see it directly: swapping the limits turns <M d="F(b)-F(a)"/> into <M d="F(a)-F(b)"/>, the same number negated.)</p>
+  <p>And you can split an interval at any point in between:</p>
+  <M d="\int_a^b f\,dx=\int_a^c f\,dx+\int_c^b f\,dx" block/>
+</div>
+)},
+{type:"example",label:"Integrals by Geometry",render:()=>(
+<div>
+  <p>Two definite integrals you can evaluate with nothing but shapes.</p>
+  <p><strong>Example A:</strong> <M d="\int_0^3 (2x+1)\,dx"/>. This is the line from <Ref to="riemann-sums"/>, and the region under it is a rectangle (3 by 1, area 3) with a triangle on top (base 3, height 6, area 9):</p>
+  <M d="\int_0^3(2x+1)\,dx=3+9=12" block/>
+  <p>The rectangle sums in <Ref to="riemann-sums"/> trapped this between 9 and 15; geometry nails it exactly.</p>
+  <p><strong>Example B (signed area):</strong> <M d="\int_{-2}^{2} x\,dx"/>. The line <M d="y=x"/> makes a triangle below the axis from <M d="-2"/> to 0 (base 2, height 2, area 2, counted as <M d="-2"/> because it is below) and an identical triangle above the axis from 0 to 2 (counted as <M d="+2"/>):</p>
+  <M d="\int_{-2}^{2}x\,dx=-2+2=0" block/>
+  <p>The integral is zero even though the two triangles clearly have area. Signed area cancels. If you wanted the total <em>painted</em> area you would add the sizes, 4, but the integral answers a different question: the net total, the way a bank balance nets deposits against withdrawals.</p>
+  <Graph fn={(x)=>x} xMin={-2.5} xMax={2.5} yMin={-2.5} yMax={2.5}
+    shades={[{top:0,bottom:(x)=>x,from:-2,to:0,color:"rgba(244,114,182,0.28)"},{top:(x)=>x,bottom:0,from:0,to:2,color:"rgba(230,180,90,0.3)"}]}
+    caption="Under y = x from -2 to 2: the pink triangle below the axis counts as -2, the gold triangle above counts as +2, so the integral is 0."/>
+  <Box color="green"><p><M d="\int_0^3(2x+1)\,dx=12"/> and <M d="\int_{-2}^2 x\,dx=0"/>.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>If <M d="\displaystyle\int_1^4 f\,dx=7"/> and <M d="\displaystyle\int_1^4 g\,dx=3"/>, find <M d="\displaystyle\int_1^4[2f-g]\,dx"/>.</span>),
 answer:()=>(<div>
-  <p>You do not need to know what <M d="f"/> and <M d="g"/> actually are. Use the rules to break the integral apart.</p>
+  <p>You do not need to know what <M d="f"/> and <M d="g"/> actually are. Use the properties to break the integral apart.</p>
   <p><strong>Step 1: Split the sum.</strong></p>
   <M d="\int_1^4[2f-g]\,dx=\int_1^4 2f\,dx-\int_1^4 g\,dx" block/>
   <p><strong>Step 2: Pull the constant 2 out front.</strong></p>
@@ -2619,19 +2795,31 @@ answer:()=>(<div>
   <M d="=2(7)-3=14-3=11" block/>
   <Box color="green"><p>Answer: 11. The properties let you work with given totals directly, no actual integration required.</p></Box>
 </div>)},
+{type:"practice",render:()=>(<span>Evaluate by geometry: <M d="\displaystyle\int_0^4 (4-x)\,dx"/> and <M d="\displaystyle\int_1^3 5\,dx"/>. Then interpret the second one if <M d="5"/> is a cash inflow in thousands of dollars per day and <M d="x"/> is measured in days.</span>),
+answer:()=>(<div>
+  <p><strong>Part 1: <M d="\int_0^4(4-x)\,dx"/>.</strong> The line <M d="y=4-x"/> starts at height 4 when <M d="x=0"/> and falls to height 0 at <M d="x=4"/>. The region under it is a right triangle with base 4 and height 4:</p>
+  <M d="\int_0^4(4-x)\,dx=\tfrac12\times 4\times 4=8" block/>
+  <p><strong>Part 2: <M d="\int_1^3 5\,dx"/>.</strong> The curve is the flat line <M d="y=5"/>, so the region is a rectangle 2 wide (from 1 to 3) and 5 tall:</p>
+  <M d="\int_1^3 5\,dx=5\times 2=10" block/>
+  <p><strong>Interpretation.</strong> Cash flows in at a steady $5,000 per day; from day 1 to day 3 is two days; total collected is $10,000. Rate times time is total, and the integral is the area that computes it.</p>
+  <Box color="green"><p><M d="\int_0^4(4-x)\,dx=8"/>; <M d="\int_1^3 5\,dx=10"/>, meaning $10,000 collected over two days.</p></Box>
+</div>)},
 ]},
 
-{slug:"ftc",module:"Integration",title:"Fundamental Theorem of Calculus",time:"9 min",content:[
-{type:"concept",render:()=>(
+{slug:"ftc",module:"Integration",title:"Fundamental Theorem of Calculus",time:"11 min",content:[
+{type:"concept",label:"The Two Halves of Calculus Are One",render:()=>(
 <div>
-  <p>This is the single most important result in all of calculus. It connects the two halves of the subject: <strong>antiderivatives</strong> (<Ref to="antiderivatives"/>) and <strong>area</strong> (<Ref to="definite-integral"/>). It says they are secretly the same thing.</p>
-  <p>The astonishing claim: to find the exact area under a curve, you do <em>not</em> need the slow way. (The slow way is to slice the region into many thin rectangles, add up all their areas, then repeat with more and more, thinner and thinner rectangles to creep toward the true area, an endless process.) Instead, you just find an antiderivative and subtract two values: plug in the top limit, plug in the bottom limit, subtract.</p>
+  <p>This is the single most important result in all of calculus. It connects the two halves of the subject: <strong>antiderivatives</strong> (<Ref to="antiderivatives"/>) and <strong>area</strong> (<Ref to="riemann-sums"/> and <Ref to="definite-integral"/>). It says they are secretly the same thing.</p>
+  <p>The astonishing claim: to find the exact area under a curve, you do <em>not</em> need the slow way (thousands of rectangles, then a limit). Instead, you find an antiderivative and subtract two values: plug in the top limit, plug in the bottom limit, subtract.</p>
   <M d="\int_a^b f(x)\,dx = F(b)-F(a)" block/>
-  <p>where <M d="F"/> is any antiderivative of <M d="f"/>. The <M d="+C"/> cancels out in the subtraction  -  using <M d="F(x)+C"/> gives <M d="(F(b)+C)-(F(a)+C)=F(b)-F(a)"/>, and the <M d="C"/>'s cancel  -  so we drop it for definite integrals.</p>
-  <p><strong>Here is <em>why</em> it works.</strong> Sweep the right edge of the shaded region slowly from left to right, and let <M d="F(x)"/> stand for "the area collected so far, from <M d="a"/> up to <M d="x"/>." When you nudge that edge a tiny bit further right, the sliver of area you add is almost a thin rectangle: its height is the curve's value <M d="f(x)"/> and its width is the tiny step. So the area grows at the rate <M d="f(x)"/>, which means <M d="F'(x)=f(x)"/>. In other words, the "area-so-far" function is an antiderivative of <M d="f"/>. And the area from <M d="a"/> to <M d="b"/> is simply (area up to <M d="b"/>) minus (area up to <M d="a"/>), namely <M d="F(b)-F(a)"/>. That is the whole theorem: the antiderivative <em>is</em> the running-area function, so subtracting its two values gives the area in between.</p>
+  <p>where <M d="F"/> is any antiderivative of <M d="f"/>. The <M d="+C"/> cancels out in the subtraction: using <M d="F(x)+C"/> gives <M d="(F(b)+C)-(F(a)+C)=F(b)-F(a)"/>, so we drop it for definite integrals.</p>
+  <p><strong>Here is <em>why</em> it works.</strong> Sweep the right edge of the shaded region slowly from left to right, and let <M d="A(x)"/> stand for "the area collected so far, from <M d="a"/> up to <M d="x"/>." When you nudge that edge a tiny bit further right, the sliver of area you add is almost a thin rectangle: its height is the curve's value <M d="f(x)"/> and its width is the tiny step. So the area grows at the rate <M d="f(x)"/>, which means <M d="A'(x)=f(x)"/>. In other words, the "area-so-far" function is an antiderivative of <M d="f"/>. It is <M d="F(x)"/> up to a constant, and since <M d="A(a)=0"/> (no area collected yet at the start), the area from <M d="a"/> to <M d="b"/> is <M d="A(b)=F(b)-F(a)"/>. That is the whole theorem: the antiderivative <em>is</em> the running-area function, so subtracting its two values gives the area in between.</p>
+  <p>Check it on the parabola from <Ref to="riemann-sums"/>, where a thousand rectangles crept toward 2.6667. An antiderivative of <M d="x^2"/> is <M d="\tfrac{x^3}{3}"/>, so</p>
+  <M d="\int_0^2 x^2\,dx=\frac{2^3}{3}-\frac{0^3}{3}=\frac{8}{3}\approx 2.6667" block/>
+  <p>One line. The limit of all those sums was hiding inside the power rule the whole time.</p>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"rule",label:"Evaluating a Definite Integral",render:()=>(
 <div>
   <p><strong>The 3-step procedure:</strong></p>
   <Box>
@@ -2640,6 +2828,9 @@ answer:()=>(<div>
     <p>3. Subtract: <M d="F(b)-F(a)"/>.</p>
   </Box>
   <p>The bracket notation <M d="\big[F(x)\big]_a^b"/> is shorthand for "evaluate <M d="F"/> at <M d="b"/> minus <M d="F"/> at <M d="a"/>."</p>
+  <p><strong>The business form of the theorem:</strong> the integral of a rate is the total change.</p>
+  <M d="\int_a^b C'(x)\,dx=C(b)-C(a)" block/>
+  <p>The area under marginal cost from <M d="a"/> to <M d="b"/> is the cost of producing units <M d="a"/> through <M d="b"/>; likewise for marginal revenue and marginal profit.</p>
 </div>
 )},
 {type:"example",label:"Top Minus Bottom",render:()=>(
@@ -2650,21 +2841,142 @@ answer:()=>(<div>
   <M d="\big[2x^2\big]_0^2 = 2(2)^2 - 2(0)^2" block/>
   <p><strong>Step 3: Subtract.</strong></p>
   <M d="= 8 - 0 = 8" block/>
-  <Graph fn={(x)=>4*x} xMin={-0.5} xMax={3} yMin={-1} yMax={10} shades={[{top:(x)=>4*x,bottom:0,from:0,to:2,color:"rgba(99,102,241,0.28)"}]} caption="The shaded area under y = 4x from 0 to 2 is a triangle: half-base-times-height = (1/2)(2)(8) = 8. The theorem agrees."/>
+  <Graph fn={(x)=>4*x} xMin={-0.5} xMax={3} yMin={-1} yMax={10} shades={[{top:(x)=>4*x,bottom:0,from:0,to:2,color:"rgba(230,180,90,0.3)"}]} caption="The shaded area under y = 4x from 0 to 2 is a triangle: half base times height is (1/2)(2)(8) = 8. The theorem agrees."/>
   <Box color="green"><p>Answer: 8. Geometry (triangle area) confirms it.</p></Box>
+</div>
+)},
+{type:"example",label:"A Rate Adds Up to a Total",render:()=>(
+<div>
+  <p>The factory from <Ref to="marginal"/> has marginal cost <M d="C'(x)=25-0.1x"/> dollars per item. What does it cost to produce items 51 through 100?</p>
+  <p><strong>Step 1: Set up the integral.</strong> Total change in cost from 50 items to 100 items is the integral of the rate:</p>
+  <M d="\int_{50}^{100}(25-0.1x)\,dx" block/>
+  <p><strong>Step 2: Antiderivative.</strong> <M d="F(x)=25x-0.05x^2"/>.</p>
+  <p><strong>Step 3: Evaluate and subtract.</strong></p>
+  <M d="F(100)=2500-500=2000\qquad F(50)=1250-125=1125" block/>
+  <M d="\int_{50}^{100}(25-0.1x)\,dx=2000-1125=875\text{ dollars}" block/>
+  <p><strong>Check against the past.</strong> In <Ref to="derivative"/> we computed the average rate of change of this very cost function from 50 to 100 and found <M d="C(100)-C(50)=875"/>, using the full cost function. Here we got the same 875 from the marginal cost alone, without ever knowing the fixed cost. The integral of the rate recovered the total change exactly.</p>
+  <Box color="green"><p>Items 51 through 100 cost $875 in total. Area under marginal cost is cost.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Find <M d="\displaystyle\int_1^2(3x^2+2x)\,dx"/></span>),
 answer:()=>(<div>
   <p><strong>Step 1: Find the antiderivative.</strong></p>
-  <Box><p><M d="3x^2"/>: exponent <M d="2+1=3"/>, divide by 3, gives <M d="x^3"/></p><p><M d="2x"/>: exponent <M d="1+1=2"/>, divide by 2, gives <M d="x^2"/></p></Box>
+  <Box><p><M d="3x^2"/>: exponent <M d="2+1=3"/>, divide by 3, giving <M d="x^3"/></p><p><M d="2x"/>: exponent <M d="1+1=2"/>, divide by 2, giving <M d="x^2"/></p></Box>
   <M d="F(x)=x^3+x^2" block/>
-  <p><strong>Step 2: Plug in top (2) and bottom (1).</strong></p>
+  <p><strong>Step 2: Plug in the top (2) and the bottom (1).</strong></p>
   <M d="F(2)=2^3+2^2=8+4=12" block/>
   <M d="F(1)=1^3+1^2=1+1=2" block/>
   <p><strong>Step 3: Subtract.</strong></p>
   <M d="F(2)-F(1)=12-2=10" block/>
   <Box color="green"><p>Answer: 10.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>A company's marginal revenue is <M d="R'(x)=80-0.2x"/> dollars per unit. How much revenue comes from selling units 101 through 200?</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Set up.</strong> Total change in revenue from 100 units to 200 units:</p>
+  <M d="\int_{100}^{200}(80-0.2x)\,dx" block/>
+  <p><strong>Step 2: Antiderivative.</strong> <M d="F(x)=80x-0.1x^2"/>.</p>
+  <p><strong>Step 3: Evaluate and subtract.</strong></p>
+  <M d="F(200)=16000-4000=12000\qquad F(100)=8000-1000=7000" block/>
+  <M d="\int_{100}^{200}(80-0.2x)\,dx=12000-7000=5{,}000\text{ dollars}" block/>
+  <p>Sanity check: the marginal revenue over this stretch runs from <M d="R'(100)=60"/> down to <M d="R'(200)=40"/>, averaging about $50 per unit, times 100 units, is about $5,000. It fits.</p>
+  <Box color="green"><p>Units 101 through 200 bring in $5,000. (In <Ref to="antiderivatives"/> this same marginal revenue integrated to <M d="R(x)=80x-0.1x^2"/>; here the limits turned that function into a single number.)</p></Box>
+</div>)},
+]},
+
+{slug:"integration-by-parts",module:"Integration",title:"Integration by Parts",time:"12 min",content:[
+{type:"concept",label:"The Product Rule, Run Backwards",render:()=>(
+<div>
+  <p>Substitution (<Ref to="substitution"/>) undoes the chain rule. Some integrals do not come from a chain rule at all: <M d="\int x\,e^x\,dx"/>, for instance, has no inner function whose derivative sits alongside it. Try <M d="u=x"/> and the <M d="e^x"/> does not turn into anything useful; try <M d="u=e^x"/> and you need an <M d="e^x\,dx"/>, which is not there. Substitution stalls.</p>
+  <p>The clue is that <M d="x\,e^x"/> is a <em>product</em>, so the rule to run backwards is the product rule (<Ref to="product-quotient"/>). Here is the whole derivation, three lines.</p>
+  <p><strong>Line 1.</strong> The product rule says</p>
+  <M d="(u\cdot v)'=u'v+uv'" block/>
+  <p><strong>Line 2.</strong> Integrate both sides. The left side is the derivative of <M d="uv"/>, and integrating a derivative gives the thing back:</p>
+  <M d="uv=\int u'v\,dx+\int uv'\,dx" block/>
+  <p><strong>Line 3.</strong> Move one integral to the other side:</p>
+  <M d="\int u\,v'\,dx=uv-\int v\,u'\,dx" block/>
+  <p>That is <strong>integration by parts</strong>. In the compact notation where <M d="dv=v'\,dx"/> and <M d="du=u'\,dx"/>:</p>
+  <M d="\int u\,dv=uv-\int v\,du" block/>
+  <p>Read it as a trade. You hand over one integral, <M d="\int u\,dv"/>, and receive a finished piece, <M d="uv"/>, plus a <em>different</em> integral, <M d="\int v\,du"/>. The trade is worth making when the new integral is easier than the old one.</p>
+  <p><strong>Choosing <M d="u"/>.</strong> Since the new integral contains <M d="du"/>, pick <M d="u"/> to be the piece that gets <em>simpler</em> when differentiated. A power of <M d="x"/> is ideal: <M d="x"/> becomes 1 and vanishes from the problem. A logarithm is also a good <M d="u"/>, because <M d="\ln x"/> becomes <M d="\tfrac1x"/>. Whatever is left is <M d="dv"/>, and it must be something you can integrate, like <M d="e^x"/> or a power of <M d="x"/>.</p>
+</div>
+)},
+{type:"rule",label:"Integration by Parts",render:()=>(
+<div>
+  <M d="\int u\,dv=uv-\int v\,du" block/>
+  <p><strong>Definite version:</strong> evaluate the <M d="uv"/> piece at both limits, then subtract the remaining integral over the same limits:</p>
+  <M d="\int_a^b u\,dv=\big[uv\big]_a^b-\int_a^b v\,du" block/>
+  <p><strong>Choosing <M d="u"/>:</strong> the piece that simplifies when differentiated (a power of <M d="x"/>, or <M d="\ln x"/>). Then <M d="dv"/> is everything else, including the <M d="dx"/>, and it must be integrable.</p>
+  <p><strong>Always check</strong> by differentiating your answer.</p>
+</div>
+)},
+{type:"example",label:"The Classic Case",render:()=>(
+<div>
+  <p>Find <M d="\int x\,e^x\,dx"/>.</p>
+  <p><strong>Step 1: Choose.</strong> <M d="x"/> simplifies when differentiated, so <M d="u=x"/>, which leaves <M d="dv=e^x\,dx"/>.</p>
+  <p><strong>Step 2: Find <M d="du"/> and <M d="v"/>.</strong> <M d="du=dx"/>. And <M d="v"/> is the antiderivative of <M d="dv"/>: <M d="v=e^x"/> (no <M d="+C"/> needed here; any one antiderivative works).</p>
+  <p><strong>Step 3: Apply the formula.</strong></p>
+  <M d="\int x\,e^x\,dx=x\,e^x-\int e^x\,dx" block/>
+  <p>The new integral is just <M d="\int e^x\,dx=e^x"/>, which we know cold. The trade paid off.</p>
+  <M d="\int x\,e^x\,dx=x\,e^x-e^x+C" block/>
+  <p><strong>Step 4: Check by differentiating.</strong> Product rule on <M d="x\,e^x"/> gives <M d="e^x+x\,e^x"/>; the derivative of <M d="-e^x"/> is <M d="-e^x"/>. Total: <M d="x\,e^x"/>. Correct.</p>
+  <Box color="green"><p><M d="\int x\,e^x\,dx=x\,e^x-e^x+C=e^x(x-1)+C"/>.</p></Box>
+</div>
+)},
+{type:"example",label:"Integrating a Logarithm",render:()=>(
+<div>
+  <p>Find <M d="\int\ln x\,dx"/>. This looks like it has only one piece, so where is the product?</p>
+  <p><strong>Step 1: Choose.</strong> The trick is to see <M d="\ln x"/> as <M d="\ln x\cdot 1"/>. Let <M d="u=\ln x"/> (it simplifies to <M d="\tfrac1x"/> when differentiated), which leaves <M d="dv=1\,dx"/>.</p>
+  <p><strong>Step 2: Find <M d="du"/> and <M d="v"/>.</strong> <M d="du=\tfrac{1}{x}\,dx"/> and <M d="v=x"/>.</p>
+  <p><strong>Step 3: Apply the formula.</strong></p>
+  <M d="\int\ln x\,dx=x\ln x-\int x\cdot\frac{1}{x}\,dx=x\ln x-\int 1\,dx" block/>
+  <p>The <M d="x"/> and the <M d="\tfrac1x"/> cancel, leaving the easiest integral there is.</p>
+  <M d="\int\ln x\,dx=x\ln x-x+C" block/>
+  <p><strong>Check.</strong> Differentiate <M d="x\ln x"/> with the product rule: <M d="\ln x+x\cdot\tfrac1x=\ln x+1"/>. Then <M d="-x"/> contributes <M d="-1"/>. Total: <M d="\ln x"/>. Correct.</p>
+  <p><strong>A definite version.</strong> Compute <M d="\int_1^e\ln x\,dx"/>:</p>
+  <M d="\big[x\ln x-x\big]_1^e=(e\ln e-e)-(1\ln 1-1)=(e-e)-(0-1)=1" block/>
+  <p>(Using <M d="\ln e=1"/> and <M d="\ln 1=0"/> from <Ref to="logarithms"/>.) The area under the log curve from 1 to <M d="e"/> is exactly 1, one of the small pleasures of the number <M d="e"/>.</p>
+  <Box color="green"><p><M d="\int\ln x\,dx=x\ln x-x+C"/>, and <M d="\int_1^e\ln x\,dx=1"/>.</p></Box>
+</div>
+)},
+{type:"example",label:"Where It Shows Up in Business",render:()=>(
+<div>
+  <p>Income streams (<Ref to="income-streams"/>) are valued by discounting each moment's income back to today, which means integrating (income rate) times <M d="e^{-rt}"/>. If the income rate is a constant, substitution handles it. But real income often <em>grows</em>. Suppose a new product's revenue rate is <M d="1000t"/> dollars per year (starting at zero and growing by $1,000 per year each year) for 5 years, discounted at 5%. Its present value is</p>
+  <M d="PV=\int_0^5 1000t\,e^{-0.05t}\,dt" block/>
+  <p>The integrand is <M d="t"/> times <M d="e^{-0.05t}"/>, a product. Parts.</p>
+  <p><strong>Step 1: Choose.</strong> <M d="u=1000t"/> (simplifies to a constant), <M d="dv=e^{-0.05t}\,dt"/>.</p>
+  <p><strong>Step 2: <M d="du"/> and <M d="v"/>.</strong> <M d="du=1000\,dt"/>. For <M d="v"/>, integrate <M d="e^{-0.05t}"/> with the <M d="e^{kt}"/> shortcut from <Ref to="substitution"/>: <M d="v=\tfrac{e^{-0.05t}}{-0.05}=-20e^{-0.05t}"/>.</p>
+  <p><strong>Step 3: Apply the definite formula.</strong></p>
+  <M d="PV=\Big[1000t\cdot(-20e^{-0.05t})\Big]_0^5-\int_0^5(-20e^{-0.05t})(1000)\,dt" block/>
+  <M d="=\Big[-20000\,t\,e^{-0.05t}\Big]_0^5+20000\int_0^5 e^{-0.05t}\,dt" block/>
+  <p><strong>Step 4: Evaluate each piece.</strong> First bracket: at <M d="t=5"/> it is <M d="-100000\,e^{-0.25}"/>; at <M d="t=0"/> it is 0. So the bracket is <M d="-100000\,e^{-0.25}"/>. Second piece: <M d="\int_0^5 e^{-0.05t}\,dt=\big[-20e^{-0.05t}\big]_0^5=-20e^{-0.25}+20=20(1-e^{-0.25})"/>.</p>
+  <M d="PV=-100000\,e^{-0.25}+400000\,(1-e^{-0.25})" block/>
+  <p><strong>Step 5: Numbers.</strong> <M d="e^{-0.25}\approx 0.778801"/>:</p>
+  <M d="PV\approx-77880.1+400000(0.221199)\approx-77880.1+88479.7\approx\$10{,}600" block/>
+  <p>Sanity check: the undiscounted total is <M d="\int_0^5 1000t\,dt=\tfrac{1000\cdot 25}{2}=12{,}500"/>, so discounting knocked off about 15%, reasonable for money arriving over five years at 5%.</p>
+  <Box color="green"><p>The growing stream is worth about $10,600 today. Integration by parts is what makes growing income streams computable.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Find <M d="\int x\,e^{2x}\,dx"/></span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Choose.</strong> <M d="u=x"/>, <M d="dv=e^{2x}\,dx"/>.</p>
+  <p><strong>Step 2: <M d="du"/> and <M d="v"/>.</strong> <M d="du=dx"/>; <M d="v=\int e^{2x}\,dx=\tfrac{e^{2x}}{2}"/> (the <M d="e^{kx}"/> shortcut with <M d="k=2"/>).</p>
+  <p><strong>Step 3: Formula.</strong></p>
+  <M d="\int x\,e^{2x}\,dx=x\cdot\frac{e^{2x}}{2}-\int\frac{e^{2x}}{2}\,dx" block/>
+  <p><strong>Step 4: Finish the easy integral.</strong> <M d="\int\tfrac{e^{2x}}{2}\,dx=\tfrac12\cdot\tfrac{e^{2x}}{2}=\tfrac{e^{2x}}{4}"/>:</p>
+  <M d="\int x\,e^{2x}\,dx=\frac{x\,e^{2x}}{2}-\frac{e^{2x}}{4}+C" block/>
+  <p><strong>Check.</strong> Differentiate <M d="\tfrac{x e^{2x}}{2}"/>: product rule gives <M d="\tfrac{e^{2x}}{2}+\tfrac{x\cdot 2e^{2x}}{2}=\tfrac{e^{2x}}{2}+x\,e^{2x}"/>. Differentiate <M d="-\tfrac{e^{2x}}{4}"/>: <M d="-\tfrac{2e^{2x}}{4}=-\tfrac{e^{2x}}{2}"/>. Total: <M d="x\,e^{2x}"/>. Correct.</p>
+  <Box color="green"><p><M d="\int x\,e^{2x}\,dx=\dfrac{x\,e^{2x}}{2}-\dfrac{e^{2x}}{4}+C"/>.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>Evaluate <M d="\displaystyle\int_1^4 x\ln x\,dx"/>, giving an exact form and a decimal.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Choose.</strong> Both pieces are candidates for <M d="u"/>, but <M d="\ln x"/> is the one we cannot easily integrate, so it must be <M d="u"/>: <M d="u=\ln x"/>, <M d="dv=x\,dx"/>.</p>
+  <p><strong>Step 2: <M d="du"/> and <M d="v"/>.</strong> <M d="du=\tfrac{1}{x}\,dx"/>; <M d="v=\tfrac{x^2}{2}"/>.</p>
+  <p><strong>Step 3: Definite formula.</strong></p>
+  <M d="\int_1^4 x\ln x\,dx=\Big[\frac{x^2}{2}\ln x\Big]_1^4-\int_1^4\frac{x^2}{2}\cdot\frac{1}{x}\,dx=\Big[\frac{x^2}{2}\ln x\Big]_1^4-\int_1^4\frac{x}{2}\,dx" block/>
+  <p><strong>Step 4: Evaluate.</strong> The bracket: at 4, <M d="8\ln 4"/>; at 1, <M d="\tfrac12\ln 1=0"/>. So the bracket is <M d="8\ln 4"/>. The remaining integral: <M d="\big[\tfrac{x^2}{4}\big]_1^4=4-\tfrac14=3.75"/>.</p>
+  <M d="\int_1^4 x\ln x\,dx=8\ln 4-3.75" block/>
+  <p><strong>Step 5: Decimal.</strong> <M d="\ln 4\approx 1.3863"/>, so <M d="8\ln 4\approx 11.0904"/>, and the answer is about <M d="11.0904-3.75=7.3404"/>.</p>
+  <Box color="green"><p><M d="8\ln 4-\tfrac{15}{4}\approx 7.340"/>.</p></Box>
 </div>)},
 ]},
 
@@ -4002,6 +4314,56 @@ export const QUIZ = {
    ]
   }
  ],
+ "riemann-sums": [
+  {
+   "q": "Using 2 left-corner rectangles, estimate the area under $f(x)=x^2$ on $[0,2]$.",
+   "choices": [
+    "$5$",
+    "$1$",
+    "$2.5$",
+    "$4$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - $5$ is the right sum ($f(1)+f(2)$ times width 1); left corners use $f(0)$ and $f(1)$.",
+    "Correct - width $1$, heights $f(0)=0$ and $f(1)=1$, so the sum is $(0+1)\\times 1=1$.",
+    "Not quite - that averages the left and right sums; the left sum alone is $1$.",
+    "Not quite - $4$ is the height of the curve at $x=2$, not a sum of rectangle areas."
+   ]
+  },
+  {
+   "q": "As the number of rectangles $n$ grows without bound, a Riemann sum approaches:",
+   "choices": [
+    "Zero, because each rectangle becomes infinitely thin",
+    "Infinity, because there are infinitely many rectangles",
+    "The exact area under the curve, the definite integral",
+    "The height of the tallest rectangle"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - each rectangle shrinks, but there are more of them; the total settles on a finite number.",
+    "Not quite - the count grows but the widths shrink to match; the sum converges rather than blowing up.",
+    "Correct - the limit of the Riemann sums is the definite integral, the exact area.",
+    "Not quite - the sum measures area, not any single height."
+   ]
+  },
+  {
+   "q": "For a function that is increasing on the interval, a left-corner Riemann sum is always:",
+   "choices": [
+    "An underestimate of the true area",
+    "An overestimate of the true area",
+    "Exactly equal to the true area",
+    "Equal to the right-corner sum"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - on a rising curve each strip's left edge is its lowest point, so every rectangle sits under the curve.",
+    "Not quite - that describes the right-corner sum on an increasing function.",
+    "Not quite - only in the limit do the sums equal the area; any finite left sum falls short on a rising curve.",
+    "Not quite - the two sums differ by the difference of the first and last heights times the width."
+   ]
+  }
+ ],
  "definite-integral": [
   {
    "q": "A definite integral $\\int_a^b f(x)\\,dx$ gives back what?",
@@ -4099,6 +4461,56 @@ export const QUIZ = {
     "$16$ would be $4(2)^2$ without dividing correctly; the antiderivative is $2x^2$, giving $8$.",
     "Correct - $F(x)=2x^2$, so $2(2)^2-2(0)^2=8-0=8$.",
     "$2$ ignores the antiderivative step; evaluating $2x^2$ from 0 to 2 gives $8$."
+   ]
+  }
+ ],
+ "integration-by-parts": [
+  {
+   "q": "The integration by parts formula is:",
+   "choices": [
+    "$\\int u\\,dv = uv + \\int v\\,du$",
+    "$\\int u\\,dv = uv - \\int v\\,du$",
+    "$\\int u\\,dv = \\int u\\,dx \\cdot \\int dv$",
+    "$\\int u\\,dv = u'v - uv'$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - the sign is wrong; moving one integral of the product rule to the other side produces a minus.",
+    "Correct - it is the product rule integrated and rearranged: $\\int u\\,dv = uv - \\int v\\,du$.",
+    "Not quite - an integral of a product is never the product of integrals.",
+    "Not quite - that is the shape of the product rule itself, not its integrated form."
+   ]
+  },
+  {
+   "q": "For $\\int x\\,e^x\\,dx$, which choice of $u$ makes the method work, and why?",
+   "choices": [
+    "$u=e^x$, because it is its own derivative",
+    "$u=x$, because differentiating it gives a constant, which simplifies the new integral",
+    "$u=x\\,e^x$, the whole integrand",
+    "$u=dx$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - with $u=e^x$ the new integral contains $x^2 e^x$, which is harder than what you started with.",
+    "Correct - $u=x$ gives $du=dx$, and the leftover integral is just $\\int e^x\\,dx$.",
+    "Not quite - $u$ must be one factor of the product, not the whole thing.",
+    "Not quite - $dx$ belongs with $dv$; $u$ is a function."
+   ]
+  },
+  {
+   "q": "What is $\\int \\ln x\\,dx$?",
+   "choices": [
+    "$\\dfrac{1}{x}+C$",
+    "$\\ln x + C$",
+    "$x\\ln x - x + C$",
+    "$x\\ln x + C$"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - $\\dfrac{1}{x}$ is the derivative of $\\ln x$, the opposite direction.",
+    "Not quite - $\\ln x$ is not its own antiderivative; differentiate it and you get $\\dfrac{1}{x}$, not $\\ln x$.",
+    "Correct - parts with $u=\\ln x$ and $dv=dx$ gives $x\\ln x-\\int 1\\,dx=x\\ln x-x+C$.",
+    "Not quite - differentiating $x\\ln x$ gives $\\ln x+1$, so the extra $-x$ is needed to cancel the $+1$."
    ]
   }
  ],
