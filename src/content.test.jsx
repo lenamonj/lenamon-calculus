@@ -38,13 +38,26 @@ describe('lesson corpus contract', () => {
     }
   });
 
-  it.each(LESSONS)('$slug: has at most one Key Formulas block, a concept, and a practice', (l) => {
+  it.each(LESSONS)('$slug: has exactly one Key Formulas block, a concept, a worked example, and two closing practices', (l) => {
     const types = l.content.map((b) => b.type);
-    // Tightened to exactly one once every lesson carries a formulas plate.
-    expect(types.filter((t) => t === 'rule').length).toBeLessThanOrEqual(1);
+    expect(types.filter((t) => t === 'rule').length).toBe(1);
     expect(types).toContain('concept');
-    expect(types).toContain('practice');
+    expect(types).toContain('example');
+    expect(types.filter((t) => t === 'practice').length).toBe(2);
+    expect(types.slice(-2)).toEqual(['practice', 'practice']);
+    expect(types.indexOf('rule')).toBeGreaterThan(types.indexOf('concept'));
     for (const t of types) expect(['concept', 'rule', 'example', 'interactive', 'practice']).toContain(t);
+  });
+
+  it.each(LESSONS)('$slug: prose has no emoji, arrows, dashes, or spacing artifacts', (l) => {
+    const { container, unmount } = render(
+      <>{l.content.map((b, i) => <div key={i}>{b.render()}{b.type === 'practice' ? b.answer() : null}</div>)}</>
+    );
+    const text = container.textContent;
+    unmount();
+    expect(text).not.toMatch(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
+    expect(text).not.toMatch(/→|—|–/);
+    expect(text).not.toMatch(/ {2}- {2}/);
   });
 });
 

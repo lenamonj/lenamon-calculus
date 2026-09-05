@@ -2980,28 +2980,46 @@ answer:()=>(<div>
 </div>)},
 ]},
 
-{slug:"area-between-curves",module:"Business Applications",title:"Area Between Curves",time:"8 min",content:[
-{type:"concept",render:()=>(
+{slug:"area-between-curves",module:"Business Applications",title:"Area Between Curves",time:"10 min",content:[
+{type:"concept",label:"The Gap Between Two Curves",render:()=>(
 <div>
-  <p>A single integral gives the area between a curve and the x-axis. But business problems usually compare <em>two</em> curves: revenue versus cost, demand versus supply, this year's sales versus last year's. The gap between them is what matters, and that gap is an <strong>area between curves</strong>.</p>
-  <p>The idea is simple. Picture slicing the region into thin vertical strips. A strip at position <M d="x"/> has height (top curve) minus (bottom curve) and a tiny width <M d="dx"/>, so its area is <M d="[\text{top}-\text{bottom}]\cdot dx"/>  -  just height times width, like any rectangle. Add up the areas of all the strips from <M d="a"/> to <M d="b"/> and you get the whole region. That tiny width <M d="dx"/> is what turns a height (a length) into an area, and adding infinitely many of them is exactly an integral:</p>
+  <p>A single integral gives the area between a curve and the <M d="x"/>-axis. But business problems usually compare <em>two</em> curves: revenue versus cost, demand versus supply, this year's sales versus last year's. The gap between them is what matters, and that gap is an <strong>area between curves</strong>.</p>
+  <p>The idea is simple, and it is the Riemann picture from <Ref to="riemann-sums"/> with one change. Picture slicing the region into thin vertical strips. A strip at position <M d="x"/> has height (top curve) minus (bottom curve) and a tiny width <M d="dx"/>, so its area is <M d="[\text{top}-\text{bottom}]\cdot dx"/>, just height times width, like any rectangle. Add up the areas of all the strips from <M d="a"/> to <M d="b"/> and you get the whole region. That tiny width <M d="dx"/> is what turns a height (a length) into an area, and adding infinitely many of them is exactly an integral:</p>
   <M d="\text{Area}=\int_a^b[\text{top}-\text{bottom}]\,dx" block/>
   <p>Get the order right. If you subtract the wrong way you get a negative number; the fix is just to swap them, since real area is positive.</p>
+  <p>Why does subtracting the curves work even when both are below the axis, or one is above and one below? Because each strip's height is the vertical <em>distance</em> between the curves, and top minus bottom measures that distance no matter where the axis happens to be. The axis is irrelevant to a gap.</p>
 </div>
 )},
-{type:"rule",render:()=>(<div><p><strong>The procedure:</strong></p><p>1. Sketch or test a point to see which curve is on top.</p><p>2. If you are not given the interval, find where the curves cross by setting them equal.</p><p>3. Integrate (top minus bottom) across the interval.</p></div>)},
+{type:"rule",label:"The Procedure",render:()=>(<div><p>1. Sketch, or test a point, to see which curve is on top.</p><p>2. If you are not given the interval, find where the curves cross by setting them equal (<Ref to="quadratics"/> for the algebra).</p><p>3. Integrate (top minus bottom) across the interval.</p><M d="\text{Area}=\int_a^b\big[f(x)-g(x)\big]\,dx\qquad\text{where }f\ge g\text{ on }[a,b]" block/><p>If the curves swap places partway through, split the integral at the crossing and use the right "top" on each piece.</p></div>)},
 {type:"example",label:"Finding the Interval Yourself",render:()=>(
 <div>
   <p>Find the area between <M d="y=x"/> and <M d="y=x^2"/>.</p>
   <p><strong>Step 1: Where do they cross?</strong> Set them equal:</p>
   <M d="x=x^2\;\Rightarrow\;x^2-x=0\;\Rightarrow\;x(x-1)=0\;\Rightarrow\;x=0,\,1" block/>
-  <p>That last step uses the fact that a product is zero only when one of its factors is zero, so either <M d="x=0"/> or <M d="x-1=0"/> (giving <M d="x=1"/>).</p>
+  <p>That last step uses the zero-product rule from <Ref to="quadratics"/>: a product is zero only when one of its factors is zero, so either <M d="x=0"/> or <M d="x-1=0"/> (giving <M d="x=1"/>).</p>
   <p>So the region runs from <M d="x=0"/> to <M d="x=1"/>.</p>
   <p><strong>Step 2: Which is on top?</strong> Test <M d="x=0.5"/>: the line gives <M d="0.5"/>, the parabola gives <M d="0.25"/>. The line <M d="y=x"/> is on top.</p>
   <p><strong>Step 3: Integrate top minus bottom.</strong></p>
   <M d="\int_0^1(x-x^2)\,dx=\Big[\frac{x^2}{2}-\frac{x^3}{3}\Big]_0^1=\frac{1}{2}-\frac{1}{3}=\frac{1}{6}" block/>
-  <Graph fns={[(x)=>x,(x)=>x*x]} xMin={-0.3} xMax={1.4} yMin={-0.3} yMax={1.5} shades={[{top:(x)=>x,bottom:(x)=>x*x,from:0,to:1,color:"rgba(99,102,241,0.28)"}]} caption="Between x=0 and x=1 the line (blue) sits above the parabola (pink). The shaded sliver is the area we found, 1/6."/>
+  <Graph fns={[(x)=>x,(x)=>x*x]} xMin={-0.3} xMax={1.4} yMin={-0.3} yMax={1.5} shades={[{top:(x)=>x,bottom:(x)=>x*x,from:0,to:1,color:"rgba(230,180,90,0.3)"}]} caption="Between x = 0 and x = 1 the line (blue) sits above the parabola (pink). The shaded sliver is the area we found, 1/6."/>
   <Box color="green"><p>Area = <M d="\tfrac{1}{6}\approx 0.167"/>.</p></Box>
+</div>
+)},
+{type:"example",label:"Profit Is an Area Between Marginal Curves",render:()=>(
+<div>
+  <p>A company's marginal revenue is <M d="R'(x)=60-0.1x"/> and its marginal cost is <M d="C'(x)=20+0.1x"/>, both in dollars per unit. How much profit (before fixed costs) does it make by producing up to the level where the two curves meet?</p>
+  <p><strong>Step 1: Where do they cross?</strong> That is the golden rule from <Ref to="marginal"/>, <M d="R'=C'"/>:</p>
+  <M d="60-0.1x=20+0.1x\;\Rightarrow\;40=0.2x\;\Rightarrow\;x=200" block/>
+  <p><strong>Step 2: Which is on top?</strong> At <M d="x=0"/>, marginal revenue is 60 and marginal cost is 20, so revenue is on top from 0 up to 200. (Past 200, cost takes over: each extra unit loses money, which is why 200 is the profit-maximizing level.)</p>
+  <p><strong>Step 3: Integrate top minus bottom.</strong> Each strip is (marginal revenue minus marginal cost) times a sliver of units: the marginal profit on that sliver. Adding them up is total profit, by <Ref to="ftc"/>:</p>
+  <M d="\int_0^{200}\big[(60-0.1x)-(20+0.1x)\big]\,dx=\int_0^{200}(40-0.2x)\,dx=\Big[40x-0.1x^2\Big]_0^{200}=8000-4000=4{,}000" block/>
+  <Graph fns={[(x)=>60-0.1*x,(x)=>20+0.1*x]} xMin={0} xMax={320} yMin={0} yMax={70}
+    shades={[{top:(x)=>60-0.1*x,bottom:(x)=>20+0.1*x,from:0,to:200,color:"rgba(230,180,90,0.3)"}]}
+    highlights={[{x:200,y:40,label:"R' = C' at 200",color:"#f59e0b",lo:[10,-12]}]}
+    label={<><span style={{color:"#818cf8"}}>Marginal revenue</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#f472b6"}}>marginal cost</span></>}
+    xlab="Units" ylab="$ per unit"
+    caption="The gold region between marginal revenue and marginal cost, from 0 to 200 units, is the profit those units generate: $4,000."/>
+  <Box color="green"><p>Profit from the first 200 units is $4,000 (before subtracting fixed costs). The gap between two marginal curves is the total of the marginal differences, which is profit.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Find the area between <M d="y=6-x^2"/> and <M d="y=2"/> on <M d="[-2,2]"/>.</span>),
@@ -3011,43 +3029,156 @@ answer:()=>(<div>
   <M d="\int_{-2}^{2}\big[(6-x^2)-2\big]\,dx=\int_{-2}^{2}(4-x^2)\,dx" block/>
   <p><strong>Step 3: Integrate and evaluate.</strong></p>
   <M d="\Big[4x-\frac{x^3}{3}\Big]_{-2}^{2}=\Big(8-\tfrac{8}{3}\Big)-\Big(-8+\tfrac{8}{3}\Big)=\frac{16}{3}+\frac{16}{3}=\frac{32}{3}" block/>
-  <Graph fns={[(x)=>6-x*x,()=>2]} xMin={-2.4} xMax={2.4} yMin={-1} yMax={7} shades={[{top:(x)=>6-x*x,bottom:2,from:-2,to:2,color:"rgba(99,102,241,0.28)"}]} caption="On the interval from -2 to 2 the blue parabola stays above the pink line. The shaded region is the area we computed, 32/3."/>
+  <Graph fns={[(x)=>6-x*x,()=>2]} xMin={-2.4} xMax={2.4} yMin={-1} yMax={7} shades={[{top:(x)=>6-x*x,bottom:2,from:-2,to:2,color:"rgba(230,180,90,0.3)"}]} caption="On the interval from -2 to 2 the blue parabola stays above the pink line. The shaded region is the area we computed, 32/3."/>
   <Box color="green"><p>Area = <M d="\tfrac{32}{3}\approx 10.67"/>.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>Find the area between <M d="y=x^2-4"/> and <M d="y=2x-1"/>. You will need to find where they cross.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Crossing points.</strong> Set them equal and gather everything on one side:</p>
+  <M d="x^2-4=2x-1\;\Rightarrow\;x^2-2x-3=0" block/>
+  <p>Factor (<Ref to="quadratics"/>): two numbers adding to <M d="-2"/> and multiplying to <M d="-3"/> are <M d="-3"/> and <M d="1"/>:</p>
+  <M d="(x-3)(x+1)=0\;\Rightarrow\;x=-1\;\text{ or }\;x=3" block/>
+  <p><strong>Step 2: Which is on top?</strong> Test <M d="x=0"/>: the line gives <M d="-1"/>, the parabola gives <M d="-4"/>. The line is on top (both are below the axis here, which does not matter; the gap is what counts).</p>
+  <p><strong>Step 3: Integrate top minus bottom.</strong></p>
+  <M d="\int_{-1}^{3}\big[(2x-1)-(x^2-4)\big]\,dx=\int_{-1}^{3}(-x^2+2x+3)\,dx" block/>
+  <M d="=\Big[-\frac{x^3}{3}+x^2+3x\Big]_{-1}^{3}=(-9+9+9)-\Big(\tfrac13+1-3\Big)=9-\Big(-\tfrac53\Big)=\frac{32}{3}" block/>
+  <p>Watch the bottom limit: at <M d="x=-1"/>, <M d="-\tfrac{(-1)^3}{3}=+\tfrac13"/>, and <M d="3(-1)=-3"/>. Subtracting a negative total adds.</p>
+  <Graph fns={[(x)=>x*x-4,(x)=>2*x-1]} xMin={-2.5} xMax={4.5} yMin={-5} yMax={8} shades={[{top:(x)=>2*x-1,bottom:(x)=>x*x-4,from:-1,to:3,color:"rgba(230,180,90,0.3)"}]} caption="From x = -1 to x = 3 the line sits above the parabola. The gold region has area 32/3."/>
+  <Box color="green"><p>Area = <M d="\tfrac{32}{3}\approx 10.67"/>. (The same number as the first practice, by coincidence: two different regions with the same area.)</p></Box>
 </div>)},
 ]},
 
-{slug:"surplus",module:"Business Applications",title:"Consumer & Producer Surplus",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"average-value",module:"Business Applications",title:"Average Value of a Function",time:"9 min",content:[
+{type:"concept",label:"Averaging a Curve",render:()=>(
 <div>
-  <p>This is one of the most useful ideas in microeconomics, and it is pure area-between-curves. It measures the hidden "bonus" value that buyers and sellers walk away with at the market price.</p>
-  <Box>
-    <p><strong>Consumer Surplus (CS):</strong> some buyers would happily have paid more than the market price. The money they <em>saved</em> compared to what they were willing to pay is their surplus. On a graph it is the area below the demand curve and above the price line.</p>
-    <p>Here is why that saved money <em>is</em> an area. Take the buyers one unit at a time. The buyer of the very first unit was willing to pay <M d="D(0)"/> (the top of the demand curve) but pays only the market price <M d="\bar p"/>, so on that unit they pocket <M d="D(0)-\bar p"/> in savings. Each later unit's buyer would have paid a little less but still pays only <M d="\bar p"/>, saving <M d="D(x)-\bar p"/>. Add up the savings on every unit from 0 to the equilibrium quantity  -  and adding a smoothly changing quantity across an interval is exactly an integral  -  and the total is the area between the demand curve and the price line. The "money saved" and the "area" are the same thing, measured in dollars because it is a price-per-unit times a number of units.</p>
-  </Box>
-  <Box>
-    <p><strong>Producer Surplus (PS):</strong> some sellers would have accepted less than the market price. The extra they <em>earned</em> above their minimum is their surplus. It is the area above the supply curve and below the price line.</p>
-    <p>By the same unit-by-unit reasoning, each unit earns its seller <M d="\bar p-S(x)"/> above the minimum they would have accepted, and summing those gains from 0 to the equilibrium quantity is the area between the price line and the supply curve.</p>
-  </Box>
-  <Box>
-    <p>Two quick definitions, since we will not assume them. A <strong>demand curve</strong> <M d="D(x)"/> answers: for a given quantity <M d="x"/>, what is the highest price a buyer is willing to pay for that unit? It slopes down (people pay less as more is sold). A <strong>supply curve</strong> <M d="S(x)"/> answers: what is the lowest price a seller will accept for that unit? It slopes up (making more units costs more  -  think overtime and pricier materials  -  so sellers need a higher price to justify each extra unit). Note the setup here: <M d="x"/> is the <em>quantity</em>, and each function hands back a <em>price</em>.</p>
-  </Box>
-  <p>Everything is anchored at the <strong>equilibrium</strong>: the single <M d="(\text{quantity},\,\text{price})"/> point where demand and supply meet, so the amount buyers want exactly equals the amount sellers offer.</p>
+  <p>Averaging a list is easy: add the numbers, divide by how many there are. The average of 2, 4, and 9 is <M d="\tfrac{2+4+9}{3}=5"/>. But a curve has infinitely many heights. What is the <em>average height</em> of <M d="f(x)=x^2"/> between 0 and 2? You cannot add infinitely many numbers and divide by infinity.</p>
+  <p>Riemann sums (<Ref to="riemann-sums"/>) solve it. Sample the curve at <M d="n"/> evenly spaced points and average those:</p>
+  <M d="\text{average of samples}=\frac{f(x_1)+f(x_2)+\cdots+f(x_n)}{n}" block/>
+  <p>Now a small trick. The spacing between samples on <M d="[a,b]"/> is <M d="\Delta x=\tfrac{b-a}{n}"/>, so <M d="\tfrac{1}{n}=\tfrac{\Delta x}{b-a}"/>. Substitute that in:</p>
+  <M d="\text{average of samples}=\frac{1}{b-a}\big[f(x_1)\Delta x+f(x_2)\Delta x+\cdots+f(x_n)\Delta x\big]=\frac{1}{b-a}\sum f(x_i)\,\Delta x" block/>
+  <p>The bracket is a Riemann sum. Let <M d="n\to\infty"/> so the samples cover the whole curve, and the Riemann sum becomes the integral:</p>
+  <M d="f_{\text{avg}}=\frac{1}{b-a}\int_a^b f(x)\,dx" block/>
+  <p>In words: <strong>the average value of a function is its total (the integral) divided by the width of the interval.</strong> That is exactly "add and divide by how many," carried over to a continuous curve.</p>
+  <p><strong>The picture.</strong> Rearrange the formula: <M d="f_{\text{avg}}\cdot(b-a)=\int_a^b f(x)\,dx"/>. The left side is the area of a rectangle of height <M d="f_{\text{avg}}"/> and width <M d="b-a"/>; the right side is the area under the curve. So the average value is the height of the rectangle that has the same area as the region under the curve. Imagine the region as water: let it settle to a flat level, and that level is the average.</p>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"rule",label:"Average Value",render:()=>(
+<div>
+  <M d="f_{\text{avg}}=\frac{1}{b-a}\int_a^b f(x)\,dx" block/>
+  <p>Evaluate the integral with <Ref to="ftc"/>, then divide by the width of the interval. The result is a single number in the same units as <M d="f"/>: an average price is in dollars, an average inventory is in units.</p>
+  <p>One consequence, stated without proof: a continuous curve always <em>hits</em> its average value somewhere on the interval, at least once. (This is called the mean value theorem for integrals. It just says a curve cannot stay above its own average everywhere, or below it everywhere.)</p>
+</div>
+)},
+{type:"example",label:"The Average Height of a Parabola",render:()=>(
+<div>
+  <p>Find the average value of <M d="f(x)=x^2"/> on <M d="[0,2]"/>.</p>
+  <p><strong>Step 1: The integral.</strong> From <Ref to="ftc"/>, <M d="\int_0^2 x^2\,dx=\tfrac{8}{3}"/>.</p>
+  <p><strong>Step 2: Divide by the width.</strong> The interval is 2 wide:</p>
+  <M d="f_{\text{avg}}=\frac{1}{2}\cdot\frac{8}{3}=\frac{4}{3}\approx 1.333" block/>
+  <p>Sanity check: the curve runs from height 0 to height 4, so an average somewhere around 1 or 2 is plausible. It is below the midpoint 2 because the parabola spends most of the interval low and only shoots up near the end. And the curve does hit <M d="\tfrac43"/>: at <M d="x=\sqrt{4/3}\approx 1.155"/>.</p>
+  <Graph fn={(x)=>x*x} xMin={-0.2} xMax={2.3} yMin={-0.3} yMax={4.4}
+    shades={[{top:(x)=>x*x,bottom:0,from:0,to:2,color:"rgba(129,140,248,0.18)"}]}
+    hlines={[{y:4/3,x1:0,x2:2,color:"#fbbf24"}]}
+    highlights={[{x:1.155,y:4/3,label:"average height 4/3",color:"#f59e0b",lo:[10,-12]}]}
+    caption="The gold line at height 4/3 is the average value: a rectangle of that height over [0, 2] has the same area, 8/3, as the region under the parabola."/>
+  <Box color="green"><p>Average value <M d="\tfrac43"/>.</p></Box>
+</div>
+)},
+{type:"example",label:"Average Inventory",render:()=>(
+<div>
+  <p>A warehouse receives 500 units at the start of each 10-day cycle and sells them at a steady 50 per day, so its stock on day <M d="t"/> is <M d="I(t)=500-50t"/>. What is the average stock over a cycle? (Holding costs are charged on this average, as in the order-size problem in <Ref to="optimization"/>.)</p>
+  <p><strong>Step 1: The integral.</strong></p>
+  <M d="\int_0^{10}(500-50t)\,dt=\Big[500t-25t^2\Big]_0^{10}=5000-2500=2500" block/>
+  <p>(Units: units of stock times days, "unit-days," the total amount of inventory-holding the warehouse did.)</p>
+  <p><strong>Step 2: Divide by the width.</strong> The cycle is 10 days:</p>
+  <M d="I_{\text{avg}}=\frac{2500}{10}=250\text{ units}" block/>
+  <p>That is exactly half the starting stock, which makes sense: the stock falls in a straight line from 500 to 0, so on average it is at the midpoint. This is the "average inventory is half the order size" fact that <Ref to="optimization"/> used without proof. Now it is proved.</p>
+  <Box color="green"><p>Average inventory 250 units, half the 500 delivered. Holding costs should be charged on 250, not 500.</p></Box>
+</div>
+)},
+{type:"example",label:"Average Price Over a Season",render:()=>(
+<div>
+  <p>The price of a seasonal product over an 8-week season is <M d="p(t)=20+4t-0.5t^2"/> dollars, where <M d="t"/> is in weeks. What was the average price?</p>
+  <p><strong>Step 1: The integral.</strong></p>
+  <M d="\int_0^8(20+4t-0.5t^2)\,dt=\Big[20t+2t^2-\frac{t^3}{6}\Big]_0^8=160+128-\frac{512}{6}" block/>
+  <p><M d="\tfrac{512}{6}\approx 85.333"/>, so the integral is about <M d="202.667"/>.</p>
+  <p><strong>Step 2: Divide by the width.</strong></p>
+  <M d="p_{\text{avg}}=\frac{202.667}{8}\approx\$25.33" block/>
+  <p>Check the shape: the price starts at $20, peaks (vertex at <M d="t=4"/>, where <M d="p=28"/>), and ends at <M d="p(8)=20"/>. An average of about $25.33 sits sensibly between the $20 endpoints and the $28 peak, closer to the peak because the curve spends most of its time up there.</p>
+  <Box color="green"><p>Average price about $25.33 over the season.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Find the average value of <M d="f(x)=3x^2"/> on <M d="[1,3]"/>.</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: The integral.</strong> An antiderivative of <M d="3x^2"/> is <M d="x^3"/>:</p>
+  <M d="\int_1^3 3x^2\,dx=\big[x^3\big]_1^3=27-1=26" block/>
+  <p><strong>Step 2: Divide by the width.</strong> From 1 to 3 is 2 wide:</p>
+  <M d="f_{\text{avg}}=\frac{26}{2}=13" block/>
+  <p>Sanity check: the curve runs from <M d="f(1)=3"/> to <M d="f(3)=27"/>. An average of 13 is between them, and the curve hits 13 at <M d="x=\sqrt{13/3}\approx 2.08"/>, inside the interval.</p>
+  <Box color="green"><p>Average value 13.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>A startup's revenue rate grows as <M d="f(t)=1000\,e^{0.1t}"/> dollars per year. What was its average revenue rate over its first 5 years?</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: The integral.</strong> Use the <M d="e^{kt}"/> shortcut from <Ref to="substitution"/> with <M d="k=0.1"/>:</p>
+  <M d="\int_0^5 1000\,e^{0.1t}\,dt=1000\Big[\frac{e^{0.1t}}{0.1}\Big]_0^5=10000\,(e^{0.5}-1)" block/>
+  <p><M d="e^{0.5}\approx 1.648721"/>, so the integral is about <M d="10000(0.648721)=6487.21"/> dollars (the total revenue over five years).</p>
+  <p><strong>Step 2: Divide by the width.</strong></p>
+  <M d="f_{\text{avg}}=\frac{6487.21}{5}\approx\$1{,}297.44\text{ per year}" block/>
+  <p>Sanity check: the rate starts at $1,000 and ends at <M d="1000e^{0.5}\approx\$1{,}649"/>. The average of about $1,297 sits between them, a little below the midpoint of $1,324, because exponential growth spends more time at the low end and climbs fastest at the finish.</p>
+  <Box color="green"><p>Average revenue rate about $1,297 per year over the first five years.</p></Box>
+</div>)},
+]},
+
+{slug:"surplus",module:"Business Applications",title:"Consumer & Producer Surplus",time:"11 min",content:[
+{type:"concept",label:"The Hidden Bonus in Every Trade",render:()=>(
+<div>
+  <p>This is one of the most useful ideas in microeconomics, and it is pure area-between-curves. It measures the hidden "bonus" value that buyers and sellers walk away with at the market price. The demand and supply curves are the ones from <Ref to="business-models"/>, and the setup is the same: <M d="x"/> is the quantity, and each curve hands back a price.</p>
+  <Box>
+    <p><strong>Consumer surplus (CS):</strong> some buyers would happily have paid more than the market price. The money they <em>saved</em> compared to what they were willing to pay is their surplus. On a graph it is the area below the demand curve and above the price line.</p>
+    <p>Here is why that saved money <em>is</em> an area. Take the buyers one unit at a time. The buyer of the very first unit was willing to pay <M d="D(0)"/> (the top of the demand curve) but pays only the market price <M d="\bar p"/>, so on that unit they pocket <M d="D(0)-\bar p"/> in savings. Each later unit's buyer would have paid a little less but still pays only <M d="\bar p"/>, saving <M d="D(x)-\bar p"/>. Add up the savings on every unit from 0 to the equilibrium quantity, and adding a smoothly changing quantity across an interval is exactly an integral (<Ref to="riemann-sums"/>), and the total is the area between the demand curve and the price line. The "money saved" and the "area" are the same thing, measured in dollars because it is a price per unit times a number of units.</p>
+  </Box>
+  <Box>
+    <p><strong>Producer surplus (PS):</strong> some sellers would have accepted less than the market price. The extra they <em>earned</em> above their minimum is their surplus. It is the area above the supply curve and below the price line.</p>
+    <p>By the same unit-by-unit reasoning, each unit earns its seller <M d="\bar p-S(x)"/> above the minimum they would have accepted, and summing those gains from 0 to the equilibrium quantity is the area between the price line and the supply curve.</p>
+  </Box>
+  <p>Everything is anchored at the <strong>equilibrium</strong>: the single <M d="(\text{quantity},\,\text{price})"/> point where demand and supply meet, so the amount buyers want exactly equals the amount sellers offer. Together, consumer surplus plus producer surplus is the total benefit the market creates by letting these people trade; economists call it the gains from trade.</p>
+</div>
+)},
+{type:"rule",label:"Computing the Surpluses",render:()=>(
 <div>
   <p><strong>Step 1:</strong> Find equilibrium by setting demand equal to supply, <M d="D(x)=S(x)"/>. Solve for the quantity <M d="\bar x"/>, then plug it back in to get the price <M d="\bar p"/>.</p>
   <p><strong>Step 2:</strong> Each surplus is an area between the curve and the horizontal price line:</p>
   <M d="CS=\int_0^{\bar x}\big[D(x)-\bar p\big]\,dx" block/>
   <M d="PS=\int_0^{\bar x}\big[\bar p-S(x)\big]\,dx" block/>
-  <p>Demand is on top for CS; the price is on top for PS. Both are just "top minus bottom" again.</p>
+  <p>Demand is on top for CS; the price is on top for PS. Both are just "top minus bottom" from <Ref to="area-between-curves"/>.</p>
+</div>
+)},
+{type:"example",label:"A Market With Unequal Surpluses",render:()=>(
+<div>
+  <p>Demand is <M d="D(x)=100-0.5x"/> and supply is <M d="S(x)=20+0.3x"/>, prices in dollars, <M d="x"/> in units. Find the equilibrium and both surpluses.</p>
+  <p><strong>Step 1: Equilibrium.</strong></p>
+  <M d="100-0.5x=20+0.3x\;\Rightarrow\;80=0.8x\;\Rightarrow\;\bar x=100" block/>
+  <p>Price: <M d="\bar p=S(100)=20+30=\$50"/>. Check: <M d="D(100)=100-50=50"/>. Agreed.</p>
+  <p><strong>Step 2: Consumer surplus.</strong> Demand minus the price line, from 0 to 100:</p>
+  <M d="CS=\int_0^{100}\big[(100-0.5x)-50\big]\,dx=\int_0^{100}(50-0.5x)\,dx=\Big[50x-0.25x^2\Big]_0^{100}=5000-2500=\$2{,}500" block/>
+  <p><strong>Step 3: Producer surplus.</strong> The price line minus supply:</p>
+  <M d="PS=\int_0^{100}\big[50-(20+0.3x)\big]\,dx=\int_0^{100}(30-0.3x)\,dx=\Big[30x-0.15x^2\Big]_0^{100}=3000-1500=\$1{,}500" block/>
+  <p><strong>Step 4: Read the picture.</strong> Both regions are triangles, and you can check the integrals with geometry: CS is a triangle of base 100 and height <M d="100-50=50"/>, area <M d="\tfrac12(100)(50)=2500"/>; PS has height <M d="50-20=30"/>, area <M d="\tfrac12(100)(30)=1500"/>. Consumer surplus is larger here because the demand curve is steeper than the supply curve: the earliest buyers were willing to pay far above $50, while the earliest sellers would have accepted only a little below it.</p>
+  <Graph fns={[(x)=>100-0.5*x,(x)=>20+0.3*x]} xMin={-4} xMax={160} yMin={0} yMax={110}
+    shades={[{top:(x)=>100-0.5*x,bottom:50,from:0,to:100,color:"rgba(99,102,241,0.30)"},{top:50,bottom:(x)=>20+0.3*x,from:0,to:100,color:"rgba(16,185,129,0.26)"}]}
+    hlines={[{y:50,x1:0,x2:100,color:"#fbbf24"}]}
+    notes={[{x:35,y:72,text:"CS = $2,500",color:"#c7d2fe"},{x:35,y:38,text:"PS = $1,500",color:"#a7f3d0"}]}
+    highlights={[{x:100,y:50,label:"equilibrium (100, $50)",color:"#f59e0b",lo:[8,-12]}]}
+    xlab="Quantity" ylab="Price ($)"
+    caption="Consumer surplus (indigo) is the triangle under demand and above the $50 line; producer surplus (green) is the triangle above supply and below it. Gains from trade total $4,000."/>
+  <Box color="green"><p>Equilibrium at 100 units and $50. CS = $2,500, PS = $1,500, total gains from trade $4,000.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Given demand <M d="D(x)=50-0.1x"/> and supply <M d="S(x)=10+0.1x"/>, find the equilibrium and both surpluses.</span>),
 answer:()=>(<div>
   <p><strong>Step 1: Equilibrium.</strong> Set demand equal to supply:</p>
   <M d="50-0.1x=10+0.1x\;\Rightarrow\;40=0.2x\;\Rightarrow\;\bar x=200" block/>
-  <p>Price at equilibrium: <M d="\bar p=10+0.1(200)=\$30"/>.</p>
+  <p>Price at equilibrium: <M d="\bar p=10+0.1(200)=\$30"/>. (These are the curves from <Ref to="business-models"/>.)</p>
   <p><strong>Step 2: Consumer surplus.</strong> Demand minus price:</p>
   <M d="CS=\int_0^{200}\big[(50-0.1x)-30\big]\,dx=\int_0^{200}(20-0.1x)\,dx" block/>
   <M d="=\big[20x-0.05x^2\big]_0^{200}=4000-2000=\$2{,}000" block/>
@@ -3064,34 +3195,84 @@ answer:()=>(<div>
     xlab="Quantity" ylab="Price ($)"
     caption="Consumer surplus (indigo) lies below the demand line and above the $30 price line. Producer surplus (green) lies above the supply line and below the $30 price line. Both end at the equilibrium quantity of 200."/>
   <Box color="green"><p>Equilibrium: 200 units at $30. Consumer surplus = producer surplus = $2,000.</p>
-  <p>They came out equal here only because the demand and supply curves are equally steep (slopes <M d="-0.1"/> and <M d="+0.1"/>), which made the two integrals identical. In general consumer and producer surplus are different  -  do not expect them to match.</p></Box>
+  <p>They came out equal here only because the demand and supply curves are equally steep (slopes <M d="-0.1"/> and <M d="+0.1"/>), which made the two integrals identical. The worked example showed the more usual case, where they differ.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>Demand is <M d="D(x)=66-0.01x^2"/> and supply is <M d="S(x)=18+0.02x^2"/>. Find the equilibrium and both surpluses. (The curves are not straight, so the surpluses are not triangles; the integrals are the only way.)</span>),
+answer:()=>(<div>
+  <p><strong>Step 1: Equilibrium.</strong></p>
+  <M d="66-0.01x^2=18+0.02x^2\;\Rightarrow\;48=0.03x^2\;\Rightarrow\;x^2=1600\;\Rightarrow\;\bar x=40" block/>
+  <p>(Only the positive root makes sense for a quantity.) Price: <M d="\bar p=66-0.01(1600)=66-16=\$50"/>. Check: <M d="S(40)=18+0.02(1600)=18+32=50"/>. Agreed.</p>
+  <p><strong>Step 2: Consumer surplus.</strong></p>
+  <M d="CS=\int_0^{40}\big[(66-0.01x^2)-50\big]\,dx=\int_0^{40}(16-0.01x^2)\,dx=\Big[16x-\frac{0.01x^3}{3}\Big]_0^{40}" block/>
+  <M d="=640-\frac{0.01(64000)}{3}=640-\frac{640}{3}=640-213.33=\$426.67" block/>
+  <p><strong>Step 3: Producer surplus.</strong></p>
+  <M d="PS=\int_0^{40}\big[50-(18+0.02x^2)\big]\,dx=\int_0^{40}(32-0.02x^2)\,dx=\Big[32x-\frac{0.02x^3}{3}\Big]_0^{40}" block/>
+  <M d="=1280-\frac{0.02(64000)}{3}=1280-\frac{1280}{3}=1280-426.67=\$853.33" block/>
+  <p><strong>Step 4: Interpret.</strong> Producer surplus is twice consumer surplus this time. The supply curve rises steeply (its coefficient on <M d="x^2"/> is twice the demand curve's), so the earliest sellers would have accepted far less than $50 and gain a lot; the demand curve is flatter near the top, so buyers were not willing to pay that much more than $50 and gain less.</p>
+  <Box color="green"><p>Equilibrium at 40 units and $50. CS about $426.67, PS about $853.33. Curved supply and demand still yield surpluses; the integrals just stop being triangles.</p></Box>
 </div>)},
 ]},
 
-{slug:"income-streams",module:"Business Applications",title:"Income Streams & Present Value",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"income-streams",module:"Business Applications",title:"Income Streams & Present Value",time:"13 min",content:[
+{type:"concept",label:"What a Future Stream Is Worth Today",render:()=>(
 <div>
   <p>This lesson ties together everything: integration, the exponential function, and a core finance idea. It answers a question every investor asks: <strong>what is a future stream of money worth today?</strong></p>
-  <p>A dollar arriving five years from now is worth less than a dollar today, because today's dollar could be invested and grow. In <Ref to="exponentials"/> we found that under continuous compounding a dollar invested today grows to <M d="e^{rt}"/> dollars after <M d="t"/> years. Present value runs that in reverse: if a dollar today becomes <M d="e^{rt}"/> dollars later, then a dollar that arrives later is worth only <M d="\tfrac{1}{e^{rt}}=e^{-rt}"/> dollars today  -  you <em>divide</em> by the growth factor to undo the growth. That dividing-back is what <strong>discounting</strong> means, and <M d="e^{-rt}"/> is called the discount factor. The minus sign in the exponent is simply growth run backwards.</p>
-  <p>What does earning money "continuously" mean? Picture income flowing like water from a tap, instead of arriving in monthly lumps. A <strong>continuous income stream</strong> has a flow rate <M d="f(t)"/>  -  dollars per year at the instant <M d="t"/>, just as speed is miles per hour at an instant. Over a tiny slice of time <M d="dt"/> years you actually receive <M d="f(t)\,dt"/> dollars (rate times time, the same way speed times time gives distance). Each tiny payment is then pulled back to today's value by multiplying by <M d="e^{-rt}"/>, giving <M d="f(t)\,e^{-rt}\,dt"/>. Adding up every tiny slice from now (<M d="t=0"/>) to year <M d="T"/> is an integral:</p>
+  <p>A dollar arriving five years from now is worth less than a dollar today, because today's dollar could be invested and grow. In <Ref to="exponentials"/> we found that under continuous compounding a dollar invested today grows to <M d="e^{rt}"/> dollars after <M d="t"/> years. Present value runs that in reverse: if a dollar today becomes <M d="e^{rt}"/> dollars later, then a dollar that arrives later is worth only <M d="\tfrac{1}{e^{rt}}=e^{-rt}"/> dollars today; you <em>divide</em> by the growth factor to undo the growth. That dividing-back is what <strong>discounting</strong> means, and <M d="e^{-rt}"/> is called the discount factor. The minus sign in the exponent is simply growth run backwards.</p>
+  <p>What does earning money "continuously" mean? Picture income flowing like water from a tap, instead of arriving in monthly lumps. A <strong>continuous income stream</strong> has a flow rate <M d="f(t)"/>, dollars per year at the instant <M d="t"/>, just as speed is miles per hour at an instant. Over a tiny slice of time <M d="dt"/> years you actually receive <M d="f(t)\,dt"/> dollars (rate times time, the same way speed times time gives distance). Each tiny payment is then pulled back to today's value by multiplying by <M d="e^{-rt}"/>, giving <M d="f(t)\,e^{-rt}\,dt"/>. Adding up every tiny slice from now (<M d="t=0"/>) to year <M d="T"/> is an integral (<Ref to="riemann-sums"/>):</p>
   <M d="PV=\int_0^T f(t)\,e^{-rt}\,dt" block/>
   <p>Here <M d="r"/> is the annual rate (as a decimal) and <M d="T"/> is the number of years.</p>
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"concept",label:"Future Value: The Same Stream, Valued at the End",render:()=>(
 <div>
-  <p>When the income is a <strong>constant</strong> rate <M d="f(t)=R"/> dollars per year, the integral works out to a clean formula:</p>
-  <M d="PV=\int_0^T R\,e^{-rt}\,dt=\frac{R\,(1-e^{-rT})}{r}" block/>
-  <p>Memorize this shape: a constant times one minus a decay term, all divided by the rate. It saves you from redoing the integral each time.</p>
+  <p>Present value asks what the stream is worth <em>today</em>. A saver asks the opposite: if every payment is invested as it arrives, how much is in the account at the <em>end</em>, at time <M d="T"/>? That is the <strong>future value</strong>.</p>
+  <p>A payment <M d="f(t)\,dt"/> received at time <M d="t"/> has <M d="T-t"/> years left to grow, so by time <M d="T"/> it has become <M d="f(t)\,e^{r(T-t)}\,dt"/>. Add up the slices:</p>
+  <M d="FV=\int_0^T f(t)\,e^{r(T-t)}\,dt" block/>
+  <p>There is a shortcut. The factor <M d="e^{r(T-t)}"/> equals <M d="e^{rT}\cdot e^{-rt}"/> (exponent rule from <Ref to="exponentials"/>), and <M d="e^{rT}"/> does not depend on <M d="t"/>, so it slides out of the integral:</p>
+  <M d="FV=e^{rT}\int_0^T f(t)\,e^{-rt}\,dt=e^{rT}\cdot PV" block/>
+  <p>Future value is just present value grown forward for <M d="T"/> years. Compute one and you have the other.</p>
+</div>
+)},
+{type:"concept",label:"Forever: A Stream That Never Stops",render:()=>(
+<div>
+  <p>Some streams have no end date: a pension, a perpetual bond, a piece of land that produces rent every year. What is a stream worth if it goes on forever? The upper limit becomes infinity:</p>
+  <M d="PV=\int_0^{\infty}R\,e^{-rt}\,dt" block/>
+  <p>An integral with an infinite limit is called an <strong>improper integral</strong>, and it means exactly what <Ref to="infinite-limits"/> would suggest: integrate up to <M d="T"/>, then let <M d="T\to\infty"/>. For a constant rate <M d="R"/> the integral up to <M d="T"/> is <M d="\tfrac{R(1-e^{-rT})}{r}"/> (derived in the example below). As <M d="T\to\infty"/>, <M d="e^{-rT}\to 0"/> (decay toward zero, from <Ref to="exponentials"/>), so</p>
+  <M d="PV_{\text{forever}}=\lim_{T\to\infty}\frac{R\,(1-e^{-rT})}{r}=\frac{R}{r}" block/>
+  <p>An infinite stream has a finite value, because far-future dollars are discounted to almost nothing. At 6%, $10,000 a year forever is worth <M d="\tfrac{10000}{0.06}\approx\$166{,}667"/> today. Compare that with the $43,200 a five-year stream is worth (below): the first five years alone carry about a quarter of the value of eternity, and the years past 30 or 40 barely register.</p>
+</div>
+)},
+{type:"rule",label:"Income Stream Formulas",render:()=>(
+<div>
+  <M d="PV=\int_0^T f(t)\,e^{-rt}\,dt\qquad FV=e^{rT}\cdot PV" block/>
+  <p>When the income is a <strong>constant</strong> rate <M d="f(t)=R"/> dollars per year:</p>
+  <M d="PV=\frac{R\,(1-e^{-rT})}{r}\qquad FV=\frac{R\,(e^{rT}-1)}{r}\qquad PV_{\text{forever}}=\frac{R}{r}" block/>
+  <p>Memorize the shape of the first one: a constant times one minus a decay term, all divided by the rate. It saves you from redoing the integral each time. For a stream that <strong>grows</strong>, integrate by parts (<Ref to="integration-by-parts"/>).</p>
 </div>
 )},
 {type:"example",label:"Where the Formula Comes From",render:()=>(
 <div>
-  <p>Quick derivation so the formula is not magic. Integrate <M d="R\,e^{-rt}"/> from 0 to <M d="T"/>:</p>
+  <p>Quick derivation so the formula is not magic. Integrate <M d="R\,e^{-rt}"/> from 0 to <M d="T"/>, using the <M d="e^{kt}"/> shortcut from <Ref to="substitution"/> with <M d="k=-r"/>:</p>
   <M d="\int_0^T R\,e^{-rt}\,dt=R\cdot\Big[\frac{e^{-rt}}{-r}\Big]_0^T" block/>
   <p>Plug in top minus bottom:</p>
   <M d="=R\left(\frac{e^{-rT}}{-r}-\frac{e^{0}}{-r}\right)=R\cdot\frac{1-e^{-rT}}{r}" block/>
-  <p>That is the formula in the rule above. The <M d="e^{-rt}"/> integrates with the substitution from <Ref to="substitution"/>  -  and you can confirm the antiderivative by differentiating <M d="\tfrac{e^{-rt}}{-r}"/>, which hands back <M d="e^{-rt}"/>.</p>
+  <p>That is the formula in the rule above. You can confirm the antiderivative by differentiating <M d="\tfrac{e^{-rt}}{-r}"/>, which hands back <M d="e^{-rt}"/>.</p>
+  <p>For future value, multiply by <M d="e^{rT}"/>: <M d="e^{rT}\cdot\tfrac{R(1-e^{-rT})}{r}=\tfrac{R(e^{rT}-1)}{r}"/>, since <M d="e^{rT}\cdot e^{-rT}=1"/>.</p>
+</div>
+)},
+{type:"example",label:"A Growing Stream",render:()=>(
+<div>
+  <p>A business expects income starting at $10,000 a year and growing by $2,000 a year each year, so <M d="f(t)=10000+2000t"/>, for 5 years. At a 6% rate, what is the present value?</p>
+  <p><strong>Step 1: Set up and split.</strong></p>
+  <M d="PV=\int_0^5(10000+2000t)\,e^{-0.06t}\,dt=10000\int_0^5 e^{-0.06t}\,dt+2000\int_0^5 t\,e^{-0.06t}\,dt" block/>
+  <p><strong>Step 2: The constant part.</strong> The formula with <M d="R=10000"/>, <M d="r=0.06"/>, <M d="T=5"/>: <M d="\tfrac{10000(1-e^{-0.3})}{0.06}\approx\tfrac{10000(0.259182)}{0.06}\approx 43{,}197"/>.</p>
+  <p><strong>Step 3: The growing part, by parts</strong> (<Ref to="integration-by-parts"/>) with <M d="u=t"/>, <M d="dv=e^{-0.06t}dt"/>, so <M d="du=dt"/> and <M d="v=\tfrac{e^{-0.06t}}{-0.06}"/>:</p>
+  <M d="\int_0^5 t\,e^{-0.06t}\,dt=\Big[\frac{t\,e^{-0.06t}}{-0.06}\Big]_0^5+\frac{1}{0.06}\int_0^5 e^{-0.06t}\,dt" block/>
+  <p>The bracket at <M d="t=5"/> is <M d="\tfrac{5(0.740818)}{-0.06}\approx-61.735"/> (and 0 at <M d="t=0"/>). The remaining integral is <M d="\tfrac{1-e^{-0.3}}{0.06}\approx 4.3197"/>, and dividing by 0.06 again gives about <M d="71.995"/>. Total: <M d="-61.735+71.995\approx 10.260"/>.</p>
+  <p><strong>Step 4: Combine.</strong></p>
+  <M d="PV\approx 43197+2000(10.260)\approx 43197+20520\approx\$63{,}717" block/>
+  <p>Sanity check: the undiscounted total is <M d="\int_0^5(10000+2000t)\,dt=50000+25000=75{,}000"/>, so discounting took off about 15%, in line with the five-year, 6% setting.</p>
+  <Box color="green"><p>The growing stream is worth about $63,717 today: about $43,200 for the base $10,000 a year, plus about $20,500 for the growth.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>An investment pays $10,000 per year continuously for 5 years. At a 6% discount rate, what is its present value?</span>),
@@ -3102,14 +3283,27 @@ answer:()=>(<div>
   <p><strong>Step 3: Finish the arithmetic.</strong></p>
   <M d="PV=\frac{10000\,(0.2592)}{0.06}=\frac{2592}{0.06}=\$43{,}200" block/>
   <Graph fn={(t)=>10000*Math.exp(-0.06*t)} xMin={0} xMax={5.5} yMin={0} yMax={11000}
-    shades={[{top:(t)=>10000*Math.exp(-0.06*t),bottom:0,from:0,to:5,color:"rgba(99,102,241,0.30)"}]}
+    shades={[{top:(t)=>10000*Math.exp(-0.06*t),bottom:0,from:0,to:5,color:"rgba(230,180,90,0.3)"}]}
     highlights={[{x:0,y:10000,label:"rate now: $10K/yr",color:"#f59e0b",lo:[10,-14]},{x:5,y:7408,label:"discounted: $7,408/yr",color:"#10b981",lo:[-44,18]}]}
-    notes={[{x:2.5,y:4200,text:"Area = present value",color:"#c7d2fe"}]}
+    notes={[{x:2.5,y:4200,text:"Area = present value",color:"#f3d18a"}]}
     xlab="Years" ylab="$ per year"
     caption="This is the pay-rate curve after discounting. The shaded area under it from year 0 to year 5 is the present value, about $43,200."/>
-  <Box color="green"><p>Present value is about $43,200. The undiscounted total is $50,000, but future dollars are worth less, so today's value is lower.</p></Box>
+  <Box color="green"><p>Present value is about $43,200 (more precisely $43,197). The undiscounted total is $50,000, but future dollars are worth less, so today's value is lower.</p></Box>
+</div>)},
+{type:"practice",render:()=>(<span>A retiree's account will receive $5,000 a year continuously for 10 years, invested as it arrives at 4%. What will the account hold at the end of the 10 years? And what would the same $5,000 a year be worth today if it continued forever?</span>),
+answer:()=>(<div>
+  <p><strong>Part 1: Future value.</strong> Constant rate <M d="R=5000"/>, <M d="r=0.04"/>, <M d="T=10"/>, so <M d="rT=0.4"/>:</p>
+  <M d="FV=\frac{5000\,(e^{0.4}-1)}{0.04}" block/>
+  <p><M d="e^{0.4}\approx 1.49182"/>, so <M d="e^{0.4}-1\approx 0.49182"/>:</p>
+  <M d="FV\approx\frac{5000(0.49182)}{0.04}=\frac{2459.1}{0.04}\approx\$61{,}478" block/>
+  <p>Sanity check: $5,000 a year for 10 years is $50,000 of deposits, and the growth adds about $11,500 on top. Early deposits have nearly 10 years to grow; late ones have almost none.</p>
+  <p><strong>Part 2: Forever, valued today.</strong> The perpetuity formula:</p>
+  <M d="PV_{\text{forever}}=\frac{R}{r}=\frac{5000}{0.04}=\$125{,}000" block/>
+  <p>Interpretation: $125,000 invested today at 4% produces <M d="0.04\times 125000=5000"/> dollars a year of interest, forever, without touching the principal. That is exactly why <M d="\tfrac{R}{r}"/> is the answer: it is the lump sum whose interest <em>is</em> the stream.</p>
+  <Box color="green"><p>After 10 years the account holds about $61,478. The same stream forever is worth $125,000 today.</p></Box>
 </div>)},
 ]},
+
   ];
 }
 
@@ -4564,6 +4758,56 @@ export const QUIZ = {
    ]
   }
  ],
+ "average-value": [
+  {
+   "q": "The average value of $f$ on $[a,b]$ is:",
+   "choices": [
+    "$\\dfrac{f(a)+f(b)}{2}$",
+    "$\\dfrac{1}{b-a}\\displaystyle\\int_a^b f(x)\\,dx$",
+    "$\\displaystyle\\int_a^b f(x)\\,dx$",
+    "$f\\!\\left(\\dfrac{a+b}{2}\\right)$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - averaging only the two endpoint heights ignores everything the curve does in between.",
+    "Correct - the integral is the total, and dividing by the width $b-a$ turns it into an average height.",
+    "Not quite - the integral alone is the total area, not the average; it must be divided by the width.",
+    "Not quite - the height at the midpoint is one sample, not the average of the whole curve."
+   ]
+  },
+  {
+   "q": "What is the average value of $f(x)=x$ on $[0,4]$?",
+   "choices": [
+    "$4$",
+    "$8$",
+    "$2$",
+    "$1$"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - 4 is the largest height; the average of a line rising from 0 to 4 is halfway up.",
+    "Not quite - 8 is the integral (the triangle's area); divide by the width 4 to get the average.",
+    "Correct - $\\dfrac{1}{4}\\int_0^4 x\\,dx=\\dfrac{1}{4}\\cdot 8=2$, the midpoint height of a straight line.",
+    "Not quite - the line rises from 0 to 4, so its average height is 2, not 1."
+   ]
+  },
+  {
+   "q": "Geometrically, the average value of $f$ on $[a,b]$ is:",
+   "choices": [
+    "The height of the rectangle over $[a,b]$ with the same area as the region under $f$",
+    "The width of the region under $f$",
+    "The slope of $f$ at the midpoint",
+    "The largest height $f$ reaches on $[a,b]$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - $f_{\\text{avg}}\\cdot(b-a)$ equals the integral, so a rectangle of that height matches the region's area.",
+    "Not quite - the width is just $b-a$; the average is a height.",
+    "Not quite - slope is a derivative idea; average value comes from an integral.",
+    "Not quite - the average is below the maximum height (unless the function is constant)."
+   ]
+  }
+ ],
  "surplus": [
   {
    "q": "On a graph, consumer surplus is the area that is:",
@@ -4632,19 +4876,19 @@ export const QUIZ = {
    ]
   },
   {
-   "q": "Why is a dollar arriving five years from now worth less than a dollar today?",
+   "q": "What is the present value of $R$ dollars a year, continuously, forever, at rate $r$?",
    "choices": [
-    "Because money loses its color over time",
-    "Because future dollars are taxed twice",
-    "Because today's dollar could be invested and grow",
-    "Because banks refuse to hold old dollars"
+    "$R\\cdot r$",
+    "$\\dfrac{R}{r}$",
+    "$R\\,e^{-r}$",
+    "Infinite, because the stream never ends"
    ],
-   "answer": 2,
+   "answer": 1,
    "why": [
-    "This is not a real reason; dollars do not change in any such way.",
-    "Double taxation is not the reason; discounting comes from the chance to invest today.",
-    "Correct: a dollar today can be invested to grow, so future dollars are worth less now.",
-    "This is not true and is not why future money is discounted."
+    "Not quite - multiplying by the rate gives one year's interest on $R$, not the value of the stream.",
+    "Correct - the improper integral $\\int_0^{\\infty}R\\,e^{-rt}\\,dt$ equals $\\dfrac{R}{r}$, the lump sum whose interest is the stream.",
+    "Not quite - that discounts a single payment of $R$ by one year; the stream needs the whole integral.",
+    "Not quite - far-future dollars are discounted to almost nothing, so the total converges to $\\dfrac{R}{r}$."
    ]
   },
   {
