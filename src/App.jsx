@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useId, Component } from "react";
 import { buildLessons, QUIZ } from "./content.jsx";
+import { migrateSave, freshSave } from "./progress.js";
 
 // Shared KaTeX readiness signal: every <M> renders raw LaTeX immediately, then
 // re-typesets once the CDN script finishes loading. A single poller notifies
@@ -477,14 +478,14 @@ function progressKey(session){
   return SAVE_KEY;
 }
 function loadSave(key){
-  try{const s=JSON.parse(localStorage.getItem(key||SAVE_KEY));if(s)return s;}catch(e){console.warn("Ignoring unreadable saved progress:",e);}
-  return {done:[],idx:0,xp:0};
+  try{const s=JSON.parse(localStorage.getItem(key||SAVE_KEY));if(s)return migrateSave(s,L.map(l=>l.slug));}catch(e){console.warn("Ignoring unreadable saved progress:",e);}
+  return freshSave();
 }
 // Resume point: the first lesson the learner has not completed yet
 // (Lesson 1 for a brand-new account; the last lesson if everything is done).
 function firstIncompleteIdx(doneArr){
   const d=new Set(doneArr||[]);
-  for(let i=0;i<L.length;i++){if(!d.has(i))return i;}
+  for(let i=0;i<L.length;i++){if(!d.has(L[i].slug))return i;}
   return Math.max(0,L.length-1);
 }
 
@@ -509,33 +510,42 @@ function MX({s}){
 }
 
 // Per-lesson inspiration card (indexed by lesson position). Quotes are genuine and attributed.
-const INSPO=[
-  {t:"Roger Bacon",b:"\"Mathematics is the gate and key to the sciences.\" You are turning that key right now - and it all starts with the humble function."},
-  {t:"The whole course in one idea",b:"Slope answers a single question: how fast is something changing? Every big idea ahead - derivatives, integrals - is a twist on that one question."},
-  {t:"Meet a famous number",b:"The number e turns up wherever growth feeds on itself: savings, populations, even how a hot cup of coffee cools. You will see it for the rest of the course."},
-  {t:"Pierre-Simon Laplace",b:"Laplace said the invention of logarithms, \"by shortening the labours, doubled the life of the astronomer.\" One good idea can give you time back."},
-  {t:"A clever trick",b:"A limit is calculus learning to sneak up on the impossible - getting infinitely close to an answer you cannot reach head-on. Beautiful, once it clicks."},
-  {t:"Georg Cantor",b:"\"The essence of mathematics lies in its freedom.\" Cantor tamed infinity itself - and here you are, looking in that same direction."},
-  {t:"Smooth sailing",b:"Continuity is the math of 'no sudden jumps' - curves you can draw without lifting your pen. It is what makes everything ahead possible."},
-  {t:"Isaac Newton",b:"\"If I have seen further, it is by standing on the shoulders of giants.\" Newton co-invented the very derivative you are about to learn."},
-  {t:"The shortcut",b:"Once you see the pattern, you never unsee it. The power rule turns a whole page of limit algebra into a one-second move."},
-  {t:"Calculus at work",b:"This is calculus earning its keep. 'What does one more unit cost, or earn?' is how real businesses and economists actually decide."},
-  {t:"Its own echo",b:"e^x is the one function that is its own rate of change - it grows exactly as fast as it already is. Nature reuses this trick everywhere."},
-  {t:"Keep asking why",b:"Every rule here was discovered by someone asking 'but why does that work?' - the exact question that is serving you so well right now."},
-  {t:"Rates within rates",b:"The chain rule is how calculus handles a world of nested causes - speeds inside speeds. Once you spot it, you will see it everywhere."},
-  {t:"William Thurston",b:"\"Mathematics is an art of human understanding.\" That is exactly what elasticity gives you - not a formula to memorize, but a way to understand how price and demand pull on each other."},
-  {t:"Albert Einstein",b:"\"Pure mathematics is, in its way, the poetry of logical ideas.\" Finding a curve's peaks and valleys is a little piece of that poetry."},
-  {t:"The second look",b:"Concavity is calculus noticing not just where you are headed, but whether you are speeding up or easing off. Subtle, and powerful."},
-  {t:"Albert Einstein",b:"\"Do not worry about your difficulties in mathematics. I can assure you mine are still greater.\" If Einstein struggled, you are in fine company - keep going."},
-  {t:"Leonhard Euler",b:"\"Nothing takes place in the world whose meaning is not that of some maximum or minimum.\" Optimization is calculus finding the best of everything."},
-  {t:"Reverse gear",b:"Every derivative you learned now runs backward. That reverse gear is what unlocks areas, totals, and even the future."},
-  {t:"Rename and conquer",b:"Substitution is the oldest trick in problem-solving: when something is too hard, rename it into something you already know."},
-  {t:"Infinite slices",b:"An integral adds up infinitely many infinitely-thin slices and still lands on a clean, finite answer. That it works at all is a quiet miracle."},
-  {t:"John von Neumann",b:"\"The calculus was the first achievement of modern mathematics, and it is difficult to overestimate its importance.\" You are now holding its crown jewel."},
-  {t:"Mind the gap",b:"The gap between two curves can mean profit, surplus, or growth. Calculus measures that gap exactly - no guessing."},
-  {t:"Hidden value",b:"Behind every supply-and-demand graph is a real story of value created. Calculus puts a number on the bonus everyone walks away with."},
-  {t:"You made it",b:"From one humble function to pricing the future - look how far you have come. Wherever numbers lead next, you now speak their language."},
-];
+// Per-lesson inspiration cards, keyed by slug so inserting a lesson never
+// shifts a card onto the wrong lesson.
+const INSPO={
+  "functions":{t:"Roger Bacon",b:"\"Mathematics is the gate and key to the sciences.\" You are turning that key right now - and it all starts with the humble function."},
+  "lines":{t:"The whole course in one idea",b:"Slope answers a single question: how fast is something changing? Every big idea ahead - derivatives, integrals - is a twist on that one question."},
+  "quadratics":{t:"The shape of every deal",b:"Revenue, profit, and cost curves in this course are parabolas. Learn one U-shape well and you have read every business chart ahead of you."},
+  "business-models":{t:"Calculus needs a subject",b:"Cost, revenue, profit, demand: these are the functions calculus will soon differentiate and integrate. Meet them first as plain ideas, and the math later will feel like a conversation with old friends."},
+  "exponentials":{t:"Meet a famous number",b:"The number e turns up wherever growth feeds on itself: savings, populations, even how a hot cup of coffee cools. You will see it for the rest of the course."},
+  "logarithms":{t:"Pierre-Simon Laplace",b:"Laplace said the invention of logarithms, \"by shortening the labours, doubled the life of the astronomer.\" One good idea can give you time back."},
+  "limits":{t:"A clever trick",b:"A limit is calculus learning to sneak up on the impossible - getting infinitely close to an answer you cannot reach head-on. Beautiful, once it clicks."},
+  "infinite-limits":{t:"Georg Cantor",b:"\"The essence of mathematics lies in its freedom.\" Cantor tamed infinity itself - and here you are, looking in that same direction."},
+  "continuity":{t:"Smooth sailing",b:"Continuity is the math of 'no sudden jumps' - curves you can draw without lifting your pen. It is what makes everything ahead possible."},
+  "derivative":{t:"Isaac Newton",b:"\"If I have seen further, it is by standing on the shoulders of giants.\" Newton co-invented the very derivative you are about to learn."},
+  "power-rule":{t:"The shortcut",b:"Once you see the pattern, you never unsee it. The power rule turns a whole page of limit algebra into a one-second move."},
+  "tangent-lines":{t:"The straight line inside every curve",b:"Zoom in on any smooth curve and it turns into a straight line. That single fact is why a derivative can predict tomorrow from today."},
+  "marginal":{t:"Calculus at work",b:"This is calculus earning its keep. 'What does one more unit cost, or earn?' is how real businesses and economists actually decide."},
+  "exp-log-derivatives":{t:"Its own echo",b:"e^x is the one function that is its own rate of change - it grows exactly as fast as it already is. Nature reuses this trick everywhere."},
+  "product-quotient":{t:"Keep asking why",b:"Every rule here was discovered by someone asking 'but why does that work?' - the exact question that is serving you so well right now."},
+  "chain-rule":{t:"Rates within rates",b:"The chain rule is how calculus handles a world of nested causes - speeds inside speeds. Once you spot it, you will see it everywhere."},
+  "implicit-related-rates":{t:"Everything moves at once",b:"In a real business, price, demand, and revenue all change together over time. Related rates is calculus keeping track of all of them in one equation."},
+  "elasticity":{t:"William Thurston",b:"\"Mathematics is an art of human understanding.\" That is exactly what elasticity gives you - not a formula to memorize, but a way to understand how price and demand pull on each other."},
+  "first-derivative-test":{t:"Albert Einstein",b:"\"Pure mathematics is, in its way, the poetry of logical ideas.\" Finding a curve's peaks and valleys is a little piece of that poetry."},
+  "concavity":{t:"The second look",b:"Concavity is calculus noticing not just where you are headed, but whether you are speeding up or easing off. Subtle, and powerful."},
+  "absolute-extrema":{t:"Albert Einstein",b:"\"Do not worry about your difficulties in mathematics. I can assure you mine are still greater.\" If Einstein struggled, you are in fine company - keep going."},
+  "optimization":{t:"Leonhard Euler",b:"\"Nothing takes place in the world whose meaning is not that of some maximum or minimum.\" Optimization is calculus finding the best of everything."},
+  "antiderivatives":{t:"Reverse gear",b:"Every derivative you learned now runs backward. That reverse gear is what unlocks areas, totals, and even the future."},
+  "substitution":{t:"Rename and conquer",b:"Substitution is the oldest trick in problem-solving: when something is too hard, rename it into something you already know."},
+  "riemann-sums":{t:"Archimedes",b:"More than 2,200 years ago Archimedes found the exact area under a parabola by adding up ever thinner slices. You are about to do the same thing, with a slider instead of a stylus."},
+  "definite-integral":{t:"Infinite slices",b:"An integral adds up infinitely many infinitely-thin slices and still lands on a clean, finite answer. That it works at all is a quiet miracle."},
+  "ftc":{t:"John von Neumann",b:"\"The calculus was the first achievement of modern mathematics, and it is difficult to overestimate its importance.\" You are now holding its crown jewel."},
+  "integration-by-parts":{t:"The product rule, backwards",b:"Every differentiation rule hides an integration rule inside it. Integration by parts is the product rule run in reverse, and it unlocks integrals no substitution can touch."},
+  "area-between-curves":{t:"Mind the gap",b:"The gap between two curves can mean profit, surplus, or growth. Calculus measures that gap exactly - no guessing."},
+  "average-value":{t:"One number for a whole season",b:"A curve has infinitely many heights. Calculus can still say what its average is, exactly, and that average is what a manager actually plans around."},
+  "surplus":{t:"Hidden value",b:"Behind every supply-and-demand graph is a real story of value created. Calculus puts a number on the bonus everyone walks away with."},
+  "income-streams":{t:"You made it",b:"From one humble function to pricing the future - look how far you have come. Wherever numbers lead next, you now speak their language."},
+};
 
 const QLETTERS=["A","B","C","D"];
 export function Quiz({quiz,passed,onPass,onNext,nextLabel}){
@@ -697,7 +707,7 @@ function Certificate({fullName,dateStr,onPrint}){
         <div style={{height:1,width:"min(440px,82%)",background:`linear-gradient(90deg,transparent,${gold},transparent)`,margin:"0 auto 22px"}}/>
 
         <div style={{fontSize:"clamp(14px,2.4vw,16.5px)",lineHeight:1.85,color:"#3a4254",fontFamily:ui,maxWidth:560,margin:"0 auto"}}>
-          has successfully completed the <strong style={{color:ink}}>Lenamon Calculus</strong> course, comprising all 25 lessons across 6 modules of business calculus, demonstrating mastery from foundations and limits through derivatives, integration, and their real-world business applications.
+          has successfully completed the <strong style={{color:ink}}>Lenamon Calculus</strong> course, comprising all {L.length} lessons across {MODULES.length} modules of business calculus, demonstrating mastery from foundations and limits through derivatives, integration, and their real-world business applications.
         </div>
 
         <div style={{margin:"22px auto 4px",display:"flex",justifyContent:"center"}}><CertSeal/></div>
@@ -834,12 +844,12 @@ export function Course({session,onSignOut,onBrand}){
 
 
   useEffect(()=>{
-    try{localStorage.setItem(storeKey,JSON.stringify({done:[...done],idx,xp,completedAt}));}catch(e){console.warn("Could not save lesson progress:",e);}
+    try{localStorage.setItem(storeKey,JSON.stringify({v:2,done:[...done],idx,xp,completedAt}));}catch(e){console.warn("Could not save lesson progress:",e);}
   },[done,idx,xp,completedAt,storeKey]);
 
   // Stamp the completion date the first time every lesson is done.
   useEffect(()=>{
-    if(done.size>=L.length&&!completedAt) setCompletedAt(new Date().toISOString());
+    if(L.every(l=>done.has(l.slug))&&!completedAt) setCompletedAt(new Date().toISOString());
   },[done,completedAt]);
 
   // Scroll-spy: the "On this page" rail tracks which block is being read.
@@ -865,18 +875,20 @@ export function Course({session,onSignOut,onBrand}){
 
   const level=Math.floor(xp/XP_PER_LEVEL)+1;
   const lesson=L[idx];
-  const allDone=done.size>=L.length;
+  // A certificate, once earned, stays earned even after the curriculum grows.
+  const allDone=L.every(l=>done.has(l.slug))||!!completedAt;
   const certDate=(completedAt?new Date(completedAt):new Date()).toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
   const fullName=session?`${session.firstName||""} ${session.lastName||""}`.trim():"";
   const lessonQuiz=QUIZ[lesson.slug];
   const hasQuiz=!!(lessonQuiz&&lessonQuiz.length);
-  const passed=done.has(idx);
+  const passed=done.has(lesson.slug);
   const toggle=(i)=>setAns(p=>({...p,[`${idx}-${i}`]:!p[`${idx}-${i}`]}));
   // Completing a lesson the first time awards XP and fires the confetti once;
   // calling it again for an already-done lesson is a no-op.
   const completeLesson=(i)=>{
-    if(done.has(i))return;
-    setDone(p=>new Set([...p,i]));setXp(p=>p+XP_PER_LESSON);setBurst(b=>b+1);
+    const slug=L[i].slug;
+    if(done.has(slug))return;
+    setDone(p=>new Set([...p,slug]));setXp(p=>p+XP_PER_LESSON);setBurst(b=>b+1);
   };
   // Passing the quiz is what completes a lesson (awards XP, confetti once).
   const passQuiz=()=>completeLesson(idx);
@@ -908,7 +920,7 @@ export function Course({session,onSignOut,onBrand}){
       <PB completed={done.size} total={L.length}/>
       {MODULES.map(mod=>{
         const modLessons=L.filter(l=>l.module===mod);
-        const modDone=modLessons.filter(l=>done.has(L.indexOf(l))).length;
+        const modDone=modLessons.filter(l=>done.has(l.slug)).length;
         return(
         <div key={mod} style={{marginBottom:16}}>
           <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:8,marginBottom:6,paddingBottom:4,borderBottom:"1px solid rgba(148,166,200,0.14)"}}>
@@ -917,7 +929,7 @@ export function Course({session,onSignOut,onBrand}){
           </div>
           {modLessons.map(l=>{
             const i=L.indexOf(l);
-            const isDone=done.has(i);
+            const isDone=done.has(l.slug);
             const isAct=i===idx;
             return(
               <div key={l.id} role="button" tabIndex={0} aria-current={isAct?"true":undefined} onClick={()=>{setIdx(i);setAns({});setSidebarOpen(false);}} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setIdx(i);setAns({});setSidebarOpen(false);}}} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:2,borderRadius:8,cursor:"pointer",background:isAct?"rgba(230,180,90,0.10)":"transparent",border:isAct?"1px solid rgba(230,180,90,0.34)":"1px solid transparent",transition:"background 0.15s,border 0.15s"}}>
@@ -1064,8 +1076,8 @@ export function Course({session,onSignOut,onBrand}){
               </div>
               <div style={{background:"linear-gradient(160deg,rgba(230,180,90,0.10),rgba(230,180,90,0.03))",border:"1px solid rgba(230,180,90,0.24)",borderTop:"1px solid rgba(240,205,140,0.32)",borderRadius:16,padding:"16px 18px"}}>
                 <div style={{fontSize:9.5,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#e9c37a",marginBottom:8}}>A little inspiration</div>
-                <div style={{fontSize:13,fontWeight:700,color:"#f3d18a",marginBottom:6}}>{(INSPO[idx]||INSPO[0]).t}</div>
-                <div style={{fontSize:13,lineHeight:1.75,color:"#b6c0d2",fontFamily:"'Source Serif 4',Georgia,serif"}}>{(INSPO[idx]||INSPO[0]).b}</div>
+                <div style={{fontSize:13,fontWeight:700,color:"#f3d18a",marginBottom:6}}>{(INSPO[lesson.slug]||INSPO.functions).t}</div>
+                <div style={{fontSize:13,lineHeight:1.75,color:"#b6c0d2",fontFamily:"'Source Serif 4',Georgia,serif"}}>{(INSPO[lesson.slug]||INSPO.functions).b}</div>
               </div>
               <div style={{padding:"4px 4px 0"}}>
                 <div style={{fontSize:11,color:"#64748b",marginBottom:6,fontWeight:600}}>Course progress</div>
@@ -1566,7 +1578,7 @@ function LandingPage({loggedIn,userName,onCreate,onSignIn,onContinue,onAdmin,onS
                   <div style={{transform:"scale(0.62)",transformOrigin:"top center"}}><CertSeal/></div>
                 </div>
               </div>
-              <p style={{fontSize:14,lineHeight:1.65,color:MUTED,margin:"16px 0 0"}}>Pass all 25 quizzes and the certificate unlocks, printed with your name and the date you earned it.</p>
+              <p style={{fontSize:14,lineHeight:1.65,color:MUTED,margin:"16px 0 0"}}>Pass all {L.length} quizzes and the certificate unlocks, printed with your name and the date you earned it.</p>
             </div>
           </div>
         </Reveal>
