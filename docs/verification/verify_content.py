@@ -447,7 +447,4 @@ check("2459.1/0.04", 2459.1 / 0.04, 61477.5, 1e-4)
 check("R'(0) vs C'(0)", 60 - 20, 40)
 check("marginal profit area bracket", 40 * 200 - 0.1 * 200**2, 4000)
 
-print(f"
-
-print(f"
-ALL {ok} CHECKS PASSED")
+print(f"\nALL {ok} CHECKS PASSED")
