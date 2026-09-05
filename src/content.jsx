@@ -763,22 +763,17 @@ answer:()=>(
 )},
 ]},
 
-{slug:"limits",module:"Limits & Continuity",title:"Introduction to Limits",time:"10 min",content:[
-{type:"concept",render:()=>(
+{slug:"limits",module:"Limits & Continuity",title:"Introduction to Limits",time:"11 min",content:[
+{type:"concept",label:"What a Limit Asks",render:()=>(
 <div>
-  <p>Before we learn derivatives (the main event of calculus), we need to understand <strong>limits</strong>. The idea is actually simpler than it sounds.</p>
-
+  <p>Before we learn derivatives (the main event of calculus), we need to understand <strong>limits</strong>. The idea is simpler than it sounds.</p>
   <p>A limit asks one question: <strong>"What number is <M d="f(x)"/> getting closer and closer to?"</strong></p>
-
   <p>Let's see this with a real example. Take this function:</p>
   <M d="f(x) = \frac{x^2 - 4}{x - 2}" block/>
   <p>What happens if we plug in <M d="x = 2"/>?</p>
-  <M d="f(2) = \frac{4 - 4}{2 - 2} = \frac{0}{0} \quad\text{ -  breaks! Can't divide by zero.}" block/>
-
-  <p>OK so the function breaks at <M d="x=2"/>. But what if we sneak up on 2  -  plug in numbers <em>really close</em> to 2, from both sides?</p>
-
-  <p>Where do these numbers come from? Let's compute the first one by hand so you can see they are not magic. Put <M d="x=1.9"/> into <M d="\dfrac{x^2-4}{x-2}"/>. The top is <M d="1.9^2-4 = 3.61-4 = -0.39"/>. The bottom is <M d="1.9-2 = -0.1"/>. Dividing, <M d="\dfrac{-0.39}{-0.1}=3.9"/> (a negative divided by a negative is positive). Every other row is computed the same way  -  try one yourself.</p>
-
+  <M d="f(2) = \frac{4 - 4}{2 - 2} = \frac{0}{0}" block/>
+  <p>That breaks: dividing by zero is the first jam from <Ref to="functions"/>. So the function has no value at exactly <M d="x=2"/>. But what if we sneak up on 2, plugging in numbers <em>really close</em> to 2 from both sides?</p>
+  <p>Where do these numbers come from? Let's compute the first one by hand so you can see they are not magic. Put <M d="x=1.9"/> into <M d="\dfrac{x^2-4}{x-2}"/>. The top is <M d="1.9^2-4 = 3.61-4 = -0.39"/>. The bottom is <M d="1.9-2 = -0.1"/>. Dividing, <M d="\dfrac{-0.39}{-0.1}=3.9"/> (a negative divided by a negative is positive). Every other row is computed the same way; try one yourself.</p>
   <Box>
     <p><strong>Sneaking up from the left (below 2):</strong></p>
     <p><M d="f(1.9) = 3.9"/></p>
@@ -789,85 +784,113 @@ answer:()=>(
     <p><M d="f(2.01) = 4.01"/></p>
     <p><M d="f(2.001) = 4.001"/></p>
   </Box>
-
-  <p>See the pattern? From the left: 3.9, 3.99, 3.999… heading toward <strong>4</strong>. From the right: 4.1, 4.01, 4.001… also heading toward <strong>4</strong>.</p>
-
-  <p>Even though the function <em>breaks</em> at exactly 2, we can see exactly where it was <em>headed</em>. That "destination" is the <strong>limit</strong>.</p>
-
+  <p>See the pattern? From the left: 3.9, 3.99, 3.999, heading toward <strong>4</strong>. From the right: 4.1, 4.01, 4.001, also heading toward <strong>4</strong>.</p>
+  <p>Even though the function <em>breaks</em> at exactly 2, we can see exactly where it was <em>headed</em>. That destination is the <strong>limit</strong>.</p>
   <p>We write it like this:</p>
   <M d="\lim_{x \to 2} f(x) = 4" block/>
-  <p>Read this as: <em>"The limit of f(x), as x approaches 2, is 4."</em></p>
-
-  <p>One more thing about this example, because it explains the whole picture. That fraction <M d="\dfrac{x^2-4}{x-2}"/> is secretly just the straight line <M d="y=x+2"/>, with a single point punched out at <M d="x=2"/> (we will prove that with algebra in the practice problem below). That is exactly why the table marched so neatly toward 4.</p>
-
+  <p>Read this as: <em>"the limit of f(x), as x approaches 2, is 4."</em></p>
+  <p>One more thing about this example, because it explains the whole picture. That fraction <M d="\dfrac{x^2-4}{x-2}"/> is secretly just the straight line <M d="y=x+2"/> with a single point punched out at <M d="x=2"/> (the first practice problem proves it with algebra). That is exactly why the table marched so neatly toward 4.</p>
   <Graph fn={(x) => x + 2} xMin={-1} xMax={5} yMin={-1} yMax={7}
-    highlights={[{ x: 2, y: 4, open: true, label: "hole  -  f(2) undefined", color: "#f59e0b", lo: [12, 16] }]}
+    highlights={[{ x: 2, y: 4, open: true, label: "hole: f(2) undefined", color: "#f59e0b", lo: [12, 16] }]}
     label="The graph has a hole at x = 2"
-    caption="The function follows y = x + 2, but there's a missing dot at (2, 4). The limit is still 4."
+    caption="The function follows y = x + 2, but there is a missing dot at (2, 4). The limit is still 4."
   />
 </div>
 )},
-{type:"rule",render:()=>(
+{type:"concept",label:"When You Can Just Plug In",render:()=>(
 <div>
-  <p><strong>Approaching from each side separately</strong></p>
-
-  <p>In the example above, we checked numbers from both sides of 2. Sometimes you need to do this carefully, because a function might approach <em>different</em> values from the left vs. right.</p>
-
-  <p>Think of it like walking along a road toward a bridge. You can approach from the left bank or the right bank. If both sides of the road meet at the same point, the bridge connects. If they don't line up, there's a gap  -  and the limit doesn't exist.</p>
-
-  <p>Here we use the letter <M d="c"/> to stand for whatever number <M d="x"/> is approaching. In the example above <M d="c"/> was 2, but the same idea works for any target number.</p>
-  <p>The notation for checking each side:</p>
+  <p>The table method is the honest definition, but most of the time there is a shortcut. If the function has no jam at the target number, then the limit is simply the function's value there. Plug in and you are done:</p>
+  <M d="\lim_{x\to 3}\,(x^2+2x)=3^2+2(3)=15" block/>
+  <p>Why is that allowed? A polynomial like <M d="x^2+2x"/> (from <Ref to="quadratics"/>) has no fractions and no square roots, so nothing can jam. Its graph is one unbroken curve, and if you sneak up on <M d="x=3"/> along an unbroken curve you arrive exactly at the height <M d="f(3)"/>. There is no hole to fall into. This is called <strong>direct substitution</strong>, and <Ref to="continuity"/> gives the "unbroken" idea its proper name.</p>
+  <p>The same reasoning makes limits respect ordinary arithmetic. If <M d="f(x)"/> is heading to <M d="L"/> and <M d="g(x)"/> is heading to <M d="K"/>, then:</p>
   <Box>
-    <p><M d="\lim_{x\to c^-}f(x)"/> = the value <M d="f(x)"/> approaches from the <strong>left</strong></p>
-    <p>(using values like 1.9, 1.99, 1.999…)</p>
-    <p><M d="\lim_{x\to c^+}f(x)"/> = the value <M d="f(x)"/> approaches from the <strong>right</strong></p>
-    <p>(using values like 2.1, 2.01, 2.001…)</p>
+    <p><M d="f(x)+g(x)"/> heads to <M d="L+K"/> (and the same with a minus)</p>
+    <p><M d="c\cdot f(x)"/> heads to <M d="c\cdot L"/> for any constant <M d="c"/></p>
+    <p><M d="f(x)\cdot g(x)"/> heads to <M d="L\cdot K"/></p>
+    <p><M d="\dfrac{f(x)}{g(x)}"/> heads to <M d="\dfrac{L}{K}"/>, as long as <M d="K\neq 0"/></p>
   </Box>
-  <p>The full limit exists <strong>only if both sides arrive at the same number</strong>.</p>
-
-  <p><strong>What does <M d="\tfrac{0}{0}"/> mean?</strong></p>
-  <p>When you plug in and get <M d="\tfrac{0}{0}"/>, it does NOT mean the answer is 0. It does NOT mean the limit doesn't exist. It's a signal that says: <em>"I can't tell yet  -  you need to simplify the algebra first."</em></p>
-  <p>The fix is almost always: <strong>factor the top and bottom → cancel the common factor → try plugging in again.</strong></p>
+  <p>These are called the <strong>limit laws</strong>, and they say something reassuring: you can take a complicated function apart, find the limit of each piece, and put the answers back together. The one exception is that last line. When the bottom heads to zero, plugging in fails, and that is precisely the situation the rest of this lesson is about.</p>
 </div>
 )},
-{type:"practice",render:()=>(<span>Find <M d="\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}"/> using algebra (confirming our table from above).</span>),
+{type:"rule",label:"One-Sided Limits and the 0/0 Signal",render:()=>(
+<div>
+  <p><strong>Approaching from each side separately.</strong> In the first example we checked numbers from both sides of 2. Sometimes you need to do this carefully, because a function might approach <em>different</em> values from the left and from the right.</p>
+  <p>Think of it like walking along a road toward a bridge. You can approach from the left bank or the right bank. If both sides of the road meet at the same point, the bridge connects. If they do not line up, there is a gap, and the limit does not exist.</p>
+  <p>Here we use the letter <M d="c"/> to stand for whatever number <M d="x"/> is approaching. In the first example <M d="c"/> was 2, but the same idea works for any target number.</p>
+  <Box>
+    <p><M d="\lim_{x\to c^-}f(x)"/> = the value <M d="f(x)"/> approaches from the <strong>left</strong> (using values like 1.9, 1.99, 1.999 when <M d="c=2"/>)</p>
+    <p><M d="\lim_{x\to c^+}f(x)"/> = the value <M d="f(x)"/> approaches from the <strong>right</strong> (using values like 2.1, 2.01, 2.001)</p>
+  </Box>
+  <p>The full limit exists <strong>only if both sides arrive at the same number</strong>.</p>
+  <p><strong>Direct substitution.</strong> If plugging in <M d="c"/> causes no jam, the limit is just <M d="f(c)"/>.</p>
+  <p><strong>What <M d="\tfrac{0}{0}"/> means.</strong> When you plug in and get <M d="\tfrac{0}{0}"/>, it does NOT mean the answer is 0, and it does NOT mean the limit fails to exist. It is a signal that says: <em>"I cannot tell yet; simplify the algebra first."</em> The fix is almost always the recipe from <Ref to="quadratics"/>: <strong>factor the top and bottom, cancel the common factor, then plug in again.</strong></p>
+</div>
+)},
+{type:"example",label:"Two Sides That Disagree",render:()=>(
+<div>
+  <p>A courier charges <strong>$5</strong> for any parcel lighter than 2 kg and <strong>$8</strong> for any parcel weighing 2 kg or more. Write the price as a function of the weight <M d="w"/>:</p>
+  <M d="f(w)=\begin{cases}5 & \text{if } w<2\\ 8 & \text{if } w\ge 2\end{cases}" block/>
+  <p>(That big brace is just a way to write a function with two rules; you read off whichever line matches your input. A function defined this way is called <strong>piecewise</strong>.) What is <M d="\lim_{w\to 2}f(w)"/>?</p>
+  <p><strong>From the left:</strong> parcels of 1.9 kg, 1.99 kg, 1.999 kg all cost $5. So <M d="\lim_{w\to 2^-}f(w)=5"/>.</p>
+  <p><strong>From the right:</strong> parcels of 2.1 kg, 2.01 kg, 2.001 kg all cost $8. So <M d="\lim_{w\to 2^+}f(w)=8"/>.</p>
+  <p>The two sides disagree, 5 versus 8, so <M d="\lim_{w\to 2}f(w)"/> <strong>does not exist</strong>. Notice that the function has a perfectly good value at 2 (it is 8). A limit is about where you are <em>heading</em>, and here the left and right roads head to different bridges.</p>
+  <p>Here is an algebraic version of the same thing:</p>
+  <M d="g(x)=\begin{cases}x+1 & \text{if } x<2\\ 6-x & \text{if } x\ge 2\end{cases}" block/>
+  <p>From the left the first rule applies, and as <M d="x"/> creeps toward 2, <M d="x+1"/> creeps toward <M d="3"/>. From the right the second rule applies, and <M d="6-x"/> creeps toward <M d="4"/>. Left gives 3, right gives 4: the limit at 2 does not exist. The graph shows the leap.</p>
+  <Graph fns={[(x)=>x<2?x+1:NaN,(x)=>x>=2?6-x:NaN]} xMin={-1} xMax={5} yMin={0} yMax={6}
+    highlights={[{x:2,y:3,open:true,label:"left side heads to 3",color:"#818cf8",lo:[-124,-10]},{x:2,y:4,label:"right side starts at 4",color:"#f472b6",lo:[10,-10]}]}
+    caption="A jump: the left piece arrives at height 3 (hollow dot, not included) while the right piece begins at height 4 (solid dot)."/>
+  <Box color="green"><p>In both examples the one-sided limits exist but differ, so the two-sided limit does not exist. Business functions with thresholds, such as shipping tiers, tax brackets, and volume discounts, jump exactly like this.</p></Box>
+</div>
+)},
+{type:"interactive",render:()=>(<ParamExplorer xMin={0} xMax={4} yMin={0} yMax={6.5} min={0} max={4} step={0.01} start={1.5} name="x" hint="slide toward x = 2 from either side"
+  intro="This is the function (x squared minus 4) over (x minus 2) from the start of the lesson. Slide x toward 2 from the left and from the right and watch where the point is heading. At exactly x = 2 the point vanishes, because the function has no value there."
+  build={(x)=>{const at2=Math.abs(x-2)<0.005;const y=at2?null:(x*x-4)/(x-2);return{curves:[{f:(v)=>v+2,color:"#818cf8"}],points:at2?[{x:2,y:4,open:true,color:"#f59e0b",label:"hole at (2, 4)",lx:10,ly:-12}]:[{x:2,y:4,open:true,color:"#f59e0b"},{x,y,color:"#fbbf24",label:`f(${x.toFixed(2)}) = ${y.toFixed(3)}`,lx:x<2?-12:12,ly:-14,anchor:x<2?"end":"start"}],formula:at2?"f(2)=\\tfrac{0}{0}\\ \\text{(undefined)}":`f(${x.toFixed(2)})=${y.toFixed(3)}`,caption:at2?"At exactly x = 2 the function jams: 0/0, no value. Yet the limit is still 4, because both sides were heading there.":x<2?`Approaching from the left: f(x) is ${y.toFixed(3)}, closing in on 4.`:`Approaching from the right: f(x) is ${y.toFixed(3)}, closing in on 4.`};}}/>)},
+{type:"practice",render:()=>(<span>Find <M d="\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}"/> using algebra (confirming the table from the start of the lesson).</span>),
 answer:()=>(
 <div>
   <p><strong>Step 1: Try plugging in <M d="x = 2"/> directly.</strong></p>
   <M d="\frac{2^2-4}{2-2}=\frac{4-4}{0}=\frac{0}{0}" block/>
-  <p>We got <M d="\tfrac{0}{0}"/>  -  that's our signal to simplify first.</p>
-
-  <p><strong>Step 2: Factor the top.</strong></p>
-  <p>"Factoring" just means rewriting something as a product, things multiplied together. The top, <M d="x^2-4"/>, fits a famous pattern called the <em>difference of squares</em> (one perfect square minus another):</p>
-  <M d="a^2 - b^2 = (a-b)(a+b)" block/>
-  <p>Here <M d="x^2"/> is <M d="x"/> squared and <M d="4"/> is <M d="2"/> squared, so <M d="a=x"/> and <M d="b=2"/>:</p>
+  <p>We got <M d="\tfrac{0}{0}"/>: the signal to simplify first.</p>
+  <p><strong>Step 2: Factor the top.</strong> The top, <M d="x^2-4"/>, is a difference of squares from <Ref to="quadratics"/>: <M d="a^2-b^2=(a-b)(a+b)"/> with <M d="a=x"/> and <M d="b=2"/>:</p>
   <M d="x^2 - 4 = (x-2)(x+2)" block/>
-  <p>Not convinced? Multiply it back out to check: <M d="(x-2)(x+2)=x^2+2x-2x-4=x^2-4"/>. The middle terms cancel and we land right back where we started, so the factoring is correct.</p>
-
+  <p>Not convinced? Multiply it back out: <M d="(x-2)(x+2)=x^2+2x-2x-4=x^2-4"/>. The middle terms cancel and we land right back where we started.</p>
   <p><strong>Step 3: Rewrite the fraction with the factored version.</strong></p>
   <M d="\frac{(x-2)(x+2)}{(x-2)}" block/>
-  <p>The <M d="(x-2)"/> appears on both top and bottom. We can cancel them:</p>
+  <p>The <M d="(x-2)"/> appears on both top and bottom, so cancel them:</p>
   <M d="= x + 2" block/>
   <p><em>Why can we cancel?</em> For a limit, <M d="x"/> is getting <strong>close</strong> to 2 but is never exactly 2. So <M d="(x-2)"/> is never zero, and dividing by it is safe.</p>
-
-  <p><strong>Step 4: Plug in <M d="x = 2"/> into the simplified version.</strong></p>
+  <p><strong>Step 4: Plug <M d="x = 2"/> into the simplified version.</strong> Now it is direct substitution:</p>
   <M d="\lim_{x\to 2}(x+2) = 2 + 2 = 4" block/>
-
   <Box color="green">
-    <p>✅ <M d="\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}=4"/></p>
-    <p>This confirms what our table showed: the numbers were heading toward 4, and the algebra proves it.</p>
-    <p><strong>The recipe when you get <M d="\tfrac{0}{0}"/>:</strong> Factor → Cancel → Plug in again.</p>
+    <p><M d="\displaystyle\lim_{x\to 2}\frac{x^2-4}{x-2}=4"/></p>
+    <p>This confirms what the table showed: the numbers were heading toward 4, and the algebra proves it.</p>
+    <p><strong>The recipe when you get <M d="\tfrac{0}{0}"/>:</strong> factor, cancel, plug in again.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Find <M d="\displaystyle\lim_{x\to 3}\frac{x^2-x-6}{x-3}"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Try direct substitution.</strong> Top: <M d="9-3-6=0"/>. Bottom: <M d="3-3=0"/>. That is <M d="\tfrac{0}{0}"/>, so simplify.</p>
+  <p><strong>Step 2: Factor the top.</strong> <M d="x^2-x-6"/> is a trinomial (<Ref to="quadratics"/>): we need two numbers that add to <M d="-1"/> and multiply to <M d="-6"/>. Try <M d="-3"/> and <M d="2"/>: <M d="-3+2=-1"/> and <M d="(-3)(2)=-6"/>. So</p>
+  <M d="x^2-x-6=(x-3)(x+2)" block/>
+  <p>Check: <M d="(x-3)(x+2)=x^2+2x-3x-6=x^2-x-6"/>. Correct.</p>
+  <p><strong>Step 3: Cancel.</strong></p>
+  <M d="\frac{(x-3)(x+2)}{x-3}=x+2\qquad(x\neq 3)" block/>
+  <p><strong>Step 4: Plug in.</strong></p>
+  <M d="\lim_{x\to 3}(x+2)=5" block/>
+  <p>Sanity check with the table method: at <M d="x=2.99"/>, <M d="\tfrac{2.99^2-2.99-6}{2.99-3}=\tfrac{-0.0499}{-0.01}=4.99"/>, which is closing in on 5.</p>
+  <Box color="green"><p><M d="\displaystyle\lim_{x\to 3}\frac{x^2-x-6}{x-3}=5"/>. Same recipe, a different factoring pattern.</p></Box>
 </div>
 )},
 ]},
 
 {slug:"infinite-limits",module:"Limits & Continuity",title:"Infinite Limits & Limits at Infinity",time:"10 min",content:[
-{type:"concept",render:()=>(
+{type:"concept",label:"Two New Kinds of Limit",render:()=>(
 <div>
-  <p>In <Ref to="limits"/>, we found limits where the answer was a <em>number</em>  -  like <M d="\lim_{x\to 2}f(x)=4"/>. But sometimes limits don't settle on a nice number. This lesson covers two new situations:</p>
-
-  <p><strong>Situation 1: Infinite Limits</strong>  -  "What happens as <M d="x"/> approaches a specific number, but the function blows up?"</p>
+  <p>In <Ref to="limits"/> we found limits where the answer was a <em>number</em>, like <M d="\lim_{x\to 2}f(x)=4"/>. But sometimes limits do not settle on a nice number. This lesson covers two new situations.</p>
+  <p><strong>Situation 1: Infinite limits.</strong> "What happens as <M d="x"/> approaches a specific number, but the function blows up?"</p>
   <p>Think about the function <M d="f(x)=\dfrac{1}{x}"/>. What happens as <M d="x"/> gets really close to 0?</p>
   <p>Remember <M d="\tfrac{1}{x}"/> just means 1 divided by <M d="x"/>, so <M d="f(0.1)=\tfrac{1}{0.1}=10"/> (there are ten tenths in one whole). The rest of the rows work the same way:</p>
   <Box>
@@ -876,18 +899,16 @@ answer:()=>(
     <p><M d="f(0.001)=1000"/></p>
     <p><M d="f(0.0001)=10{,}000"/></p>
   </Box>
-  <p>The outputs are getting bigger and bigger  -  shooting off toward infinity! The function never "arrives" at a number. We write:</p>
+  <p>The outputs are getting bigger and bigger, shooting off toward infinity. The function never "arrives" at a number. We write:</p>
   <M d="\lim_{x\to 0^+}\frac{1}{x}=+\infty" block/>
-  <p>This does NOT mean the limit equals infinity (infinity isn't a number). It means: <em>"the function grows without bound."</em> The limit technically <strong>does not exist</strong>  -  but we write <M d="+\infty"/> to describe <em>how</em> it fails.</p>
-  <p>On a graph, this creates a <strong>vertical asymptote</strong>  -  the graph hugs a vertical line but never crosses it, like a wall the function can't pass through.</p>
-
+  <p>This does NOT mean the limit equals infinity (infinity is not a number). It means: <em>"the function grows without bound."</em> The limit technically <strong>does not exist</strong>, but we write <M d="+\infty"/> to describe <em>how</em> it fails. From the left the story is the same with a sign flip: <M d="f(-0.1)=-10"/>, <M d="f(-0.01)=-100"/>, so <M d="\lim_{x\to 0^-}\tfrac{1}{x}=-\infty"/>.</p>
+  <p>On a graph, this creates a <strong>vertical asymptote</strong>: the graph hugs a vertical line but never crosses it, like a wall the function cannot pass through.</p>
   <Graph fn={(x) => 1/x} xMin={-4} xMax={4} yMin={-6} yMax={6}
     label="f(x) = 1/x"
-    caption="Vertical asymptote at x = 0  -  the graph shoots off to positive or negative infinity (shorthand ±∞) on either side"
+    caption="Vertical asymptote at x = 0: the graph shoots off to positive infinity on the right of the wall and negative infinity on the left."
   />
-
-  <p><strong>Situation 2: Limits at Infinity</strong>  -  "What happens as <M d="x"/> itself gets really, really big?"</p>
-  <p>Now we're asking a different question. Instead of <M d="x"/> approaching a specific number, <M d="x"/> is heading toward <M d="\infty"/>. Does the function level off?</p>
+  <p><strong>Situation 2: Limits at infinity.</strong> "What happens as <M d="x"/> itself gets really, really big?"</p>
+  <p>Now we are asking a different question. Instead of <M d="x"/> approaching a specific number, <M d="x"/> is heading toward <M d="\infty"/>. Does the function level off?</p>
   <p>Look at <M d="f(x)=\dfrac{1}{x}"/> again, but this time let <M d="x"/> grow:</p>
   <Box>
     <p><M d="f(10)=0.1"/></p>
@@ -895,33 +916,27 @@ answer:()=>(
     <p><M d="f(1000)=0.001"/></p>
     <p><M d="f(1{,}000{,}000)=0.000001"/></p>
   </Box>
-  <p>The outputs are shrinking toward <strong>0</strong>. They'll never reach exactly 0, but they get as close as you want. We write:</p>
+  <p>The outputs are shrinking toward <strong>0</strong>. They will never reach exactly 0, but they get as close as you want. We write:</p>
   <M d="\lim_{x\to\infty}\frac{1}{x}=0" block/>
-  <p>On a graph, this creates a <strong>horizontal asymptote</strong>  -  the graph levels off and approaches a horizontal line as you look further and further to the right.</p>
+  <p>On a graph, this creates a <strong>horizontal asymptote</strong>: the graph levels off and approaches a horizontal line as you look further and further to the right. The bakery's average cost in <Ref to="business-models"/> did exactly this, creeping toward $1.50 per loaf; the second practice problem makes that precise.</p>
 </div>
 )},
-{type:"rule",label:"The Degree Shortcut (Most Important Rule Here)",render:()=>(
+{type:"rule",label:"The Degree Shortcut",render:()=>(
 <div>
-  <p>For <strong>rational functions</strong> (a polynomial divided by a polynomial) as <M d="x\to\infty"/>:</p>
+  <p>For <strong>rational functions</strong> (a polynomial divided by a polynomial, from <Ref to="quadratics"/>) as <M d="x\to\infty"/>, you do not need a table of values. Compare the <strong>degree</strong> (highest power of <M d="x"/>) on top with the degree on the bottom:</p>
   <Box>
-    <p>Three quick words so nothing is assumed. A <strong>polynomial</strong> is just a sum of power terms, like <M d="3x^2+5x-1"/>. Its <strong>degree</strong> is the highest power that shows up (here that is 2). Its <strong>leading coefficient</strong> is the number multiplying that highest power (here that is 3).</p>
-  </Box>
-  <p>You <em>don't</em> need to build a table of values every time. There's a shortcut. Just compare the <strong>highest power of <M d="x"/></strong> on top vs. bottom:</p>
-
-  <Box>
-    <p><strong>Same degree on top and bottom</strong> → limit = ratio of the leading coefficients</p>
-    <p>Example: <M d="\dfrac{3x^2+1}{5x^2-x}"/> → same <M d="x^2"/> on top and bottom → answer is <M d="\dfrac{3}{5}"/></p>
+    <p><strong>Same degree on top and bottom:</strong> the limit is the ratio of the leading coefficients.</p>
+    <p>Example: <M d="\dfrac{3x^2+1}{5x^2-x}"/> has <M d="x^2"/> on top and bottom, so the limit is <M d="\dfrac{3}{5}"/>.</p>
   </Box>
   <Box>
-    <p><strong>Top degree is smaller than bottom</strong> → limit = 0</p>
-    <p>The bottom grows faster and crushes the top to zero.</p>
-    <p>Example: <M d="\dfrac{2x}{x^2+1}"/> → top is degree 1, bottom is degree 2 → answer is 0</p>
+    <p><strong>Top degree smaller than bottom:</strong> the limit is 0. The bottom grows faster and crushes the fraction.</p>
+    <p>Example: <M d="\dfrac{2x}{x^2+1}"/> has degree 1 on top and degree 2 on the bottom, so the limit is 0.</p>
   </Box>
   <Box>
-    <p><strong>Top degree is bigger than bottom</strong> → limit = <M d="\pm\infty"/> (no horizontal asymptote)</p>
-    <p>The top grows faster and the whole thing blows up  -  to <M d="+\infty"/> or <M d="-\infty"/> depending on the signs of the leading terms, but either way its size grows without bound.</p>
-    <p>Example: <M d="\dfrac{x^3}{x+1}"/> → top is degree 3, bottom is degree 1 → blows up to <M d="\infty"/></p>
+    <p><strong>Top degree bigger than bottom:</strong> the limit is <M d="+\infty"/> or <M d="-\infty"/> (no horizontal asymptote). The top grows faster and the whole thing blows up; the sign depends on the signs of the leading terms, but either way the size grows without bound.</p>
+    <p>Example: <M d="\dfrac{x^3}{x+1}"/> has degree 3 on top and degree 1 on the bottom, so it blows up to <M d="\infty"/>.</p>
   </Box>
+  <p><strong>Vertical asymptotes</strong> live wherever the bottom is zero and the top is not: a nonzero number divided by something tiny is something huge.</p>
 </div>
 )},
 {type:"example",label:"Why the Degree Shortcut Works",render:()=>(
@@ -930,150 +945,142 @@ answer:()=>(
   <M d="\frac{3x^2+1}{5x^2-2x}\quad\text{as }x\to\infty" block/>
   <p>Plug in a huge number, say <M d="x=1{,}000{,}000"/>:</p>
   <p><strong>Top:</strong> <M d="3(1{,}000{,}000)^2+1 = 3{,}000{,}000{,}000{,}001"/></p>
-  <p>That "+1" at the end? Totally irrelevant. It's like adding a penny to 3 trillion dollars.</p>
+  <p>That "+1" at the end? Totally irrelevant. It is like adding a penny to 3 trillion dollars.</p>
   <p><strong>Bottom:</strong> <M d="5(1{,}000{,}000)^2-2(1{,}000{,}000) = 4{,}999{,}998{,}000{,}000"/></p>
-  <p>That "−2x" part? It subtracted 2 million from 5 trillion. A rounding error.</p>
+  <p>That "<M d="-2x"/>" part subtracted 2 million from 5 trillion. A rounding error.</p>
   <p>So the ratio is basically <M d="\dfrac{3{,}000{,}000{,}000{,}000}{5{,}000{,}000{,}000{,}000}=\dfrac{3}{5}"/>.</p>
-  <p><strong>The lesson:</strong> when <M d="x"/> is enormous, the highest-power terms completely dominate. Everything else is noise. That's why you only need to compare the leading terms.</p>
-
+  <p><strong>The lesson:</strong> when <M d="x"/> is enormous, the highest-power terms completely dominate. Everything else is noise. That is why you only need to compare the leading terms.</p>
   <p><strong>The algebra way</strong> (divide everything by <M d="x^2"/>, the highest power in the denominator):</p>
   <p>Divide each term on the top and each term on the bottom by <M d="x^2"/>. Top: <M d="\tfrac{3x^2}{x^2}=3"/>, and <M d="\tfrac{1}{x^2}"/> stays as it is. Bottom: <M d="\tfrac{5x^2}{x^2}=5"/>, and <M d="\tfrac{2x}{x^2}=\tfrac{2}{x}"/> (one <M d="x"/> cancels, since <M d="\tfrac{x}{x^2}=\tfrac1x"/>). That gives:</p>
   <M d="\frac{3x^2+1}{5x^2-2x}=\frac{3+\frac{1}{x^2}}{5-\frac{2}{x}}" block/>
   <p>As <M d="x\to\infty"/>: <M d="\tfrac{1}{x^2}\to 0"/> and <M d="\tfrac{2}{x}\to 0"/>. So we get <M d="\dfrac{3+0}{5-0}=\dfrac{3}{5}"/>.</p>
+  <p><strong>A "top smaller" case, the same way.</strong> Take <M d="\dfrac{2x+5}{x^2-1}"/>. At <M d="x=1{,}000"/> the top is about 2,000 and the bottom about 1,000,000, so the fraction is about <M d="\tfrac{2000}{1{,}000{,}000}=0.002"/>. Tiny, and it only gets tinier. The bottom's higher degree wins, and the limit is 0: a horizontal asymptote at <M d="y=0"/>, the <M d="x"/>-axis.</p>
 </div>
 )},
 {type:"practice",render:()=>(<span>Find <M d="\displaystyle\lim_{x\to\infty}\frac{7x^3-2x}{4x^3+x^2+1}"/></span>),
 answer:()=>(
 <div>
   <p><strong>Step 1: Identify the highest power on top and bottom.</strong></p>
-  <p>Top: <M d="7x^3"/> → degree 3</p>
-  <p>Bottom: <M d="4x^3"/> → degree 3</p>
-  <p><strong>Same degree!</strong> So we use the ratio of leading coefficients.</p>
-
-  <p><strong>Step 2: Take the ratio.</strong></p>
-  <p>Leading coefficient on top: <strong>7</strong> (from <M d="7x^3"/>)</p>
-  <p>Leading coefficient on bottom: <strong>4</strong> (from <M d="4x^3"/>)</p>
+  <p>Top: <M d="7x^3"/>, degree 3. Bottom: <M d="4x^3"/>, degree 3. <strong>Same degree</strong>, so we use the ratio of leading coefficients.</p>
+  <p><strong>Step 2: Take the ratio.</strong> Leading coefficient on top: <strong>7</strong>. On the bottom: <strong>4</strong>.</p>
   <M d="\lim_{x\to\infty}\frac{7x^3-2x}{4x^3+x^2+1}=\frac{7}{4}" block/>
-
-  <p><strong>Step 3: Verify the logic.</strong> The <M d="-2x"/>, <M d="x^2"/>, and <M d="+1"/> are all lower-degree terms. When <M d="x"/> is a million, the <M d="x^3"/> terms are trillions  -  the rest are rounding errors.</p>
-
+  <p><strong>Step 3: Verify the logic.</strong> The <M d="-2x"/>, <M d="x^2"/>, and <M d="+1"/> are all lower-degree terms. When <M d="x"/> is a million, the <M d="x^3"/> terms are in the quintillions and the rest are rounding errors.</p>
   <Box color="green">
-    <p>✅ <M d="\dfrac{7}{4}"/></p>
-    <p>This means the function has a horizontal asymptote at <M d="y=\tfrac{7}{4}=1.75"/>. As you look further and further right on the graph, the curve flattens out toward 1.75.</p>
+    <p><M d="\dfrac{7}{4}"/></p>
+    <p>The function has a horizontal asymptote at <M d="y=\tfrac{7}{4}=1.75"/>. As you look further and further right on the graph, the curve flattens out toward 1.75.</p>
   </Box>
 </div>
 )},
-{type:"practice",render:()=>(<span>Find <M d="\displaystyle\lim_{x\to\infty}\frac{2x+5}{x^2-1}"/></span>),
+{type:"practice",render:()=>(<span>The bakery in <Ref to="business-models"/> has cost <M d="C(x)=2000+1.5x"/>, so its average cost per loaf is <M d="AC(x)=\dfrac{2000+1.5x}{x}"/>. Find <M d="\displaystyle\lim_{x\to\infty}AC(x)"/> and explain what it means for the bakery.</span>),
 answer:()=>(
 <div>
-  <p><strong>Step 1:</strong> Top degree: 1 (from <M d="2x"/>). Bottom degree: 2 (from <M d="x^2"/>). <strong>Top is smaller.</strong></p>
-  <p><strong>Step 2:</strong> When the bottom degree is larger, the bottom grows faster and crushes the fraction toward zero.</p>
-  <p>Think about it: when <M d="x=1{,}000"/>:</p>
-  <p>Top ≈ 2,000. Bottom ≈ 1,000,000. So the fraction ≈ <M d="\tfrac{2000}{1{,}000{,}000}=0.002"/>. Tiny!</p>
-  <M d="\lim_{x\to\infty}\frac{2x+5}{x^2-1}=0" block/>
-  <Box color="green">
-    <p>✅ <strong>0</strong>  -  horizontal asymptote at <M d="y=0"/> (the x-axis).</p>
-  </Box>
+  <p><strong>Step 1: Compare degrees.</strong> Top: <M d="1.5x"/>, degree 1. Bottom: <M d="x"/>, degree 1. Same degree, so the limit is the ratio of leading coefficients:</p>
+  <M d="\lim_{x\to\infty}\frac{2000+1.5x}{x}=\frac{1.5}{1}=1.5" block/>
+  <p><strong>Step 2: See it the algebra way.</strong> Split the fraction: <M d="\tfrac{2000}{x}+\tfrac{1.5x}{x}=\tfrac{2000}{x}+1.5"/>. As <M d="x\to\infty"/>, <M d="\tfrac{2000}{x}\to 0"/>, leaving 1.5. This is the table from <Ref to="business-models"/> ($21.50, then $3.50, then $1.70) written as one line of algebra.</p>
+  <p><strong>Step 3: Interpret.</strong> As the bakery bakes more and more, the $2,000 of fixed cost is spread so thin that each loaf's share of it vanishes, and the average cost settles at the $1.50 of ingredients each loaf needs no matter what. The line <M d="y=1.5"/> is a horizontal asymptote: average cost can get as close to $1.50 as you like but never below it.</p>
+  <Box color="green"><p><M d="\lim_{x\to\infty}AC(x)=1.5"/>: at huge volumes, average cost is just the variable cost per unit.</p></Box>
 </div>
 )},
 ]},
 
-{slug:"continuity",module:"Limits & Continuity",title:"Continuity",time:"9 min",content:[
-{type:"concept",render:()=>(
+{slug:"continuity",module:"Limits & Continuity",title:"Continuity",time:"10 min",content:[
+{type:"concept",label:"Heading There Versus Arriving",render:()=>(
 <div>
-  <p>In Lessons <Ref to="limits" bare/> and <Ref to="infinite-limits" bare/>, we found limits  -  the value a function is <em>heading toward</em>. But sometimes the function actually <em>arrives</em> there, and sometimes it doesn't. Continuity tells us which.</p>
-
-  <p><strong>Why should you care?</strong> In the next module, we'll learn derivatives  -  the most powerful tool in calculus. But here's the catch: <em>you can only take a derivative where the function is continuous</em>. A derivative measures the slope of a smooth curve, and if the curve has a hole or a jump, there's no slope to measure. So continuity is a requirement for taking a derivative. (To be fully precise, continuity is required but is not the whole story. Picture the sharp point at the bottom of a V: coming in from the left, the line tilts one way; coming in from the right, it tilts the other way. Because the two sides disagree about which direction the curve is heading, there is no single slope right at the corner, so a derivative cannot be taken exactly there. We will unpack this when we reach derivatives. For the smooth business curves in this course, continuous means you are good to go.)</p>
-
+  <p>In Lessons <Ref to="limits" bare/> and <Ref to="infinite-limits" bare/> we found limits: the value a function is <em>heading toward</em>. But sometimes the function actually <em>arrives</em> there, and sometimes it does not. Continuity tells us which.</p>
+  <p><strong>Why should you care?</strong> In the next module we learn derivatives, the most powerful tool in calculus. But here is the catch: <em>you can only take a derivative where the function is continuous</em>. A derivative measures the slope of a smooth curve, and if the curve has a hole or a jump, there is no slope to measure. So continuity is a requirement for taking a derivative. (To be fully precise, continuity is required but is not the whole story. Picture the sharp point at the bottom of a V: coming in from the left, the line tilts one way; coming in from the right, it tilts the other way. Because the two sides disagree about which direction the curve is heading, there is no single slope right at the corner, so a derivative cannot be taken exactly there. We will unpack this when we reach derivatives. For the smooth business curves in this course, continuous means you are good to go.)</p>
   <p>Intuitively, a function is <strong>continuous at a point</strong> if you can draw through that point without lifting your pen. No holes, no jumps, no walls.</p>
-
   <p><strong>Three types of breaks (discontinuities):</strong></p>
-
   <Box>
-    <p><strong>1. Hole (removable discontinuity)</strong>  -  The function is heading toward a value, but there's a missing point. Like a bridge with one plank removed. We saw this in <Ref to="limits"/>: <M d="\tfrac{x^2-4}{x-2}"/> has a hole at <M d="x=2"/>.</p>
+    <p><strong>1. Hole (removable discontinuity).</strong> The function is heading toward a value, but there is a missing point. Like a bridge with one plank removed. We saw this in <Ref to="limits"/>: <M d="\tfrac{x^2-4}{x-2}"/> has a hole at <M d="x=2"/>.</p>
   </Box>
   <Box>
-    <p><strong>2. Jump</strong>  -  The function suddenly leaps from one value to another. Like a staircase. The left-side limit and right-side limit exist but don't agree.</p>
+    <p><strong>2. Jump.</strong> The function suddenly leaps from one value to another, like a staircase. The left-side limit and right-side limit exist but do not agree. The courier's price in <Ref to="limits"/> jumped from $5 to $8 at 2 kg.</p>
   </Box>
   <Box>
-    <p><strong>3. Vertical asymptote (infinite discontinuity)</strong>  -  The function shoots to <M d="\pm\infty"/>. We just saw this in <Ref to="infinite-limits"/>: <M d="\tfrac{1}{x}"/> at <M d="x=0"/>.</p>
+    <p><strong>3. Vertical asymptote (infinite discontinuity).</strong> The function shoots off to <M d="+\infty"/> or <M d="-\infty"/>. We just saw this in <Ref to="infinite-limits"/>: <M d="\tfrac{1}{x}"/> at <M d="x=0"/>.</p>
   </Box>
 </div>
 )},
 {type:"rule",label:"The Three-Part Continuity Test",render:()=>(
 <div>
   <p>A function <M d="f(x)"/> is <strong>continuous at <M d="x=c"/></strong> if ALL three conditions are true:</p>
-
   <Box>
-    <p><strong>Condition 1:</strong> <M d="f(c)"/> is <strong>defined</strong>.</p>
-    <p>There has to actually be a value at that point  -  no hole, no "undefined."</p>
+    <p><strong>Condition 1:</strong> <M d="f(c)"/> is <strong>defined</strong>. There has to actually be a value at that point: no hole, no "undefined."</p>
   </Box>
   <Box>
-    <p><strong>Condition 2:</strong> <M d="\lim_{x\to c}f(x)"/> <strong>exists</strong>.</p>
-    <p>The function has to be heading toward <em>something</em> from both sides, and both sides must agree. (Remember from <Ref to="limits"/>: if left ≠ right, the limit doesn't exist.)</p>
+    <p><strong>Condition 2:</strong> <M d="\lim_{x\to c}f(x)"/> <strong>exists</strong>. The function has to be heading toward <em>something</em> from both sides, and both sides must agree. (Remember from <Ref to="limits"/>: if the left and right limits differ, the limit does not exist.)</p>
   </Box>
   <Box>
-    <p><strong>Condition 3:</strong> <M d="\lim_{x\to c}f(x) = f(c)"/>  -  <strong>the limit equals the actual value</strong>.</p>
-    <p>The place the function is heading must be the same as the place it actually is. No fakeouts.</p>
+    <p><strong>Condition 3:</strong> <M d="\lim_{x\to c}f(x) = f(c)"/>. <strong>The limit equals the actual value.</strong> The place the function is heading must be the same as the place it actually is. No fakeouts.</p>
   </Box>
-
-  <p>If <em>any</em> of these fails → discontinuity at that point.</p>
-
-  <p><strong>Good news  -  many functions are always continuous:</strong></p>
-  <p>Polynomials (like <M d="x^3-2x+1"/>): continuous everywhere. No fractions, no square roots, nothing to break.</p>
-  <p><M d="e^x"/> (the exponential function from <Ref to="exponentials"/>): continuous everywhere. Its graph is one smooth, rising curve that never breaks.</p>
-  <p><M d="\ln(x)"/> (the natural log from <Ref to="logarithms"/>): continuous for all <M d="x>0"/>. (Recall it is only defined for positive inputs, since you cannot take the log of zero or a negative number; but everywhere it does exist, it is smooth.)</p>
-  <p><strong>Rational functions</strong> (fraction with polynomials): continuous everywhere <em>except</em> where the denominator = 0.</p>
+  <p>If <em>any</em> of these fails, there is a discontinuity at that point.</p>
+  <p><strong>Good news: many functions are always continuous.</strong></p>
+  <p>Polynomials (like <M d="x^3-2x+1"/>): continuous everywhere. No fractions, no square roots, nothing to break. This is exactly why direct substitution worked in <Ref to="limits"/>.</p>
+  <p><M d="e^x"/> (from <Ref to="exponentials"/>): continuous everywhere. Its graph is one smooth, rising curve that never breaks.</p>
+  <p><M d="\ln(x)"/> (from <Ref to="logarithms"/>): continuous for all <M d="x>0"/>. It is only defined for positive inputs, but everywhere it does exist it is smooth.</p>
+  <p><strong>Rational functions</strong> (a polynomial over a polynomial): continuous everywhere <em>except</em> where the denominator is 0.</p>
 </div>
 )},
 {type:"example",label:"Checking All Three Conditions",render:()=>(
 <div>
   <p>Is <M d="f(x)=\dfrac{x^2-9}{x-3}"/> continuous at <M d="x=3"/>?</p>
-
   <p><strong>Check Condition 1: Is <M d="f(3)"/> defined?</strong></p>
-  <M d="f(3)=\frac{3^2-9}{3-3}=\frac{9-9}{0}=\frac{0}{0}\;\text{ -  UNDEFINED}" block/>
-  <p>❌ Condition 1 <strong>fails immediately</strong>. The function is NOT continuous at <M d="x=3"/>.</p>
-  <p>(Technically, we can stop here  -  one failure is enough. But let's keep going to understand <em>what kind</em> of discontinuity this is.)</p>
-
+  <M d="f(3)=\frac{3^2-9}{3-3}=\frac{9-9}{0}=\frac{0}{0}" block/>
+  <p>Undefined. Condition 1 <strong>fails immediately</strong>, so the function is NOT continuous at <M d="x=3"/>.</p>
+  <p>(Technically we can stop here; one failure is enough. But let's keep going to understand <em>what kind</em> of discontinuity this is.)</p>
   <p><strong>Check Condition 2: Does the limit exist?</strong></p>
   <p>Even though <M d="f(3)"/> is undefined, the <em>limit</em> might still exist. Remember from <Ref to="limits"/>: a limit is about where the function is <em>heading</em>, not where it actually is.</p>
-  <p>Factor the top: <M d="x^2-9=(x-3)(x+3)"/></p>
+  <p>Factor the top (difference of squares): <M d="x^2-9=(x-3)(x+3)"/></p>
   <M d="f(x)=\frac{(x-3)(x+3)}{x-3}=x+3\quad\text{(when }x\neq 3\text{)}" block/>
   <M d="\lim_{x\to 3}(x+3)=6" block/>
-  <p>✓ The limit exists and equals 6.</p>
-
-  <p><strong>Diagnosis:</strong> The limit exists (the road leads to 6), but there's no actual value at <M d="x=3"/>. This is a <strong>removable discontinuity</strong>  -  a hole. The bridge goes to the right place; there's just a missing plank at <M d="x=3"/>.</p>
-
+  <p>The limit exists and equals 6.</p>
+  <p><strong>Diagnosis:</strong> The limit exists (the road leads to 6), but there is no actual value at <M d="x=3"/>. This is a <strong>removable discontinuity</strong>, a hole. The bridge goes to the right place; there is just a missing plank at <M d="x=3"/>.</p>
   <Graph fn={(x) => x + 3} xMin={-1} xMax={6} yMin={0} yMax={9}
     highlights={[{ x: 3, y: 6, open: true, label: "hole at (3, 6)", color: "#f59e0b", lo: [12, 16] }]}
-    caption="The function follows y = x + 3, but there's a missing dot at (3, 6)"
+    caption="The function follows y = x + 3, but there is a missing dot at (3, 6)"
   />
+</div>
+)},
+{type:"example",label:"Diagnosing the Courier Jump",render:()=>(
+<div>
+  <p>Back to the courier from <Ref to="limits"/>: $5 below 2 kg, $8 from 2 kg on. Is the price function continuous at <M d="w=2"/>?</p>
+  <p><strong>Condition 1:</strong> <M d="f(2)=8"/>, because a 2 kg parcel falls under the second rule. Defined. Passes.</p>
+  <p><strong>Condition 2:</strong> From the left the price heads to 5; from the right it heads to 8. The one-sided limits disagree, so <M d="\lim_{w\to 2}f(w)"/> <strong>does not exist</strong>. Fails.</p>
+  <p>Condition 3 cannot even be checked, because there is no limit to compare with. The function is not continuous at 2, and the type of break is a <strong>jump</strong>.</p>
+  <Box color="green"><p>Notice the difference from the hole: here the function <em>has</em> a value at the trouble spot. It is the limit that is missing. A hole fails Condition 1; a jump fails Condition 2.</p></Box>
 </div>
 )},
 {type:"practice",render:()=>(<span>Is <M d="g(x)=\dfrac{x+1}{x^2-1}"/> continuous at <M d="x=1"/>? If not, what type of discontinuity?</span>),
 answer:()=>(
 <div>
   <p><strong>Step 1: Check if <M d="g(1)"/> is defined.</strong></p>
-  <M d="g(1)=\frac{1+1}{1^2-1}=\frac{2}{0}\;\text{ -  UNDEFINED}" block/>
-  <p>❌ Not defined. So NOT continuous. But what type of break is it?</p>
-
-  <p><strong>Step 2: Factor and investigate.</strong></p>
-  <p>Bottom: <M d="x^2-1=(x-1)(x+1)"/></p>
+  <M d="g(1)=\frac{1+1}{1^2-1}=\frac{2}{0}" block/>
+  <p>Undefined, so NOT continuous. But what type of break is it?</p>
+  <p><strong>Step 2: Factor and investigate.</strong> Bottom: <M d="x^2-1=(x-1)(x+1)"/>.</p>
   <M d="g(x)=\frac{x+1}{(x-1)(x+1)}=\frac{1}{x-1}\quad\text{(when }x\neq -1\text{)}" block/>
   <p>The <M d="(x+1)"/> cancels from top and bottom.</p>
-
   <p><strong>Step 3: Find the limit.</strong></p>
   <M d="\lim_{x\to 1}\frac{1}{x-1}" block/>
-  <p>As <M d="x\to 1^+"/>: denominator → tiny positive → <M d="+\infty"/></p>
-  <p>As <M d="x\to 1^-"/>: denominator → tiny negative → <M d="-\infty"/></p>
-  <p>Left and right don't agree (and both blow up). The limit does <strong>not exist</strong>.</p>
-
+  <p>As <M d="x\to 1^+"/> the denominator is tiny and positive, so the fraction heads to <M d="+\infty"/>. As <M d="x\to 1^-"/> the denominator is tiny and negative, so it heads to <M d="-\infty"/>. Left and right do not agree (and both blow up). The limit does <strong>not exist</strong>.</p>
   <Box color="green">
-    <p>✅ Not continuous at <M d="x=1"/>. This is a <strong>vertical asymptote</strong> (infinite discontinuity)  -  the graph shoots to <M d="\pm\infty"/>.</p>
-    <p><strong>Key difference from the worked example:</strong> In the example, <M d="\tfrac{0}{0}"/> led to a hole. Here, <M d="\tfrac{2}{0}"/> (a nonzero number over zero) leads to a vertical asymptote. The type of "bad fraction" tells you the type of break:</p>
-    <p><M d="\tfrac{0}{0}"/> → probably a <strong>hole</strong> (factor and check)</p>
-    <p><M d="\tfrac{\text{nonzero}}{0}"/> → always a <strong>vertical asymptote</strong></p>
+    <p>Not continuous at <M d="x=1"/>. This is a <strong>vertical asymptote</strong> (infinite discontinuity): the graph shoots off to <M d="\pm\infty"/>.</p>
+    <p><strong>Key difference from the worked example:</strong> there, <M d="\tfrac{0}{0}"/> led to a hole. Here, <M d="\tfrac{2}{0}"/> (a nonzero number over zero) leads to a vertical asymptote. The type of "bad fraction" tells you the type of break:</p>
+    <p><M d="\tfrac{0}{0}"/> means probably a <strong>hole</strong> (factor and check).</p>
+    <p><M d="\tfrac{\text{nonzero}}{0}"/> means always a <strong>vertical asymptote</strong>.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>A function is defined as <M d="h(x)=\dfrac{x^2-1}{x-1}"/> for <M d="x\neq 1"/>, and separately <M d="h(1)=3"/>. Is <M d="h"/> continuous at <M d="x=1"/>? Which condition fails?</span>),
+answer:()=>(
+<div>
+  <p>This one is sneaky: someone has "patched" the hole, but did they patch it at the right height?</p>
+  <p><strong>Condition 1: Is <M d="h(1)"/> defined?</strong> Yes, by the separate rule, <M d="h(1)=3"/>. Passes.</p>
+  <p><strong>Condition 2: Does the limit exist?</strong> For <M d="x\neq 1"/>, factor: <M d="\tfrac{(x-1)(x+1)}{x-1}=x+1"/>. So</p>
+  <M d="\lim_{x\to 1}h(x)=\lim_{x\to 1}(x+1)=2" block/>
+  <p>The limit exists and equals 2. Passes.</p>
+  <p><strong>Condition 3: Does the limit equal the value?</strong> The limit is 2, but <M d="h(1)=3"/>. They differ. <strong>Fails.</strong></p>
+  <p>Picture it: the graph is the line <M d="y=x+1"/> heading toward height 2 from both sides, but at exactly <M d="x=1"/> a lone dot has been placed at height 3 instead. You would have to lift your pen to reach it.</p>
+  <Box color="green"><p>Not continuous at <M d="x=1"/>. Condition 3 fails: the patch was placed at the wrong height. Had the rule said <M d="h(1)=2"/>, all three conditions would pass and the hole would be genuinely repaired.</p></Box>
 </div>
 )},
 ]},
