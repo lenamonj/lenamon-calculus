@@ -3,7 +3,6 @@
 // arguments, so this module imports nothing from App.jsx (no circular import).
 export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExplorer, Ref }) {
   return [
-// ═══════ LESSON 1 ═══════
 {slug:"functions",module:"Foundations",title:"Functions, Domain & Range",time:"10 min",content:[
 {type:"concept",label:"A Function Is a Machine",render:()=>(
 <div>
@@ -23,6 +22,26 @@ export function buildLessons({ M, Box, Graph, SlopeExplorer, SignChart, ParamExp
   <M d="f(4)=2(4)+3=8+3=11" block/>
   <p>You put <strong>4</strong> in, and <strong>11</strong> came out. Feed a different number in and you get a different number out. The machine just obeys its rule every single time.</p>
   <p>One quiet detail that matters later: a function gives back <strong>exactly one</strong> output for each input. Feed in 4 and you always get 11, never "11 or maybe 7." That dependability is the whole point of a function.</p>
+</div>
+)},
+{type:"concept",label:"Plugging In Expressions, Not Just Numbers",render:()=>(
+<div>
+  <p>So far we fed the machine a number. You can also feed it a <em>letter</em> or a whole <em>expression</em>, and the rule does exactly the same thing: wherever the rule says <M d="x"/>, you write whatever you fed in. This small skill is the one that <Ref to="derivative"/> will lean on hardest, so let's get comfortable with it now, while the functions are simple.</p>
+  <p>Take <M d="f(x)=2x+3"/> again. Feed in the letter <M d="a"/>: every <M d="x"/> becomes <M d="a"/>.</p>
+  <M d="f(a)=2a+3" block/>
+  <p>Now feed in the expression <M d="x+h"/> (two letters added together, just a name for "some number plus a little extra"). Every <M d="x"/> becomes <M d="(x+h)"/>, parentheses and all, so the doubling applies to the <em>whole</em> thing:</p>
+  <M d="f(x+h)=2(x+h)+3=2x+2h+3" block/>
+  <p>The parentheses matter. Doubling <M d="x+h"/> doubles both pieces, which is why the 2 reaches the <M d="h"/> as well.</p>
+  <p>One more, with a square. Let <M d="g(x)=x^2"/>. Then <M d="g(x+h)=(x+h)^2"/>, which means <M d="(x+h)(x+h)"/>. Multiply every piece in the first bracket by every piece in the second:</p>
+  <Box>
+    <p><M d="x\cdot x=x^2"/></p>
+    <p><M d="x\cdot h=xh"/></p>
+    <p><M d="h\cdot x=hx"/>, the same as <M d="xh"/></p>
+    <p><M d="h\cdot h=h^2"/></p>
+  </Box>
+  <M d="g(x+h)=x^2+2xh+h^2" block/>
+  <p>The two middle pieces are each <M d="xh"/>, so together they make <M d="2xh"/>. A common slip is to write <M d="(x+h)^2=x^2+h^2"/>, forgetting the middle. Check with numbers: <M d="(1+2)^2=9"/>, but <M d="1^2+2^2=5"/>. The missing <M d="2xh=2(1)(2)=4"/> is exactly the difference.</p>
+  <p>Finally, a note on letters. Nothing forces a function to be called <M d="f"/> or its input <M d="x"/>. In business we pick letters that remind us what they mean: <M d="C(x)"/> for the cost of making <M d="x"/> items, <M d="R(q)"/> for the revenue from selling <M d="q"/> units, <M d="V(t)"/> for the value of something at time <M d="t"/>. Read <M d="C(x)"/> as "cost at x." The machine works identically; only the labels change.</p>
 </div>
 )},
 {type:"concept",label:"Domain and Range",render:()=>(
@@ -106,6 +125,21 @@ answer:()=>(
   </Box>
 </div>
 )},
+{type:"practice",render:()=>(<span>Let <M d="f(x)=x^2-3x"/>. Find <M d="f(2)"/>, <M d="f(-1)"/>, <M d="f(a)"/>, and <M d="f(x+h)"/>, simplifying each.</span>),
+answer:()=>(
+<div>
+  <p>The rule is "square the input, then subtract three times the input." Apply it to each input in turn.</p>
+  <p><strong><M d="f(2)"/>:</strong> <M d="2^2-3(2)=4-6=-2"/>.</p>
+  <p><strong><M d="f(-1)"/>:</strong> careful with signs: <M d="(-1)^2=1"/> and <M d="-3(-1)=+3"/>, so <M d="f(-1)=1+3=4"/>.</p>
+  <p><strong><M d="f(a)"/>:</strong> every <M d="x"/> becomes <M d="a"/>: <M d="f(a)=a^2-3a"/>. There is nothing to simplify; a letter stays a letter.</p>
+  <p><strong><M d="f(x+h)"/>:</strong> every <M d="x"/> becomes <M d="(x+h)"/>:</p>
+  <M d="f(x+h)=(x+h)^2-3(x+h)" block/>
+  <p>Expand the square (from the lesson: <M d="(x+h)^2=x^2+2xh+h^2"/>) and distribute the <M d="-3"/> across both pieces:</p>
+  <M d="f(x+h)=x^2+2xh+h^2-3x-3h" block/>
+  <p>Quick check: set <M d="h=0"/> and it collapses to <M d="x^2-3x"/>, the original function, as it should.</p>
+  <Box color="green"><p><M d="f(2)=-2"/>, <M d="f(-1)=4"/>, <M d="f(a)=a^2-3a"/>, <M d="f(x+h)=x^2+2xh+h^2-3x-3h"/>.</p></Box>
+</div>
+)},
 ]},
 
 {slug:"lines",module:"Foundations",title:"Linear Equations & Slope",time:"10 min",content:[
@@ -118,9 +152,9 @@ answer:()=>(
   <p>This has two pieces you need to understand:</p>
 
   <p><strong><M d="m"/> = the slope.</strong> Slope tells you how steep the line is. Think of it as: <em>"For every 1 step I take to the right, how many steps does the line go up (or down)?"</em></p>
-  <p>• If <M d="m=2"/>, the line goes UP 2 for every 1 to the right  -  steep uphill.</p>
-  <p>• If <M d="m=-3"/>, the line goes DOWN 3 for every 1 to the right  -  steep downhill.</p>
-  <p>• If <M d="m=0"/>, the line is flat  -  horizontal.</p>
+  <p>If <M d="m=2"/>, the line goes up 2 for every 1 to the right: a steep uphill.</p>
+  <p>If <M d="m=-3"/>, the line goes down 3 for every 1 to the right: a steep downhill.</p>
+  <p>If <M d="m=0"/>, the line is flat: horizontal.</p>
 
   <p><strong><M d="b"/> = the y-intercept.</strong> This is where the line crosses the vertical (y) axis. Another way to think about it: <em>it's the starting value when <M d="x=0"/>.</em></p>
 
@@ -138,7 +172,7 @@ answer:()=>(
 {type:"rule",render:()=>(
 <div>
   <p><strong>How to calculate slope when you have two points.</strong></p>
-  <p>If you know two points on the line  -  call them <M d="(x_1,y_1)"/> and <M d="(x_2,y_2)"/>  -  the slope is:</p>
+  <p>If you know two points on the line, call them <M d="(x_1,y_1)"/> and <M d="(x_2,y_2)"/>, the slope is:</p>
   <p>Those small numbers are just labels, not multiplication or powers. <M d="(x_1,y_1)"/> means "the x and y of the first point," and <M d="(x_2,y_2)"/> means "the x and y of the second point." That is all the little 1 and 2 are doing.</p>
   <M d="m=\dfrac{y_2-y_1}{x_2-x_1}=\dfrac{\text{how much y changed}}{\text{how much x changed}}=\dfrac{\text{rise}}{\text{run}}" block/>
   <p>Think of it like this: you're standing at point 1 and walking to point 2. The slope is how much you went up (rise) divided by how far you walked forward (run).</p>
@@ -146,6 +180,10 @@ answer:()=>(
   <p><strong>How to find <M d="b"/> after you know <M d="m"/>.</strong></p>
   <p>Take either point, plug the <M d="x"/>, <M d="y"/>, and <M d="m"/> into <M d="y=mx+b"/>, then solve for <M d="b"/>.</p>
   <p>Shortcut: if one of your points has <M d="x=0"/>, then <M d="y"/> at that point IS <M d="b"/> (because <M d="m\cdot 0+b=b"/>).</p>
+  <p style={{marginTop:14}}><strong>Point-slope form: the fastest way to write a line from one point and a slope.</strong></p>
+  <p>Suppose you know the slope <M d="m"/> and one point <M d="(x_1,y_1)"/>. Pick any other point <M d="(x,y)"/> on the line. The slope from the known point to it must be <M d="m"/>, so <M d="\tfrac{y-y_1}{x-x_1}=m"/>. Multiply both sides by <M d="x-x_1"/> and you get</p>
+  <M d="y-y_1=m(x-x_1)" block/>
+  <p>Example: slope 3 through <M d="(2,5)"/>: <M d="y-5=3(x-2)"/>, and multiplying out and adding 5 gives <M d="y=3x-1"/>. Check: at <M d="x=2"/>, <M d="y=6-1=5"/>. The lesson on tangent lines, later in the course, uses this form on every problem, so it is worth knowing cold.</p>
 </div>
 )},
 {type:"example",label:"How to Turn a Word Problem Into y = mx + b",render:()=>(
@@ -154,19 +192,18 @@ answer:()=>(
 
   <p><strong>Step 1: Figure out what <M d="x"/> and <M d="y"/> represent.</strong></p>
   <p>The problem is about value changing over time. So:</p>
-  <p>• Let <M d="x"/> = time (in years)</p>
-  <p>• Let <M d="y"/> = value (in dollars)</p>
+  <p>Let <M d="x"/> = time (in years), and let <M d="y"/> = value (in dollars).</p>
 
   <p><strong>Step 2: Pull out two data points from the words.</strong></p>
-  <p>"Worth $50,000 <em>today</em>" → today means <M d="x=0"/>. So: point <M d="(0,\;50000)"/></p>
-  <p>"Worth $10,000 <em>in 10 years</em>" → <M d="x=10"/>. So: point <M d="(10,\;10000)"/></p>
+  <p>"Worth $50,000 <em>today</em>": today means <M d="x=0"/>, so the point is <M d="(0,\;50000)"/>.</p>
+  <p>"Worth $10,000 <em>in 10 years</em>": that is <M d="x=10"/>, so the point is <M d="(10,\;10000)"/>.</p>
 
   <p><strong>Step 3: Calculate the slope.</strong></p>
   <M d="m=\frac{y_2-y_1}{x_2-x_1}=\frac{10000-50000}{10-0}=\frac{-40000}{10}=-4000" block/>
   <p>The slope is <strong>−4,000</strong>. The negative means the value is going <em>down</em>. It drops $4,000 every year.</p>
 
   <p><strong>Step 4: Find <M d="b"/>.</strong></p>
-  <p>We got lucky  -  one of our points has <M d="x=0"/>! When <M d="x=0"/>, <M d="y=50000"/>. That means <M d="b=50000"/>.</p>
+  <p>We got lucky: one of our points has <M d="x=0"/>. When <M d="x=0"/>, <M d="y=50000"/>. That means <M d="b=50000"/>.</p>
 
   <p><strong>Step 5: Write the final equation.</strong> One small bookkeeping move first: instead of the generic <M d="y"/> and <M d="x"/>, we will call the output <M d="V"/> (for value) and the input <M d="t"/> (for time), so the letters remind us what they stand for. It is the exact same <M d="y=mx+b"/> line, only with friendlier letters. Read <M d="V(t)"/> as "value at time <M d="t"/>."</p>
   <M d="\boxed{V(t)=-4000t+50000}" block/>
@@ -179,7 +216,7 @@ answer:()=>(
       { x: 0, y: 50000, label: "Today: $50K", color: "#f59e0b", lo: [8, -10] },
       { x: 10, y: 10000, label: "Year 10: $10K", color: "#ef4444", lo: [8, -14] },
     ]}
-    caption="The line slopes downward  -  value drops $4,000 per year"
+    caption="The line slopes downward: value drops $4,000 per year"
   />
 </div>
 )},
@@ -194,13 +231,13 @@ answer:()=>(
   <p><M d="x"/> = months, <M d="y"/> = NAV in dollars</p>
 
   <p><strong>Step 2: Pull out the two points.</strong></p>
-  <p>"$25 at month 0" → <M d="(0,\;25)"/></p>
-  <p>"$27.50 at month 5" → <M d="(5,\;27.50)"/></p>
+  <p>"$25 at month 0" gives the point <M d="(0,\;25)"/>.</p>
+  <p>"$27.50 at month 5" gives the point <M d="(5,\;27.50)"/>.</p>
 
   <p><strong>Step 3: Calculate slope <M d="m"/>.</strong></p>
   <p>Slope = rise over run = how much <M d="y"/> changed ÷ how much <M d="x"/> changed:</p>
   <M d="m=\frac{27.50-25}{5-0}=\frac{2.50}{5}=0.50" block/>
-  <p><strong>What does 0.50 mean?</strong> The NAV goes up $0.50 every month. That's what slope IS  -  the rate of change per unit of <M d="x"/>.</p>
+  <p><strong>What does 0.50 mean?</strong> The NAV goes up $0.50 every month. That is what slope is: the rate of change per unit of <M d="x"/>.</p>
 
   <p><strong>Step 4: Find <M d="b"/>.</strong></p>
   <p>Again, we have a point where <M d="x=0"/>: at month 0, NAV = $25. So <M d="b=25"/>.</p>
@@ -212,7 +249,7 @@ answer:()=>(
   <p><strong>Step 6: Check it.</strong></p>
   <M d="\text{NAV}(5)=0.50(5)+25=2.50+25=27.50\;\checkmark" block/>
 
-  <p><strong>Bonus  -  predicting the future:</strong> What's the NAV at month 12?</p>
+  <p><strong>Bonus, predicting the future:</strong> What is the NAV at month 12?</p>
   <M d="\text{NAV}(12)=0.50(12)+25=6+25=\$31" block/>
 
   <Graph fn={(x) => 0.5 * x + 25} xMin={-1} xMax={14} yMin={23} yMax={33}
@@ -225,14 +262,259 @@ answer:()=>(
   />
 
   <Box color="green">
-    <p>✅ <M d="\text{NAV}(t)=0.50t+25"/></p>
-    <p><strong>Key takeaway:</strong> Every y=mx+b problem follows the same 5 steps: define variables → find points → calculate slope → find b → write equation.</p>
+    <p><M d="\text{NAV}(t)=0.50t+25"/></p>
+    <p><strong>Key takeaway:</strong> Every y=mx+b problem follows the same 5 steps: define variables, find points, calculate slope, find b, write the equation.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>A courier charges <strong>$7</strong> for a 2-mile delivery and <strong>$15</strong> for a 6-mile delivery, and its pricing is a straight line. Find the price per mile and the base fee, and write the price as a function of miles.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Name the variables.</strong> <M d="x"/> = miles, <M d="y"/> = price in dollars. The two points are <M d="(2,\;7)"/> and <M d="(6,\;15)"/>.</p>
+  <p><strong>Step 2: Slope.</strong></p>
+  <M d="m=\frac{15-7}{6-2}=\frac{8}{4}=2" block/>
+  <p>The price rises $2 for every extra mile, so the <strong>price per mile is $2</strong>.</p>
+  <p><strong>Step 3: Point-slope form.</strong> Neither point has <M d="x=0"/>, so the shortcut for <M d="b"/> does not apply. Use point-slope with <M d="(2,7)"/>:</p>
+  <M d="y-7=2(x-2)\;\Rightarrow\;y-7=2x-4\;\Rightarrow\;y=2x+3" block/>
+  <p>The <M d="b"/> is 3: the <strong>base fee is $3</strong>, what you pay before the first mile. (Using the other point gives the same line: <M d="y-15=2(x-6)"/> becomes <M d="y=2x+3"/> too.)</p>
+  <p><strong>Step 4: Check.</strong> <M d="x=6"/>: <M d="2(6)+3=15"/>. Correct.</p>
+  <Box color="green"><p><M d="\text{Price}(x)=2x+3"/>: $2 per mile plus a $3 base fee.</p></Box>
 </div>
 )},
 ]},
 
-// ═══════ LESSON 3 ═══════
+{slug:"quadratics",module:"Foundations",title:"Quadratics, Polynomials & Solving Equations",time:"12 min",content:[
+{type:"concept",label:"Why a Parabola Bends",render:()=>(
+<div>
+  <p>In <Ref to="lines"/> every graph was a straight line, because <M d="x"/> appeared only to the first power. This lesson is about what happens the moment an <M d="x^2"/> shows up. The graph stops being straight and starts to <strong>bend</strong>, and that bent shape, called a <strong>parabola</strong>, is the shape of nearly every revenue, cost, and profit curve in this course. Learn it once here and you will recognize it everywhere later.</p>
+  <p>Start with the simplest case, <M d="y=x^2"/>, and compute some points. Remember from <Ref to="functions"/> that <M d="x^2"/> means <M d="x\times x"/>:</p>
+  <Box>
+    <p><M d="x=-3"/>: <M d="(-3)\times(-3)=9"/></p>
+    <p><M d="x=-2"/>: <M d="(-2)\times(-2)=4"/></p>
+    <p><M d="x=-1"/>: <M d="1"/></p>
+    <p><M d="x=0"/>: <M d="0"/></p>
+    <p><M d="x=1"/>: <M d="1"/></p>
+    <p><M d="x=2"/>: <M d="4"/></p>
+    <p><M d="x=3"/>: <M d="9"/></p>
+  </Box>
+  <p>Two things jump out. First, the outputs are never negative, because a number times itself is never negative (<Ref to="functions"/> showed why: a negative times a negative is positive). So the graph never dips below the axis, and it has a lowest point at <M d="(0,0)"/>. Second, the outputs are <strong>symmetric</strong>: <M d="x=3"/> and <M d="x=-3"/> both give 9. The left half of the graph is a mirror image of the right half. Plot the points, connect them, and you get a U shape.</p>
+  <p>Now two easy variations. Put a minus sign in front, <M d="y=-x^2"/>, and every output flips sign, so the U flips upside down into a dome with a highest point instead of a lowest one. Multiply by a number, say <M d="y=0.5x^2"/>, and every output is halved, so the U opens wider. The number in front controls how tightly the curve bends, and its sign controls whether the curve holds water (opens up) or spills it (opens down).</p>
+  <Graph fns={[(x)=>x*x,(x)=>-x*x,(x)=>0.5*x*x]} xMin={-3.5} xMax={3.5} yMin={-9} yMax={9}
+    label={<><span style={{color:"#818cf8"}}>y = x²</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#f472b6"}}>y = -x²</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#34d399"}}>y = 0.5x²</span></>}
+    caption="A positive coefficient opens the parabola upward; a negative one flips it into a dome; a smaller coefficient opens it wider."/>
+  <p>Why does the curve get steeper as you move away from the middle? Because squaring grows faster than counting. Going from <M d="x=1"/> to <M d="x=2"/> lifts the output by 3 (from 1 to 4), but going from <M d="x=2"/> to <M d="x=3"/> lifts it by 5 (from 4 to 9). Each step to the right adds more than the step before. That accelerating climb is exactly what a bend looks like, and in <Ref to="derivative"/> you will measure it precisely.</p>
+</div>
+)},
+{type:"concept",label:"The Vertex: Where the Curve Turns",render:()=>(
+<div>
+  <p>The general quadratic is written</p>
+  <M d="y=ax^2+bx+c" block/>
+  <p>with three numbers: <M d="a"/> (the coefficient on <M d="x^2"/>, which cannot be 0 or the <M d="x^2"/> would vanish), <M d="b"/> (the coefficient on <M d="x"/>), and <M d="c"/> (the constant). The <M d="bx"/> term slides the U sideways, so the turning point is no longer at <M d="x=0"/>. That turning point is called the <strong>vertex</strong>, and in business it is the point you care about most: the lowest cost, the highest revenue, the peak profit.</p>
+  <p>Here is where the vertex sits:</p>
+  <M d="x_{\text{vertex}}=-\frac{b}{2a}" block/>
+  <p><strong>Why that formula?</strong> Use the symmetry you just saw. A parabola is a mirror image of itself around a vertical line through its vertex. So if the curve crosses the <M d="x"/>-axis at two points (its <strong>roots</strong>, the inputs that make <M d="y=0"/>), the vertex must sit exactly halfway between them. The next section shows that the two roots are always <M d="-\tfrac{b}{2a}"/> <em>plus</em> some amount and <M d="-\tfrac{b}{2a}"/> <em>minus</em> the same amount. Halfway between "a bit more" and "a bit less" is <M d="-\tfrac{b}{2a}"/> itself. (When there are no roots the mirror line is still there, and the formula still finds it.)</p>
+  <p>Check it on <M d="y=x^2-6x+5"/>, where <M d="a=1"/>, <M d="b=-6"/>, <M d="c=5"/>. The formula says the vertex is at <M d="x=-\tfrac{-6}{2\cdot 1}=3"/>. Plug in: <M d="y=9-18+5=-4"/>. And the roots, found in the next section, turn out to be 1 and 5, whose midpoint is indeed 3.</p>
+  <Graph fn={(x)=>x*x-6*x+5} xMin={-1} xMax={7} yMin={-5} yMax={7}
+    highlights={[{x:1,y:0,label:"root x = 1",color:"#f59e0b",lo:[-44,-12]},{x:5,y:0,label:"root x = 5",color:"#f59e0b",lo:[8,-12]},{x:3,y:-4,label:"vertex (3, -4)",color:"#10b981",lo:[10,14]}]}
+    caption="The vertex sits halfway between the two roots, on the parabola's mirror line x = 3."/>
+</div>
+)},
+{type:"rule",label:"Factoring, the Zero-Product Rule, and the Quadratic Formula",render:()=>(
+<div>
+  <p>To find the roots you must solve <M d="ax^2+bx+c=0"/>. Unlike a line, you cannot just move things to the other side, because the <M d="x^2"/> and the <M d="x"/> are stuck together. There are two tools.</p>
+  <p><strong>Tool 1: Factor, then use the zero-product rule.</strong> Factoring means rewriting a sum as a product (things multiplied together). Three patterns cover nearly every case you will meet:</p>
+  <Box>
+    <p><strong>Common factor.</strong> <M d="ax^2+bx=x(ax+b)"/>. Every term has an <M d="x"/> in it, so pull it out front. Example: <M d="3x^2-12x=3x(x-4)"/>.</p>
+    <p><strong>Difference of squares.</strong> <M d="a^2-b^2=(a-b)(a+b)"/>. Check by multiplying back: <M d="(a-b)(a+b)=a^2+ab-ab-b^2=a^2-b^2"/>; the middle terms cancel. Example: <M d="x^2-9=(x-3)(x+3)"/>.</p>
+    <p><strong>Simple trinomial.</strong> <M d="x^2+bx+c=(x+m)(x+n)"/> where the two numbers <M d="m"/> and <M d="n"/> <em>add</em> to <M d="b"/> and <em>multiply</em> to <M d="c"/>. Example: for <M d="x^2-6x+5"/> we need two numbers adding to <M d="-6"/> and multiplying to <M d="5"/>. They are <M d="-1"/> and <M d="-5"/>, so <M d="x^2-6x+5=(x-1)(x-5)"/>. Multiply back to check: <M d="x^2-5x-x+5=x^2-6x+5"/>.</p>
+  </Box>
+  <p>Once the left side is a product, the <strong>zero-product rule</strong> finishes the job: a product is zero only when at least one of its factors is zero, because two nonzero numbers can never multiply to 0. So <M d="(x-1)(x-5)=0"/> means <M d="x-1=0"/> or <M d="x-5=0"/>, giving <M d="x=1"/> or <M d="x=5"/>.</p>
+  <p><strong>Tool 2: The quadratic formula.</strong> Some quadratics refuse to factor nicely. This formula solves <em>every</em> equation shaped like <M d="ax^2+bx+c=0"/>:</p>
+  <M d="x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" block/>
+  <p>The <M d="\pm"/> sign means "do it twice, once with plus and once with minus," which is how one formula produces both roots. It comes from a technique called completing the square; we take it as a trusted tool here. Notice the <M d="-\tfrac{b}{2a}"/> hiding inside it: the formula is literally "the vertex, plus or minus the same distance," which is the symmetry argument from the last section.</p>
+  <p>Two sign traps when <M d="b"/> is negative: the formula opens with <M d="-b"/>, so a negative <M d="b"/> becomes positive; and <M d="b^2"/> is always positive, because a negative squared is positive.</p>
+  <p><strong>Vocabulary you will see from here on.</strong> A <strong>polynomial</strong> is any sum of whole-number powers of <M d="x"/> with number coefficients, such as <M d="3x^2+5x-1"/> or <M d="x^3-2x"/>. Its <strong>degree</strong> is the highest power present (2 and 3 for those two). Its <strong>leading coefficient</strong> is the number multiplying that highest power (3 and 1). A line is a polynomial of degree 1; a quadratic has degree 2. A <strong>rational function</strong> is one polynomial divided by another, like <M d="\tfrac{x+1}{x^2-4}"/>; its only jam is a zero denominator, exactly as in <Ref to="functions"/>.</p>
+</div>
+)},
+{type:"example",label:"A Profit Parabola, Two Ways",render:()=>(
+<div>
+  <p>A small company's profit, in dollars, from selling <M d="x"/> units is</p>
+  <M d="P(x)=-2x^2+120x-1000" block/>
+  <p>Find the sales levels where profit is exactly zero, and the sales level that gives the most profit.</p>
+  <p><strong>Step 1: Set profit to zero and simplify.</strong> Every term is divisible by <M d="-2"/>, so divide the whole equation by <M d="-2"/> to make the numbers friendlier (dividing both sides of an equation by the same nonzero number keeps it true):</p>
+  <M d="-2x^2+120x-1000=0\;\Rightarrow\;x^2-60x+500=0" block/>
+  <p><strong>Step 2: Factor.</strong> We need two numbers that add to <M d="-60"/> and multiply to <M d="500"/>. Try <M d="-10"/> and <M d="-50"/>: they add to <M d="-60"/> and multiply to <M d="500"/>. So:</p>
+  <M d="(x-10)(x-50)=0" block/>
+  <p><strong>Step 3: Zero-product rule.</strong> <M d="x=10"/> or <M d="x=50"/>. Profit is zero at 10 units and again at 50 units. Below 10 units the company loses money, between 10 and 50 it makes money, and above 50 it loses money again (it has to cut prices so far to sell that much). These zero-profit points are called <strong>break-even</strong> points, and <Ref to="business-models"/> is built around them.</p>
+  <p><strong>Step 4: Find the vertex.</strong> With <M d="a=-2"/> and <M d="b=120"/>:</p>
+  <M d="x_{\text{vertex}}=-\frac{120}{2(-2)}=-\frac{120}{-4}=30" block/>
+  <p>Sanity check: 30 is halfway between the roots 10 and 50. Now the profit there:</p>
+  <M d="P(30)=-2(900)+120(30)-1000=-1800+3600-1000=800" block/>
+  <p>Because <M d="a=-2"/> is negative the parabola opens downward, so this vertex is the <em>top</em>: the most profit possible is <strong>$800</strong>, at 30 units.</p>
+  <Graph fn={(x)=>-2*x*x+120*x-1000} xMin={0} xMax={60} yMin={-1100} yMax={1000}
+    highlights={[{x:10,y:0,label:"break-even",color:"#f59e0b",lo:[-34,-12]},{x:50,y:0,label:"break-even",color:"#f59e0b",lo:[-34,-12]},{x:30,y:800,label:"peak: $800 at 30 units",color:"#10b981",lo:[-70,-14]}]}
+    caption="Profit crosses zero at 10 and 50 units and peaks at the vertex, 30 units."/>
+  <Box color="green"><p>Break-even at 10 and 50 units; maximum profit $800 at 30 units. In <Ref to="marginal"/> you will find that same kind of peak a completely different way, with a derivative, and the two methods will agree.</p></Box>
+</div>
+)},
+{type:"example",label:"When It Will Not Factor",render:()=>(
+<div>
+  <p>Solve <M d="x^2+4x-3=0"/>.</p>
+  <p><strong>Step 1: Try to factor.</strong> We need two numbers that add to 4 and multiply to <M d="-3"/>. The pairs that multiply to <M d="-3"/> are <M d="(1,-3)"/> and <M d="(-1,3)"/>, which add to <M d="-2"/> and <M d="2"/>. Neither is 4. It does not factor with whole numbers, so reach for the formula.</p>
+  <p><strong>Step 2: Identify <M d="a"/>, <M d="b"/>, <M d="c"/>.</strong> <M d="a=1"/>, <M d="b=4"/>, <M d="c=-3"/>.</p>
+  <p><strong>Step 3: Apply the formula.</strong> Watch the <M d="-4ac"/> piece: <M d="c"/> is negative, so <M d="-4(1)(-3)=+12"/>.</p>
+  <M d="x=\frac{-4\pm\sqrt{16+12}}{2}=\frac{-4\pm\sqrt{28}}{2}" block/>
+  <p><strong>Step 4: Evaluate.</strong> <M d="\sqrt{28}\approx 5.2915"/>, so the two roots are</p>
+  <M d="x=\frac{-4+5.2915}{2}\approx 0.6458\qquad x=\frac{-4-5.2915}{2}\approx -4.6458" block/>
+  <p>Check the first one: <M d="0.6458^2+4(0.6458)-3\approx 0.417+2.583-3=0"/>. It works.</p>
+  <Box color="green"><p><M d="x\approx 0.646"/> or <M d="x\approx -4.646"/>. Exact form: <M d="x=-2\pm\sqrt{7}"/> (since <M d="\sqrt{28}=2\sqrt{7}"/>). The formula never fails; factoring is just faster when it works.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>Solve <M d="3x^2-12x=0"/>, then find the vertex of <M d="y=3x^2-12x"/>.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Look for a common factor.</strong> Both terms contain <M d="3x"/>, so pull it out:</p>
+  <M d="3x^2-12x=3x(x-4)" block/>
+  <p>Check by multiplying back: <M d="3x\cdot x=3x^2"/> and <M d="3x\cdot(-4)=-12x"/>. Correct.</p>
+  <p><strong>Step 2: Zero-product rule.</strong> <M d="3x(x-4)=0"/> means <M d="3x=0"/> or <M d="x-4=0"/>, so <M d="x=0"/> or <M d="x=4"/>.</p>
+  <p><strong>Step 3: Vertex.</strong> Here <M d="a=3"/>, <M d="b=-12"/>, so <M d="x_{\text{vertex}}=-\tfrac{-12}{2\cdot 3}=2"/>. (Halfway between the roots 0 and 4, as it should be.) Its height: <M d="y=3(4)-12(2)=12-24=-12"/>.</p>
+  <Box color="green"><p>Roots <M d="x=0"/> and <M d="x=4"/>; vertex <M d="(2,-12)"/>. Since <M d="a=3>0"/> the parabola opens upward, so the vertex is its lowest point.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>For <M d="y=x^2-8x+3"/>, find the vertex and the roots. (The roots will not be whole numbers.)</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Vertex.</strong> <M d="a=1"/>, <M d="b=-8"/>: <M d="x_{\text{vertex}}=-\tfrac{-8}{2}=4"/>. Height: <M d="y=16-32+3=-13"/>. The vertex is <M d="(4,-13)"/>, and since <M d="a>0"/> it is the lowest point.</p>
+  <p><strong>Step 2: Try to factor.</strong> Two numbers adding to <M d="-8"/> and multiplying to 3? The only pairs multiplying to 3 are <M d="(1,3)"/> and <M d="(-1,-3)"/>, adding to 4 or <M d="-4"/>. No luck, so use the formula.</p>
+  <p><strong>Step 3: Quadratic formula.</strong> <M d="c=3"/>, so <M d="b^2-4ac=64-12=52"/>:</p>
+  <M d="x=\frac{8\pm\sqrt{52}}{2}" block/>
+  <p><M d="\sqrt{52}\approx 7.2111"/>, giving <M d="x\approx\tfrac{8+7.2111}{2}\approx 7.606"/> and <M d="x\approx\tfrac{8-7.2111}{2}\approx 0.394"/>.</p>
+  <p><strong>Step 4: Sanity check with symmetry.</strong> The midpoint of the roots is <M d="\tfrac{7.606+0.394}{2}=4"/>, exactly the vertex. Everything agrees.</p>
+  <Box color="green"><p>Vertex <M d="(4,-13)"/>; roots <M d="x\approx 0.394"/> and <M d="x\approx 7.606"/> (exactly <M d="4\pm\sqrt{13}"/>).</p></Box>
+</div>
+)},
+]},
+
+{slug:"business-models",module:"Foundations",title:"Business Models: Cost, Revenue, Profit & Demand",time:"12 min",content:[
+{type:"concept",label:"Cost Has Two Parts",render:()=>(
+<div>
+  <p>Calculus is a set of tools, and tools need something to work on. In this course that something is a handful of business functions: cost, revenue, profit, and demand. Every later lesson differentiates or integrates one of them, so this lesson introduces each as a plain idea before any calculus touches it.</p>
+  <p>Start with <strong>cost</strong>. Imagine a bakery. Some bills arrive whether it bakes one loaf or ten thousand: rent, insurance, the oven lease. Those are <strong>fixed costs</strong>. Other costs grow with every loaf: flour, yeast, the electricity to bake it. Those are <strong>variable costs</strong>. Say the fixed bills come to $2,000 a month and each loaf costs $1.50 in ingredients and power. Then the total cost of baking <M d="x"/> loaves in a month is</p>
+  <M d="C(x)=2000+1.5x" block/>
+  <p>which is just a line from <Ref to="lines"/>: the fixed cost is the <M d="y"/>-intercept (the cost at <M d="x=0"/>, before a single loaf) and the per-loaf cost is the slope.</p>
+  <p>A second cost idea is the cost <em>per loaf</em>, called the <strong>average cost</strong>. It is total cost divided by how many you made:</p>
+  <M d="AC(x)=\frac{C(x)}{x}=\frac{2000+1.5x}{x}=\frac{2000}{x}+1.5" block/>
+  <p>(That last step splits the fraction into <M d="\tfrac{2000}{x}+\tfrac{1.5x}{x}"/>, and the second piece is just 1.5.) Watch what happens as the bakery makes more:</p>
+  <Box>
+    <p>100 loaves: <M d="AC=\tfrac{2000}{100}+1.5=20+1.5=\$21.50"/> per loaf</p>
+    <p>1,000 loaves: <M d="AC=2+1.5=\$3.50"/> per loaf</p>
+    <p>10,000 loaves: <M d="AC=0.2+1.5=\$1.70"/> per loaf</p>
+  </Box>
+  <p>Average cost falls because the same $2,000 of rent is being spread over more and more loaves, so each loaf's share shrinks. It can never fall below $1.50, though, because every loaf still needs its own ingredients. It keeps creeping toward 1.50 without reaching it, an idea <Ref to="infinite-limits"/> makes precise.</p>
+</div>
+)},
+{type:"concept",label:"Price, Demand, and Revenue",render:()=>(
+<div>
+  <p>Now the money coming in. How many units a business sells depends on the price it charges: charge more and fewer people buy. A <strong>price-demand equation</strong> records that trade-off. The simplest version is a line:</p>
+  <M d="p=a-bx" block/>
+  <p>where <M d="p"/> is the price per unit and <M d="x"/> is the number of units customers will buy at that price. The slope <M d="-b"/> is negative for the reason just given: to sell more you must charge less. Take</p>
+  <M d="p=12-0.01x" block/>
+  <p>At <M d="x=0"/> the price is $12 (the most anyone would pay). Every extra 100 units sold requires knocking $1 off the price, because <M d="0.01\times 100=1"/>.</p>
+  <p><strong>Revenue</strong> is the total money collected: price per unit times the number of units, <M d="R=p\cdot x"/>. But <M d="p"/> is not a fixed number here; it depends on <M d="x"/>. Substitute the price-demand equation in:</p>
+  <M d="R(x)=(12-0.01x)\,x=12x-0.01x^2" block/>
+  <p>Look at what just happened. A <em>linear</em> demand equation produced a <em>quadratic</em> revenue function, a parabola from <Ref to="quadratics"/>. Because the coefficient on <M d="x^2"/> is negative, it opens downward: revenue climbs as you sell more, peaks, then falls, because eventually the price cuts needed to sell more units cost more than the extra units bring in. The vertex is at</p>
+  <M d="x=-\frac{12}{2(-0.01)}=600\qquad R(600)=12(600)-0.01(600)^2=7200-3600=\$3{,}600" block/>
+  <p>So revenue is highest at 600 units, where the price is <M d="12-0.01(600)=\$6"/>.</p>
+  <Graph fn={(x)=>12*x-0.01*x*x} xMin={0} xMax={1200} yMin={0} yMax={4000}
+    highlights={[{x:600,y:3600,label:"max revenue $3,600 at 600 units",color:"#10b981",lo:[-90,-14]}]}
+    caption="Revenue from p = 12 - 0.01x is the parabola 12x - 0.01x squared, peaking at 600 units."/>
+</div>
+)},
+{type:"concept",label:"Profit, Break-Even, and Where Buyers Meet Sellers",render:()=>(
+<div>
+  <p><strong>Profit</strong> is what is left after paying costs:</p>
+  <M d="P(x)=R(x)-C(x)" block/>
+  <p>Since <M d="R"/> is a parabola and <M d="C"/> is a line, <M d="P"/> is a parabola too. Its roots, where <M d="P(x)=0"/>, are the <strong>break-even</strong> points: revenue exactly covers cost. Between the two break-even points the business makes money; outside them it loses money. Finding break-even is nothing more than solving a quadratic, which you learned in <Ref to="quadratics"/>.</p>
+  <p>One more pair of functions describes a whole <em>market</em> rather than one firm. Plot price on the vertical axis and quantity on the horizontal axis. The <strong>demand curve</strong> <M d="D(x)"/> gives the highest price buyers will pay for the <M d="x"/>-th unit; it slopes down. The <strong>supply curve</strong> <M d="S(x)"/> gives the lowest price sellers will accept for the <M d="x"/>-th unit; it slopes up, because producing more means overtime, extra shifts, and pricier materials, so sellers need a higher price to justify each extra unit. Where the two curves cross is the <strong>equilibrium</strong>: the one quantity and price at which what buyers want equals what sellers offer.</p>
+  <p>Example: with <M d="D(x)=50-0.1x"/> and <M d="S(x)=10+0.1x"/>, set them equal and gather the <M d="x"/> terms on one side:</p>
+  <M d="50-0.1x=10+0.1x\;\Rightarrow\;40=0.2x\;\Rightarrow\;x=200" block/>
+  <p>The price there is <M d="S(200)=10+0.1(200)=\$30"/>. Check: <M d="D(200)=50-20=30"/> too. This market clears at 200 units for $30 each. You will meet exactly these curves again in <Ref to="surplus"/>, where integration measures how much buyers and sellers gain from trading.</p>
+  <Graph fns={[(x)=>50-0.1*x,(x)=>10+0.1*x]} xMin={0} xMax={400} yMin={0} yMax={55}
+    highlights={[{x:200,y:30,label:"equilibrium (200, $30)",color:"#f59e0b",lo:[10,-14]}]}
+    label={<><span style={{color:"#818cf8"}}>Demand</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#f472b6"}}>supply</span></>}
+    xlab="Quantity" ylab="Price ($)"
+    caption="Demand falls and supply rises with quantity; they cross at the equilibrium."/>
+</div>
+)},
+{type:"rule",label:"The Business Functions",render:()=>(
+<div>
+  <M d="C(x)=\text{fixed cost}+(\text{cost per unit})\,x" block/>
+  <M d="AC(x)=\frac{C(x)}{x}" block/>
+  <M d="R(x)=p\cdot x\quad\text{with }p\text{ from the price-demand equation}" block/>
+  <M d="P(x)=R(x)-C(x)" block/>
+  <p><strong>Break-even:</strong> solve <M d="P(x)=0"/>, which is the same as <M d="R(x)=C(x)"/>.</p>
+  <p><strong>Equilibrium:</strong> solve <M d="D(x)=S(x)"/> for the quantity, then plug it into either curve for the price.</p>
+  <p>Letters to expect from here on: <M d="C"/> cost, <M d="R"/> revenue, <M d="P"/> profit, <M d="x"/> or <M d="q"/> quantity, <M d="p"/> price, <M d="t"/> time. Reading <M d="R(x)"/> as "revenue at x units" makes every later formula easier to follow.</p>
+</div>
+)},
+{type:"example",label:"A Phone-Case Company, Start to Finish",render:()=>(
+<div>
+  <p><em>"A company sells phone cases. Its fixed costs are $5,000 a month and each case costs $4 to make. The price-demand equation is <M d="p=20-0.01x"/>. Find the revenue and profit functions, the break-even points, the sales level with the most profit, and the sales level with the most revenue."</em></p>
+  <p><strong>Step 1: Cost.</strong> Fixed plus variable: <M d="C(x)=5000+4x"/>.</p>
+  <p><strong>Step 2: Revenue.</strong> Price times quantity, with the price-demand equation substituted in:</p>
+  <M d="R(x)=(20-0.01x)\,x=20x-0.01x^2" block/>
+  <p><strong>Step 3: Profit.</strong> Subtract, and be careful to subtract <em>both</em> parts of the cost:</p>
+  <M d="P(x)=(20x-0.01x^2)-(5000+4x)=-0.01x^2+16x-5000" block/>
+  <p><strong>Step 4: Break-even.</strong> Set <M d="P(x)=0"/>. Multiply through by <M d="-100"/> to clear the decimal: <M d="x^2-1600x+500000=0"/>. This does not factor nicely (two numbers adding to <M d="-1600"/> and multiplying to <M d="500000"/> are not obvious), so use the quadratic formula with <M d="a=1"/>, <M d="b=-1600"/>, <M d="c=500000"/>:</p>
+  <M d="x=\frac{1600\pm\sqrt{1600^2-4(500000)}}{2}=\frac{1600\pm\sqrt{2{,}560{,}000-2{,}000{,}000}}{2}=\frac{1600\pm\sqrt{560{,}000}}{2}" block/>
+  <p><M d="\sqrt{560{,}000}\approx 748.33"/>, so</p>
+  <M d="x\approx\frac{1600-748.33}{2}\approx 425.8\qquad x\approx\frac{1600+748.33}{2}\approx 1174.2" block/>
+  <p>The company breaks even at about 426 cases and again at about 1,174 cases. Between those it is profitable.</p>
+  <p><strong>Step 5: Most profit.</strong> The vertex of the profit parabola, with <M d="a=-0.01"/>, <M d="b=16"/>:</p>
+  <M d="x=-\frac{16}{2(-0.01)}=800\qquad P(800)=-0.01(640{,}000)+16(800)-5000=-6400+12800-5000=\$1{,}400" block/>
+  <p><strong>Step 6: Most revenue.</strong> The vertex of the revenue parabola, with <M d="a=-0.01"/>, <M d="b=20"/>:</p>
+  <M d="x=-\frac{20}{2(-0.01)}=1000\qquad R(1000)=20000-10000=\$10{,}000" block/>
+  <Box color="amber"><p><strong>Notice:</strong> the most revenue happens at 1,000 cases, but the most profit happens at 800. Selling those extra 200 cases brings in more revenue, yet each one costs $4 to make and requires a lower price, so profit is smaller. Maximizing revenue and maximizing profit are different questions with different answers. Keep them apart.</p></Box>
+  <Graph fns={[(x)=>20*x-0.01*x*x,(x)=>5000+4*x]} xMin={0} xMax={2000} yMin={0} yMax={14000}
+    highlights={[{x:425.8,y:6703,label:"break-even",color:"#f59e0b",lo:[-34,-14]},{x:1174.2,y:9697,label:"break-even",color:"#f59e0b",lo:[8,-14]},{x:800,y:9600,label:"biggest gap: profit $1,400",color:"#10b981",lo:[-70,-16]}]}
+    label={<><span style={{color:"#818cf8"}}>Revenue</span> <span style={{color:"#e2e8f0"}}>and</span> <span style={{color:"#f472b6"}}>cost</span></>}
+    caption="Profit is the vertical gap between revenue and cost. It is zero where they cross and largest at 800 cases."/>
+</div>
+)},
+{type:"interactive",render:()=>(<ParamExplorer xMin={0} xMax={1600} yMin={0} yMax={12000} min={0} max={1600} step={10} start={800} name="x" hint="cases sold per month"
+  intro="Revenue is the indigo parabola and cost is the pink line. Slide the number of cases and watch profit, the gold gap between them, grow, peak at 800, and shrink back into a loss."
+  build={(x)=>{const R=20*x-0.01*x*x,C=5000+4*x,P=R-C;return{curves:[{f:(v)=>20*v-0.01*v*v,color:"#818cf8"},{f:(v)=>5000+4*v,color:"#f472b6"}],points:[{x,y:R,color:"#818cf8",label:`R = $${Math.round(R).toLocaleString()}`,lx:10,ly:-12},{x,y:C,color:"#f472b6",label:`C = $${Math.round(C).toLocaleString()}`,lx:10,ly:16}],lines:[{x1:x,y1:C,x2:x,y2:R,color:"#fbbf24",width:3}],formula:`P(${x})=${Math.round(P)}`,caption:P<-0.5?`At ${x} cases the company loses $${Math.abs(Math.round(P)).toLocaleString()}: cost sits above revenue.`:P<0.5?`At ${x} cases the company exactly breaks even.`:`At ${x} cases profit is $${Math.round(P).toLocaleString()}, the length of the gold gap.`};}}/>)},
+{type:"practice",render:()=>(<span>A firm has cost <M d="C(x)=1200+8x"/> and price-demand equation <M d="p=40-0.02x"/>. Write <M d="R(x)"/> and <M d="P(x)"/>, then find the profit and the average cost when it sells 500 units.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Revenue.</strong> Price times quantity: <M d="R(x)=(40-0.02x)\,x=40x-0.02x^2"/>.</p>
+  <p><strong>Step 2: Profit.</strong> Subtract the whole cost: <M d="P(x)=(40x-0.02x^2)-(1200+8x)=-0.02x^2+32x-1200"/>.</p>
+  <p><strong>Step 3: Profit at 500.</strong></p>
+  <M d="P(500)=-0.02(250{,}000)+32(500)-1200=-5000+16000-1200=\$9{,}800" block/>
+  <p><strong>Step 4: Average cost at 500.</strong> Total cost first: <M d="C(500)=1200+8(500)=5200"/>. Divide by the units:</p>
+  <M d="AC(500)=\frac{5200}{500}=\$10.40\text{ per unit}" block/>
+  <p>Notice the per-unit cost is $10.40 even though each unit only costs $8 to make; the extra $2.40 is each unit's share of the $1,200 fixed cost.</p>
+  <Box color="green"><p><M d="R(x)=40x-0.02x^2"/>, <M d="P(x)=-0.02x^2+32x-1200"/>, <M d="P(500)=\$9{,}800"/>, <M d="AC(500)=\$10.40"/>.</p></Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>For the same firm, find both break-even points. Then, in a different market, demand is <M d="D(x)=80-0.2x"/> and supply is <M d="S(x)=20+0.1x"/>: find the equilibrium quantity and price.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Set profit to zero.</strong> <M d="-0.02x^2+32x-1200=0"/>. Multiply through by <M d="-50"/> to clear the decimal:</p>
+  <M d="x^2-1600x+60000=0" block/>
+  <p><strong>Step 2: Quadratic formula.</strong> <M d="a=1"/>, <M d="b=-1600"/>, <M d="c=60000"/>:</p>
+  <M d="x=\frac{1600\pm\sqrt{2{,}560{,}000-240{,}000}}{2}=\frac{1600\pm\sqrt{2{,}320{,}000}}{2}" block/>
+  <p><M d="\sqrt{2{,}320{,}000}\approx 1523.15"/>, so</p>
+  <M d="x\approx\frac{1600-1523.15}{2}\approx 38.4\qquad x\approx\frac{1600+1523.15}{2}\approx 1561.6" block/>
+  <p>The firm breaks even at about 38 units and about 1,562 units, and is profitable in between. Sanity check: 500 units is inside that range, and we found a healthy $9,800 profit there.</p>
+  <p><strong>Step 3: Equilibrium.</strong> Set demand equal to supply and gather the <M d="x"/> terms:</p>
+  <M d="80-0.2x=20+0.1x\;\Rightarrow\;60=0.3x\;\Rightarrow\;x=200" block/>
+  <p>Price: <M d="D(200)=80-0.2(200)=\$40"/>. Check with supply: <M d="S(200)=20+20=40"/>. Both curves agree, which is what equilibrium means.</p>
+  <Box color="green"><p>Break-even at about 38.4 and 1,561.6 units. Equilibrium at 200 units and $40.</p></Box>
+</div>
+)},
+]},
+
 {slug:"exponentials",module:"Foundations",title:"Exponential Functions & e",time:"11 min",content:[
 {type:"concept",label:"What Exponential Growth Is",render:()=>(
 <div>
@@ -264,12 +546,37 @@ answer:()=>(
   <p>If <M d="b>1"/>, the amount grows. Take <M d="b=1.05"/>. Why does multiplying by 1.05 mean "plus 5%"? Because <M d="1.05 = 1 + 0.05"/>. The <M d="1"/> keeps everything you already had (that is 100% of it), and the extra <M d="0.05"/> adds another 5% on top.</p>
   <p>If <M d="b"/> is between 0 and 1, the amount shrinks. This is called <strong>decay</strong>. For example <M d="b=0.90"/> keeps 90% and loses 10% each period.</p>
 
-  <p>The single most important base in calculus is the number <M d="e\approx 2.71828"/>. It is just a fixed constant (like <M d="\pi"/>, the circle constant that is about 3.14159) that shows up naturally when growth is <em>continuous</em>, meaning interest is added every instant instead of once a month. You will use it constantly from here on.</p>
+  <p>The single most important base in calculus is the number <M d="e\approx 2.71828"/>. Like <M d="\pi"/> (the circle constant, about 3.14159) it is a fixed number that nature keeps producing, and the next section shows exactly where it comes from. You will use it constantly from here on.</p>
 
   <Graph fns={[(x) => Math.exp(x), (x) => Math.exp(-x)]} xMin={-3} xMax={3} yMin={-0.5} yMax={8}
     label={<><span style={{color:"#818cf8"}}>Growth</span> <span style={{color:"#e2e8f0"}}>vs</span> <span style={{color:"#f472b6"}}>decay</span></>}
     caption="Blue grows faster and faster as you move right. Pink decays toward 0 but never quite reaches it."
   />
+</div>
+)},
+{type:"concept",label:"Where e Comes From",render:()=>(
+<div>
+  <p>Banks do not add interest once a year. Some add it monthly, some daily. The formula for interest added <M d="n"/> times a year is</p>
+  <M d="A=P\left(1+\frac{r}{n}\right)^{nt}" block/>
+  <p>Why that shape? If the yearly rate is <M d="r"/> but interest is added <M d="n"/> times a year, each addition is only a fraction <M d="\tfrac{r}{n}"/> of the rate, so each time you multiply by <M d="1+\tfrac{r}{n}"/>. Over <M d="t"/> years there are <M d="nt"/> such additions, and repeated multiplication is an exponent (that is the whole idea of this lesson). So the growth factor is <M d="\left(1+\tfrac{r}{n}\right)^{nt}"/>.</p>
+  <p>Now the experiment that produces <M d="e"/>. Put $1 in an account paying 100% a year (so <M d="r=1"/>) for one year, and add the interest more and more often:</p>
+  <Box>
+    <p>Once a year (<M d="n=1"/>): <M d="(1+1)^1=2"/></p>
+    <p>Twice a year (<M d="n=2"/>): <M d="(1+\tfrac12)^2=1.5^2=2.25"/></p>
+    <p>Quarterly (<M d="n=4"/>): <M d="(1.25)^4\approx 2.4414"/></p>
+    <p>Monthly (<M d="n=12"/>): <M d="\approx 2.6130"/></p>
+    <p>Daily (<M d="n=365"/>): <M d="\approx 2.71457"/></p>
+    <p>A million times a year: <M d="\approx 2.71828"/></p>
+  </Box>
+  <p>Adding interest more often helps, but each step helps less than the last. The values creep up and settle at a ceiling of about 2.71828. That ceiling <em>is</em> <M d="e"/>. It is the growth factor you get when interest is added continuously, every instant, at a 100% rate. For any other rate <M d="r"/> and time <M d="t"/>, the same creeping-up turns <M d="\left(1+\tfrac{r}{n}\right)^{nt}"/> into <M d="e^{rt}"/>, which is why the continuous formula in the next section has <M d="e"/> in it.</p>
+  <p>How much does continuous compounding actually matter? Take $10,000 at 5% for 3 years:</p>
+  <Box>
+    <p>Yearly: <M d="10000(1.05)^3=\$11{,}576.25"/></p>
+    <p>Monthly: <M d="10000\left(1+\tfrac{0.05}{12}\right)^{36}\approx\$11{,}614.72"/></p>
+    <p>Daily: <M d="10000\left(1+\tfrac{0.05}{365}\right)^{1095}\approx\$11{,}618.22"/></p>
+    <p>Continuously: <M d="10000\,e^{0.15}\approx\$11{,}618.34"/></p>
+  </Box>
+  <p>Going from daily to continuous changes the answer by twelve cents. Continuous compounding is not a trick banks play; it is the clean limiting case, and its formula is far easier to differentiate and integrate than the <M d="n"/>-times version. That is why calculus prefers it.</p>
 </div>
 )},
 {type:"rule",label:"The Formula and the Exponent Rules",render:()=>(
@@ -288,6 +595,19 @@ answer:()=>(
   <p>Multiplying stacks the repeated multiplications side by side, so the counts add. Check it: <M d="2^2\cdot 2^3=(2\cdot 2)(2\cdot 2\cdot 2)=2^5"/>, and sure enough <M d="2+3=5"/>.</p>
   <M d="(b^x)^y=b^{xy}" block/>
   <p>Raising a power to a power repeats that whole group, so the counts multiply. Check it: <M d="(2^2)^3=2^2\cdot 2^2\cdot 2^2=2^6"/>, and <M d="2\times 3=6"/>.</p>
+  <p style={{marginTop:14}}><strong>Negative and fractional exponents,</strong> which the power rule in <Ref to="power-rule"/> will need. Both come from the pattern you already saw.</p>
+  <p>Keep stepping the exponent down past zero. Each step still divides by the base, so <M d="2^{-1}=\tfrac{1}{2}"/>, <M d="2^{-2}=\tfrac{1}{4}"/>, <M d="2^{-3}=\tfrac{1}{8}"/>. In general:</p>
+  <M d="b^{-n}=\frac{1}{b^n}" block/>
+  <p>A negative exponent means "one over." It does not make anything negative.</p>
+  <p>For fractions, ask what <M d="b^{1/2}"/> would have to be. By the first rule, <M d="b^{1/2}\cdot b^{1/2}=b^{1/2+1/2}=b^1=b"/>. So <M d="b^{1/2}"/> is the number that, multiplied by itself, gives <M d="b"/>: the square root. Likewise <M d="b^{1/3}"/> is the cube root (three copies multiply to <M d="b"/>):</p>
+  <M d="b^{1/2}=\sqrt{b}\qquad b^{1/3}=\sqrt[3]{b}\qquad 8^{1/3}=2\qquad 4^{3/2}=(4^{1/2})^3=2^3=8" block/>
+  <p>The payoff is a rewriting table you will use constantly:</p>
+  <Box>
+    <p><M d="\dfrac{1}{x}=x^{-1}"/></p>
+    <p><M d="\dfrac{1}{x^2}=x^{-2}"/></p>
+    <p><M d="\sqrt{x}=x^{1/2}"/></p>
+    <p><M d="\dfrac{1}{\sqrt{x}}=x^{-1/2}"/></p>
+  </Box>
 </div>
 )},
 {type:"example",label:"Using the Formula",render:()=>(
@@ -339,6 +659,17 @@ answer:()=>(
   </Box>
 </div>
 )},
+{type:"practice",render:()=>(<span>You invest <strong>$5,000 at 4%</strong> for <strong>10 years</strong>. Find the ending amount with monthly compounding and with continuous compounding, and compare.</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Monthly.</strong> Use <M d="A=P(1+\tfrac{r}{n})^{nt}"/> with <M d="P=5000"/>, <M d="r=0.04"/>, <M d="n=12"/>, <M d="t=10"/>. The exponent is <M d="nt=120"/> and each monthly factor is <M d="1+\tfrac{0.04}{12}\approx 1.003333"/>:</p>
+  <M d="A=5000(1.003333)^{120}\approx 5000\times 1.490833\approx\$7{,}454.16" block/>
+  <p><strong>Step 2: Continuous.</strong> Use <M d="A=Pe^{rt}"/> with <M d="rt=0.04\times 10=0.4"/>:</p>
+  <M d="A=5000\,e^{0.4}\approx 5000\times 1.49182\approx\$7{,}459.12" block/>
+  <p><strong>Step 3: Compare.</strong> Continuous compounding earns about $4.96 more over ten years. Small, as the lesson promised, and the continuous version was one line of arithmetic instead of a 120th power.</p>
+  <Box color="green"><p>Monthly: about $7,454.16. Continuous: about $7,459.12.</p></Box>
+</div>
+)},
 ]},
 
 {slug:"logarithms",module:"Foundations",title:"Logarithmic Functions",time:"10 min",content:[
@@ -352,6 +683,7 @@ answer:()=>(
     <p><M d="\ln(x)"/> asks: "I know the result <M d="x"/>. What exponent produced it?"</p>
   </Box>
   <p>Concrete example: <M d="e^2\approx 7.389"/>. Going backward, <M d="\ln(7.389)\approx 2"/>, because 2 is exactly the exponent that produced 7.389. The two operations cancel.</p>
+  <Box color="amber"><p><strong>Calculator note.</strong> Most calculators have two log buttons. <strong>ln</strong> is the natural log, the one this course uses, and it undoes <M d="e^x"/>. <strong>log</strong> (with no letter) is usually the base-10 log, which undoes <M d="10^x"/> instead. Pressing the wrong one gives a different number: <M d="\ln(100)\approx 4.605"/> but <M d="\log(100)=2"/>. Whenever you see <M d="\ln"/> in this course, press ln.</p></Box>
 
   <p><strong>Why can you only take <M d="\ln"/> of a positive number?</strong> Most courses state this with no reason. Here is the reason. <M d="\ln(x)"/> is hunting for the exponent that makes <M d="e^{\,?}=x"/>. But <M d="e"/> is a positive number (about 2.718), and a positive number raised to <em>any</em> power stays positive: multiplying positives gives a positive, and even negative exponents only flip it into a fraction like <M d="\tfrac{1}{e^2}"/>, which is still positive. (You saw this in <Ref to="exponentials"/>'s decay graph, which sinks toward 0 but never touches it.) So no exponent can ever produce 0 or a negative result. That is exactly why <M d="\ln(0)"/> and <M d="\ln(-5)"/> do not exist.</p>
   <Graph fn={(x) => Math.log(x)} xMin={-1} xMax={8} yMin={-3} yMax={3}
@@ -412,6 +744,21 @@ answer:()=>(
     <p><M d="x\approx 2.796"/></p>
     <p>Check: <M d="\ln(3\times 2.796-1)\approx\ln(7.39)\approx 2"/>. Correct.</p>
   </Box>
+</div>
+)},
+{type:"practice",render:()=>(<span>A city of <strong>50,000</strong> people grows continuously at <strong>2% a year</strong>, so its population is <M d="P(t)=50000\,e^{0.02t}"/>. In how many years will it reach <strong>80,000</strong>?</span>),
+answer:()=>(
+<div>
+  <p><strong>Step 1: Set up the equation.</strong> We want the <M d="t"/> that makes the population 80,000:</p>
+  <M d="80000=50000\,e^{0.02t}" block/>
+  <p><strong>Step 2: Isolate the exponential.</strong> Divide both sides by 50,000:</p>
+  <M d="1.6=e^{0.02t}" block/>
+  <p><strong>Step 3: Free the exponent with <M d="\ln"/>.</strong> Take <M d="\ln"/> of both sides; on the right, <M d="\ln"/> cancels <M d="e"/> and hands back the exponent:</p>
+  <M d="\ln(1.6)=0.02t" block/>
+  <p><strong>Step 4: Solve for <M d="t"/>.</strong> On a calculator <M d="\ln(1.6)\approx 0.4700"/>:</p>
+  <M d="t=\frac{0.4700}{0.02}\approx 23.5\text{ years}" block/>
+  <p><strong>Step 5: Check.</strong> <M d="50000\,e^{0.02\times 23.5}=50000\,e^{0.47}\approx 50000\times 1.6\approx 80{,}000"/>. Correct.</p>
+  <Box color="green"><p>About <strong>23.5 years</strong>. Same three moves as the doubling-time problem in <Ref to="exponentials"/>: isolate the exponential, take <M d="\ln"/>, divide.</p></Box>
 </div>
 )},
 ]},
@@ -515,7 +862,6 @@ answer:()=>(
 )},
 ]},
 
-// ═══════ LESSON 6 ═══════
 {slug:"infinite-limits",module:"Limits & Continuity",title:"Infinite Limits & Limits at Infinity",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
@@ -632,7 +978,6 @@ answer:()=>(
 )},
 ]},
 
-// ═══════ LESSON 7 ═══════
 {slug:"continuity",module:"Limits & Continuity",title:"Continuity",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
@@ -733,7 +1078,6 @@ answer:()=>(
 )},
 ]},
 
-// ═══════ LESSON 8 ═══════
 {slug:"derivative",module:"Derivatives",title:"The Derivative  -  What It Means",time:"12 min",content:[
 {type:"concept",label:"The Big Idea (No Formulas Yet)",render:()=>(
 <div>
@@ -947,7 +1291,6 @@ answer:()=>(
 )},
 ]},
 
-// ═══════ LESSON 9 ═══════
 {slug:"power-rule",module:"Derivatives",title:"Power Rule & Basic Rules",time:"9 min",content:[
 {type:"concept",render:()=>(
 <div>
@@ -1010,7 +1353,6 @@ answer:()=>(
 )},
 ]},
 
-// ═══════ LESSON 10 ═══════
 {slug:"marginal",module:"Derivatives",title:"Marginal Analysis",time:"10 min",content:[
 {type:"concept",render:()=>(
 <div>
@@ -2175,21 +2517,121 @@ export const QUIZ = {
    ]
   }
  ],
- "exponentials": [
+ "quadratics": [
   {
-   "q": "An exponent is repeated multiplication. What is $2^5$?",
+   "q": "For $y=x^2-8x+3$, at what $x$ is the vertex?",
    "choices": [
-    "$10$",
-    "$25$",
-    "$32$",
-    "$16$"
+    "$x=8$",
+    "$x=4$",
+    "$x=-4$",
+    "$x=3$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - the vertex is at $-\\dfrac{b}{2a}$, and you still have to divide by $2a=2$.",
+    "Correct - $x=-\\dfrac{b}{2a}=-\\dfrac{-8}{2}=4$.",
+    "Not quite - watch the sign: $-b$ with $b=-8$ gives $+8$, so the vertex is at $+4$.",
+    "Not quite - 3 is the constant $c$, which shifts the parabola up or down but does not locate the vertex."
+   ]
+  },
+  {
+   "q": "Factor $x^2-9$.",
+   "choices": [
+    "$(x-3)(x+3)$",
+    "$(x-3)^2$",
+    "$(x-9)(x+1)$",
+    "It does not factor"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - it is a difference of squares, and $(x-3)(x+3)=x^2+3x-3x-9=x^2-9$.",
+    "Not quite - $(x-3)^2=x^2-6x+9$, which has a middle term and a $+9$.",
+    "Not quite - $(x-9)(x+1)=x^2-8x-9$; the middle term does not cancel.",
+    "Not quite - any difference of two squares factors as $(a-b)(a+b)$."
+   ]
+  },
+  {
+   "q": "If $(x-2)(x+5)=0$, what are the solutions?",
+   "choices": [
+    "$x=-2$ or $x=5$",
+    "$x=10$",
+    "$x=2$ or $x=-5$",
+    "$x=3$"
    ],
    "answer": 2,
    "why": [
-    "Not quite - that is $2\\times 5$; an exponent multiplies five 2's together.",
-    "Not quite - that is $5^2$; here the base is 2 and the exponent is 5.",
-    "Correct - $2^5 = 2\\times 2\\times 2\\times 2\\times 2 = 32$.",
-    "Not quite - $16$ is $2^4$; one more factor of 2 gives $32$."
+    "Not quite - set each factor to zero: $x-2=0$ gives $x=2$, and $x+5=0$ gives $x=-5$; the signs flip.",
+    "Not quite - a product is zero when a factor is zero, so solve each factor rather than multiplying the numbers.",
+    "Correct - the zero-product rule: $x-2=0$ or $x+5=0$, so $x=2$ or $x=-5$.",
+    "Not quite - adding the numbers in the factors does not solve the equation; set each factor to zero."
+   ]
+  }
+ ],
+ "business-models": [
+  {
+   "q": "Which statement describes a fixed cost?",
+   "choices": [
+    "It grows with every unit made, like ingredients",
+    "It is the price customers pay for each unit",
+    "It is paid even when nothing is produced, like rent",
+    "It is revenue minus cost"
+   ],
+   "answer": 2,
+   "why": [
+    "Not quite - a cost that grows with each unit is a variable cost.",
+    "Not quite - the price customers pay belongs to revenue, not cost.",
+    "Correct - fixed costs such as rent are due no matter how many units are made, even zero.",
+    "Not quite - revenue minus cost is profit."
+   ]
+  },
+  {
+   "q": "The price-demand equation is $p=30-0.05x$. What is the revenue function $R(x)$?",
+   "choices": [
+    "$R(x)=30x-0.05x^2$",
+    "$R(x)=30-0.05x^2$",
+    "$R(x)=30x-0.05x$",
+    "$R(x)=\\dfrac{30}{x}$"
+   ],
+   "answer": 0,
+   "why": [
+    "Correct - revenue is price times quantity: $(30-0.05x)\\,x=30x-0.05x^2$.",
+    "Not quite - the 30 must be multiplied by $x$ as well; every term of the price gets multiplied.",
+    "Not quite - multiplying $-0.05x$ by $x$ gives $-0.05x^2$, not $-0.05x$.",
+    "Not quite - revenue multiplies price by quantity; it never divides."
+   ]
+  },
+  {
+   "q": "A business breaks even when:",
+   "choices": [
+    "Revenue is at its maximum",
+    "Revenue equals cost, so profit is zero",
+    "Cost is at its minimum",
+    "Demand equals supply"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - maximum revenue is a different point; break-even is about profit being zero.",
+    "Correct - break-even means $R(x)=C(x)$, which is the same as $P(x)=0$.",
+    "Not quite - cost is lowest at zero output, where the business usually loses money.",
+    "Not quite - demand equal to supply is market equilibrium, a different idea."
+   ]
+  }
+ ],
+ "exponentials": [
+  {
+   "q": "A negative exponent means \"one over.\" What is $2^{-3}$?",
+   "choices": [
+    "$-8$",
+    "$\\dfrac{1}{8}$",
+    "$-6$",
+    "$\\dfrac{1}{6}$"
+   ],
+   "answer": 1,
+   "why": [
+    "Not quite - a negative exponent never makes the result negative; it flips it into a fraction.",
+    "Correct - $2^{-3}=\\dfrac{1}{2^3}=\\dfrac{1}{8}$, one over the positive power.",
+    "Not quite - that treats the exponent as multiplication; $2^{-3}$ means one over $2\\times 2\\times 2$.",
+    "Not quite - the denominator is $2^3=8$, not $2\\times 3=6$."
    ]
   },
   {
@@ -2209,19 +2651,19 @@ export const QUIZ = {
    ]
   },
   {
-   "q": "In the continuous compounding formula $A=P\\cdot e^{rt}$, what is $P$?",
+   "q": "Which power of $x$ equals $\\sqrt{x}$?",
    "choices": [
-    "The principal, how much you start with",
-    "The amount you end with",
-    "The number of years",
-    "The interest rate as a decimal"
+    "$x^2$",
+    "$x^{-1}$",
+    "$x^{1/2}$",
+    "$2x$"
    ],
-   "answer": 0,
+   "answer": 2,
    "why": [
-    "Exactly, $P$ is the principal, the amount you start with.",
-    "Not quite, the amount you end with is $A$, not $P$.",
-    "Not this one, time in years is $t$.",
-    "Not quite, the rate as a decimal is $r$, not $P$."
+    "Not quite - $x^2$ is $x$ squared, the opposite of a square root.",
+    "Not quite - $x^{-1}$ is $1/x$; a negative exponent means one over, not a root.",
+    "Correct - $x^{1/2}\\cdot x^{1/2}=x^{1}$, so $x^{1/2}$ is the number that squares to $x$: the square root.",
+    "Not quite - $2x$ doubles $x$; a square root is a power of $x$, not a multiple of it."
    ]
   }
  ],

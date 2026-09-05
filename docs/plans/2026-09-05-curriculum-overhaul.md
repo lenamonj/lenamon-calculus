@@ -423,6 +423,7 @@ For each lesson below, write the prose in the course voice; the numbers are fixe
 - Quiz `power-rule`: replace q3 with d/dx[1/x] = −1/x² (distractors 1/x², ln x, −1/x).
 
 ### Task 3.3: NEW Lesson 12 `tangent-lines` (time "12 min")
+- First restore the forward reference in Lesson 2's point-slope paragraph: replace "The lesson on tangent lines, later in the course, uses this form" with `<Ref to="tangent-lines"/> uses this form`.
 - Concept "The Line That Hugs the Curve": at a = 1 on x², slope 2, point (1, 1), point-slope (from `<Ref to="lines"/>`) gives y = 2x − 1, the exact line drawn in `<Ref to="derivative"/>`. General: y = f(a) + f'(a)(x − a).
 - Concept "Using the Tangent to Estimate": f(1.1) ≈ 1.2 vs 1.21; f(1.5) ≈ 2 vs 2.25; error grows with distance. Business: C(x) = 1000 + 25x − 0.05x², C(50) = 2125, C'(50) = 20, so C(51) ≈ 2145 vs 2144.95 (this is the marginal idea, coming in `<Ref to="marginal"/>`).
 - Concept "Units": C in dollars, x in units gives C' in dollars per unit; miles and hours give miles per hour.
