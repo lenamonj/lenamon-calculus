@@ -50,7 +50,7 @@ Most courses lose beginners at the exact moment an author assumes something the 
 | **Explain the why, always** | You will learn *why* you cannot divide by zero, *why* `b^0 = 1`, *why* the chain rule multiplies, and *why* an integral measures area, not just the rules themselves. |
 | **No skipped steps** | Worked examples show the algebra in full, including the sign traps and the "obvious" lines that trip people up. |
 | **Notation read aloud** | Every new symbol (`f'(x)`, `dy/dx`, the integral sign, limits) is named and grounded the first time it appears. |
-| **Verified for accuracy** | Every number, derivative, integral, sign chart, and graph has been independently recomputed across multiple adversarial review passes. |
+| **Verified for accuracy** | Every number, derivative, integral, sign chart, and graph has been independently recomputed across multiple adversarial review passes, and the recomputation ships with the repo (`docs/verification/`). |
 
 ---
 
@@ -168,6 +168,7 @@ lenamon-calculus/
 │   └── *.test.jsx      # Vitest suites, including the content contract
 ├── docs/specs/         # Design notes and the curriculum spec
 ├── docs/plans/         # Implementation plans
+├── docs/verification/  # verify_content.py recomputes every number in the lessons
 ├── public/             # Static assets
 ├── package.json
 └── vite.config.js
@@ -179,7 +180,7 @@ Lessons are structured data in `src/content.jsx`: each lesson has a stable slug 
 
 ## Contributing
 
-Contributions are welcome. The bar for any content change is the project's core standard: **a curious 15-year-old must be able to follow it with nothing assumed and no step skipped.** If you fix a number, an explanation, or a graph, please recompute it independently and note that in your pull request.
+Contributions are welcome. The bar for any content change is the project's core standard: **a curious 15-year-old must be able to follow it with nothing assumed and no step skipped.** If you fix a number, an explanation, or a graph, please recompute it independently: add or update its check in `docs/verification/verify_content.py` (see the runbook there) and note that in your pull request.
 
 1. Fork the repository.
 2. Create a feature branch (`git checkout -b improve-lesson-x`).
